@@ -1,2 +1,2 @@
 # alias definitions to be sourced by both bash and zsh
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
