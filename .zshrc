@@ -38,7 +38,7 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 eval "$(oh-my-posh --init --shell zsh --config ~/M365Princess.omp.json)"
 
-source ~/.antigen/antigen.zsh
+source antigen.zsh
 
 # Load Antigen Config
 antigen init ~/.antigenrc
