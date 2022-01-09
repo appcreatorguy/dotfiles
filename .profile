@@ -29,5 +29,5 @@ fi
 # Source Aliases
 source "$HOME/.aliases"
 
-export PATH="$HOME/tools/node-v16.13.1-linux-x64/bin:$PATH"
+export PATH="$HOME/tools/nodejs/bin:$PATH"
 export PATH="$HOME/.npm-packages/bin:$PATH"
