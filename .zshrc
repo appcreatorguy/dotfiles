@@ -43,5 +43,6 @@ source antigen.zsh
 # Load Antigen Config
 antigen init ~/.antigenrc
 
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 source ~/.aliases
