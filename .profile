@@ -31,3 +31,4 @@ source "$HOME/.aliases"
 
 export PATH="$HOME/tools/nodejs/bin:$PATH"
 export PATH="$HOME/.npm-packages/bin:$PATH"
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
