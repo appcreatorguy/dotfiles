@@ -31,6 +31,10 @@ if [[ ! -d "$HOME/tools/" ]]; then
     mkdir -p "$HOME/tools/"
 fi
 
+if [[ ! -d "$HOME/pacakges/" ]]; then
+    mkdir -p "$HOME/packages/"
+fi
+
 if [[ -z "$(command -V node)" ]]; then
     echo "install nodejs"
     if [[ ! -f $NODE_SRC_NAME ]]; then
@@ -48,6 +52,9 @@ else
     echo "Nodejs is already installed. Skip installing it."
 fi
 
+#refresh profile to include node, just in case
+source ~/.profile
+
 # Install vim-language-server
 npm install -g vim-language-server
 
@@ -58,7 +65,7 @@ sudo apt install ripgrep
 sudo apt install universal-ctags
 
 # Linters
-pip install pylint flake8 vint
+pip install pylint flake8 vint clangd
 
 # Install Nvim
 sudo snap install nvim --classic
@@ -66,3 +73,23 @@ echo "Installing nvim plugins, please wait"
 "/snap/bin/nvim" -c "autocmd User PackerComplete quitall" -c "PackerSync"
 
 echo "Finished installing Nvim and its dependencies!"
+
+# Build and Install Nvim-QT
+# Clone Repo
+git clone https://github.com/equalsraf/neovim-qt.git "$HOME/tools/neovim-qt"
+cd "$HOME/tools/neovim-qt"
+
+# Install Deps
+sudo apt install -y cmake build-essential qt5-qmake qt5-qmake-bin qtbase5-dev \
+    qtbase5-dev-tools libqt5svg5-dev qtchooser libqt5concurrent5 libqt5core5a libqt5dbus5 \
+    libqt5gui5 libqt5network5 libqt5widgets5 libqt5xml5
+
+# Build
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+set NVIM_QT_RUNTIME_PATH=../src/gui/runtime
+
+# Install
+sudo cp bin/nvim-qt /usr/local/bin/nvim-qt
