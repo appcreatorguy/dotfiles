@@ -93,3 +93,36 @@ set NVIM_QT_RUNTIME_PATH=../src/gui/runtime
 
 # Install
 sudo cp bin/nvim-qt /usr/local/bin/nvim-qt
+
+# Install Alacritty
+
+# Install deps
+sudo apt install -y cargo
+sudo apt-get install -y cmake libfreetype6-dev libfontconfig1-dev xclip
+sudo apt install libxcb-render0-dev libxcb-xfixes0-dev
+
+# Clone Repo
+git clone https://github.com/alacritty/alacritty.git "$HOME/tools/alacritty"
+cd "$HOME/tools/alacritty"
+
+# Build
+cargo run --manifest-path Cargo.toml
+
+# Add Man-Page Entries
+sudo mkdir -p /usr/local/share/man/man1
+gzip -c extra/alacritty.man | sudo tee /usr/local/share/man/man1/alacritty.1.gz > /dev/null
+
+# Add shell completion for bash and zsh
+mkdir -p ~/.bash_completion
+cp extra/completions/alacritty.bash ~/.bash_completion/alacritty
+
+# Create desktop file
+cp extra/linux/Alacritty.desktop ~/.local/share/applications/
+
+# Copy binary to path
+sudo cp target/debug/alacritty /usr/local/bin
+
+# Use Alacritty as default terminal (Ctrl + Alt + T)
+gsettings set org.gnome.desktop.default-applications.terminal exec 'alacritty'
+
+cd "$HOME"
