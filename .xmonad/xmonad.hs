@@ -371,7 +371,7 @@ myKeys =
         , ("M-S-q", io exitSuccess)                   -- Quits xmonad
 
     -- KB_GROUP Lock screen
-        , ("M-l", spawn "betterlockscreen -l dimblur --display 1")
+        , ("M-S-l", spawn "betterlockscreen -l blur --display 1")
 
     -- KB_GROUP Get Help
         , ("M-S-/", spawn "~/.xmonad/xmonad_keys.sh") -- Get list of keybindings

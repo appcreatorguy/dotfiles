@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cupd=$(apt list --upgradeable | wc -l)
+echo "$(($cupd - 1))"
