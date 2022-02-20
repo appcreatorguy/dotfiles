@@ -38,11 +38,13 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 eval "$(oh-my-posh --init --shell zsh --config ~/M365Princess.omp.json)"
 
-source antigen.zsh
+source "$HOME/antigen.zsh"
 
 # Load Antigen Config
-antigen init ~/.antigenrc
+antigen init "$HOME/.antigenrc"
 
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
-source ~/.aliases
+source "$HOME/.aliases"
+source "$HOME/.profile"
+export PATH="$PATH:$HOME/.spicetify"

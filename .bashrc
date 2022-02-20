@@ -115,3 +115,8 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+source ~/.bash_completion/alacritty
+source ~/.bash_completion/alacritty
+source ~/.bash_completion/alacritty
+source ~/.bash_completion/alacritty
+export PATH="$PATH:$HOME/.spicetify"
