@@ -29,6 +29,13 @@ fi
 # Source Aliases
 source "$HOME/.aliases"
 
+
 export PATH="$HOME/tools/nodejs/bin:$PATH"
 export PATH="$HOME/.npm-packages/bin:$PATH"
+# Java JDTLS
+export PATH="$HOME/tools/jdtls/:$PATH"
+export JDTLS_HOME="$HOME/tools/jdtls/:$PATH"
 export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+export LIBGL_ALWAYS_SOFTWARE=1
+export SPICETIFY_INSTALL="/home/manasmengle/.spicetify"
+export PATH="$SPICETIFY_INSTALL:$PATH"
