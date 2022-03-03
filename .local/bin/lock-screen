@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#
+# Script name: lock-screen
+# Description: Call lock screen program
+# Dependencies: betterlockscreen
+# Contributors: Manas Mengle
+
+# Set with the flags "-e", "-u", "-o pipefail" cause the script to fail
+# if certain things happen, which is a good thing. Otherwise, we can
+# get hidden bugs that are hard to discover.
+set -euo pipefail
+
+# shellcheck disable=SC1091
+source "$HOME/.config/dmscripts/config"
+
+${logout_locker}

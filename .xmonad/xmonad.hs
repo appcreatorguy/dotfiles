@@ -78,14 +78,14 @@ import XMonad.Util.SpawnOnce
       -- SolarizedDark
       -- SolarizedLight
       -- TomorrowNight
-import Colors.Nord
+import Colors.SolarizedLight
 
 myFont :: String
 myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialias=true:hinting=true"
 
 myModMask :: KeyMask
-myModMask = mod1Mask
--- myModMask = mod4Mask        -- Sets modkey to super/windows key
+-- myModMask = mod1Mask     -- Sets modkey to Alt Key
+myModMask = mod4Mask        -- Sets modkey to super/windows key
 
 myTerminal :: String
 -- myTerminal = "tilix" -- Sets default terminal
@@ -123,8 +123,13 @@ myStartupHook = do
     spawnOnce "lxsession"
     spawnOnce "picom"
     spawnOnce "nm-applet"
-    spawnOnce "volumeicon"
+    -- spawnOnce "volumeicon"
+    spawnOnce "pasystray"
+    -- spawnOnce "xfce4-power-manager"
     spawnOnce "/usr/bin/emacs --daemon" -- emacs daemon for the emacsclient
+
+    spawnOnce "dunst" -- Notification daemon
+
 
     spawn ("sleep 2 && conky -c $HOME/.config/conky/xmonad/" ++ colorScheme ++ "-01.conkyrc")
     spawn ("sleep 2 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 " ++ colorTrayer ++ " --height 22")
@@ -134,6 +139,11 @@ myStartupHook = do
     spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
     -- spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
     spawnOnce "betterlockscreen -u ~/wallpapers/"
+
+    -- Bodge: swap windows twice to fix display errors
+    spawnOnce "xrandr --output eDP-1-1 --primary --auto --left-of HDMI-0"
+
+    spawnOnce "sleep 0.5; xrandr --output HDMI-0 --primary --auto --left-of eDP-1-1" -- Set display modes
     setWMName "LG3D"
 
 myColorizer :: Window -> Bool -> X (String, String)
@@ -178,7 +188,7 @@ myAppGrid = [ ("Audacity", "audacity")
                  , ("LibreOffice Writer", "lowriter")
                  , ("OBS", "obs")
                  , ("PCManFM", "pcmanfm")
-                 , ("Spotify", "spotify")
+                 , ("Spotify", "LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify")
                  , ("Neovim", "nvim-qt")
                  ]
 
@@ -186,6 +196,7 @@ myScratchPads :: [NamedScratchpad]
 myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                 , NS "mocp" spawnMocp findMocp manageMocp
                 , NS "calculator" spawnCalc findCalc manageCalc
+                , NS "pavucontrol" spawnVolume findVolume manageVolume
                 ]
   where
     spawnTerm  = myTerminal ++ " -t scratchpad"
@@ -207,6 +218,14 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
     spawnCalc  = "qalculate-gtk"
     findCalc   = className =? "Qalculate-gtk"
     manageCalc = customFloating $ W.RationalRect l t w h
+               where
+                 h = 0.5
+                 w = 0.4
+                 t = 0.75 -h
+                 l = 0.70 -w
+    spawnVolume = "pavucontrol"
+    findVolume = title =? "Volume Control"
+    manageVolume = customFloating $ W.RationalRect l t w h
                where
                  h = 0.5
                  w = 0.4
@@ -371,7 +390,7 @@ myKeys =
         , ("M-S-q", io exitSuccess)                   -- Quits xmonad
 
     -- KB_GROUP Lock screen
-        , ("M-S-l", spawn "betterlockscreen -l blur --display 1")
+        , ("M-S-l", spawn "lock-screen")
 
     -- KB_GROUP Get Help
         , ("M-S-/", spawn "~/.xmonad/xmonad_keys.sh") -- Get list of keybindings
@@ -477,6 +496,7 @@ myKeys =
         , ("M-s t", namedScratchpadAction myScratchPads "terminal")
         , ("M-s m", namedScratchpadAction myScratchPads "mocp")
         , ("M-s c", namedScratchpadAction myScratchPads "calculator")
+        , ("M-s v", namedScratchpadAction myScratchPads "pavucontrol")
 
     -- KB_GROUP Controls for mocp music player (SUPER-u followed by a key)
         , ("M-u p", spawn "mocp --play")
@@ -497,12 +517,21 @@ myKeys =
         , ("M-e a", spawn (myEmacs ++ ("--eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/\")'")))
 
     -- KB_GROUP Multimedia Keys
-        , ("<XF86AudioPlay>", spawn "mocp --play")
-        , ("<XF86AudioPrev>", spawn "mocp --previous")
-        , ("<XF86AudioNext>", spawn "mocp --next")
-        , ("<XF86AudioMute>", spawn "amixer set Master toggle")
-        , ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
-        , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
+        -- , ("<XF86AudioPlayPause>", spawn "mocp --toggle-pause")
+        -- Uncomment if using mocp as media player
+        -- , ("<XF86AudioPlay>", spawn "mocp --toggle-pause")
+        -- , ("<XF86AudioPrev>", spawn "mocp --previous")
+        -- , ("<XF86AudioNext>", spawn "mocp --next")
+        , ("<XF86AudioPrev>", spawn "playerctl previous")
+        , ("<XF86AudioNext>", spawn "playerctl next")
+        , ("<XF86AudioPlay>", spawn "playerctl play-pause")
+        -- Not using amixer
+        -- , ("<XF86AudioMute>", spawn "amixer set Master toggle; amixer set Headphone toggle; amixer set Speaker toggle")
+        -- , ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
+        -- , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
+        , ("<XF86AudioMute>", spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
+        , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
+        , ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%; pactl set-sink-mute 0")
         , ("<XF86HomePage>", spawn "qutebrowser https://www.youtube.com/c/DistroTube")
         , ("<XF86Search>", spawn "dm-websearch")
         , ("<XF86Mail>", runOrRaise "thunderbird" (resource =? "thunderbird"))

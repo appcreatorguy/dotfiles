@@ -178,7 +178,7 @@ font:
     style: Bold Italic
 
   # Point size
-  size: 12.0
+  size: 10.5
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -570,7 +570,7 @@ schemes:
 # *SolarizedDark
 # *TomorrowNight
 
-colors: *Nord
+colors: *SolarizedLight
 
 #######################################
 ##       END OF COLOR SCHEMES        ##
@@ -647,6 +647,8 @@ window.opacity: 0.8
 #  program: /bin/bash
 #  args:
 #    - --login
+shell:
+  program: /usr/bin/zsh
 
 # Startup directory
 #

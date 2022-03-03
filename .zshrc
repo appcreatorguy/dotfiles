@@ -48,3 +48,4 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 source "$HOME/.aliases"
 source "$HOME/.profile"
 export PATH="$PATH:$HOME/.spicetify"
+PATH="$HOME/.emacs.d/bin:$PATH"

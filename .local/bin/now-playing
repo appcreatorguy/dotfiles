@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+#
+# Script name: now-playing
+# Description: Print the currently playing song.
+# Dependencies: moc
+# Github: https://www.github.com/appcreatorguy/dotfiles
+# Licence: https://www.github.com/appcreatorguy/dotfiles/LICENSE
+# Contributors: Manas Mengle
+
+# Set with the flags "-e", "-u","-o pipefail" cause the script to fail
+# if certain things happen, which is a good thing. Otherwise, we can
+# get hidden bugs that are hard to discover
+set -eou pipefail
+
+# shellcheck disable=SC1091
+source "$HOME/.config/dmscripts/config"
+
+if [ $(pgrep spotify | wc -l) -gt 0 ]; then
+    if [ $(playerctl -p spotify status | grep -c "Playing") -eq 1 ]; then
+        echo -n "<fn=2></fn>"
+    else
+        echo -n "<fn=2></fn>"
+    fi
+
+    echo -n " - $(playerctl -p spotify metadata artist | cut -c -20)"
+    echo -n " - $(playerctl -p spotify metadata title | cut -c -20)"
+
+elif [ $(pgrep mocp | wc -l) -gt 0 ]; then
+    if [ $(mocp -Q "%state" | grep -c "PLAY") -eq 1 ]; then
+        echo -n "<fn=2></fn>"
+
+    else
+        echo -n "<fn=2></fn>"
+    fi
+
+    echo -n " - $(mocp -Q "%artist" | cut -c -15)"
+    echo -n " - $(mocp -Q "%song" | cut -c -15)"
+    echo -n " - $(mocp -Q "%ct/%tt")"
+fi
