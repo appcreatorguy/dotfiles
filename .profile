@@ -39,6 +39,9 @@ export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 export LIBGL_ALWAYS_SOFTWARE=1
 export SPICETIFY_INSTALL="/home/manasmengle/.spicetify"
 export PATH="$SPICETIFY_INSTALL:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/tools/i3-battery-popup-1.0.0:$PATH"
+export PATH="$HOME/tools/platform-tools/:$PATH"
 # set DISPLAY to use X terminal in WSL
 # in WSL2 the localhost and network interfaces are not the same than windows
 if grep -q WSL2 /proc/version; then

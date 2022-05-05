@@ -164,7 +164,7 @@ config.set('content.javascript.enabled', True, 'qute://*/*')
 #   - true
 #   - false
 #   - ask
-config.set('content.notifications.enabled', True, 'https://www.reddit.com')
+# config.set('content.notifications.enabled', True, 'https://www.reddit.com')
 
 # Allow websites to show notifications.
 # Type: BoolAsk
@@ -172,7 +172,7 @@ config.set('content.notifications.enabled', True, 'https://www.reddit.com')
 #   - true
 #   - false
 #   - ask
-config.set('content.notifications.enabled', True, 'https://www.youtube.com')
+# config.set('content.notifications.enabled', True, 'https://www.youtube.com')
 
 # Directory to save downloads to. If unset, a sensible OS-specific
 # default is used.
@@ -320,11 +320,13 @@ c.colors.tabs.even.bg = '#282c34'
 
 # Background color of selected odd tabs.
 # Type: QtColor
-c.colors.tabs.selected.odd.bg = '#282c34'
+#c.colors.tabs.selected.odd.bg = '#282c34'
+c.colors.tabs.selected.odd.bg = '#5d92e8'
 
 # Background color of selected even tabs.
 # Type: QtColor
-c.colors.tabs.selected.even.bg = '#282c34'
+#c.colors.tabs.selected.even.bg = '#282c34'
+c.colors.tabs.selected.even.bg = '#5d92e8'
 
 # Background color of pinned unselected odd tabs.
 # Type: QtColor

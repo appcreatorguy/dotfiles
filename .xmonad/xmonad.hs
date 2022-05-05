@@ -65,6 +65,7 @@ import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
+import XMonad.Util.Cursor
 
    -- ColorScheme module (SET ONLY ONE!)
       -- Possible choice are:
@@ -78,13 +79,13 @@ import XMonad.Util.SpawnOnce
       -- SolarizedDark
       -- SolarizedLight
       -- TomorrowNight
-import Colors.SolarizedLight
+import Colors.Dracula
 
 myFont :: String
 myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialias=true:hinting=true"
 
 myModMask :: KeyMask
--- myModMask = mod1Mask     -- Sets modkey to Alt Key
+-- myModMask = mod1Mask -- Sets modkey to Alt key
 myModMask = mod4Mask        -- Sets modkey to super/windows key
 
 myTerminal :: String
@@ -125,20 +126,25 @@ myStartupHook = do
     spawnOnce "nm-applet"
     -- spawnOnce "volumeicon"
     spawnOnce "pasystray"
-    -- spawnOnce "xfce4-power-manager"
     spawnOnce "/usr/bin/emacs --daemon" -- emacs daemon for the emacsclient
+    spawnOnce "/snap/bin/emacs --daemon" -- I'm stupid and installed the snap emacs package, so its here.
+    spawnOnce "dunst" -- notification daemon
 
-    spawnOnce "dunst" -- Notification daemon
-
+    spawnOnce "/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd;/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd" -- Kde Connect, dunno why you have to run it twice b4 it picks up device
+    spawnOnce "$HOME/tools/i3-battery-popup-1.0.0/i3-battery-popup -n -D -L 20 -l 10 -s $HOME/tools/i3-battery-popup-1.0.0/i3-battery-popup.wav" -- Battery Warning
+    spawnOnce "sleep 3 && xinput set-prop \"MSFT0001:01 06CB:7F28 Touchpad\" \"libinput Tapping Enabled\" 1"
 
     spawn ("sleep 2 && conky -c $HOME/.config/conky/xmonad/" ++ colorScheme ++ "-01.conkyrc")
     spawn ("sleep 2 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 " ++ colorTrayer ++ " --height 22")
 
-    spawnOnce "xargs xwallpaper --stretch < ~/.cache/wall"
+    -- spawnOnce "xargs xwallpaper --stretch < ~/.cache/wall"
     -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
     spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
     -- spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
     spawnOnce "betterlockscreen -u ~/wallpapers/"
+
+    -- Setup default cursor
+    setDefaultCursor xC_left_ptr
 
     -- Bodge: swap windows twice to fix display errors
     spawnOnce "xrandr --output eDP-1-1 --primary --auto --left-of HDMI-0"
@@ -190,6 +196,7 @@ myAppGrid = [ ("Audacity", "audacity")
                  , ("PCManFM", "pcmanfm")
                  , ("Spotify", "LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify")
                  , ("Neovim", "nvim-qt")
+                 , ("Alacritty", myTerminal)
                  ]
 
 myScratchPads :: [NamedScratchpad]
@@ -197,6 +204,7 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                 , NS "mocp" spawnMocp findMocp manageMocp
                 , NS "calculator" spawnCalc findCalc manageCalc
                 , NS "pavucontrol" spawnVolume findVolume manageVolume
+                , NS "brightness-controller" spawnBrightness findBrightness manageBrightness
                 ]
   where
     spawnTerm  = myTerminal ++ " -t scratchpad"
@@ -231,6 +239,14 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                  w = 0.4
                  t = 0.75 -h
                  l = 0.70 -w
+    spawnBrightness = "brightness-controller"
+    findBrightness = title =? "Brightness Controller"
+    manageBrightness = customFloating $ W.RationalRect l t w h
+      where
+        h = 0.5
+        w = 0.4
+        t = 0.75 - h
+        l = 0.70 - w
 
 --Makes setting the spacingRaw simpler to write. The spacingRaw module adds a configurable amount of space around windows.
 mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
@@ -390,14 +406,16 @@ myKeys =
         , ("M-S-q", io exitSuccess)                   -- Quits xmonad
 
     -- KB_GROUP Lock screen
-        , ("M-S-l", spawn "lock-screen")
+        , ("M-S-l", spawn "lock-screen")              -- Locks screen
 
     -- KB_GROUP Get Help
         , ("M-S-/", spawn "~/.xmonad/xmonad_keys.sh") -- Get list of keybindings
         , ("M-/", spawn "dtos-help")                  -- DTOS help/tutorial videos
 
     -- KB_GROUP Run Prompt
-        , ("M-S-<Return>", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
+        -- , ("M-S-<Return>", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
+        -- , ("M-S-<Return>", spawn ("rofi -show combi -combi-modi" ++ "drun" ++ "-icon-theme" ++ "Suru" ++ "-show-icons")) -- Use Rofi instead of dmenu, much nicer looking.
+        , ("M-S-<Return>", spawn "rofi-custom-combi") -- Dmenu
 
     -- KB_GROUP Other Dmenu Prompts
     -- In Xmonad and many tiling window managers, M-p is the default keybinding to
@@ -422,6 +440,7 @@ myKeys =
     -- KB_GROUP Useful programs to have a keybinding for launch
         , ("M-<Return>", spawn (myTerminal))
         , ("M-b", spawn (myBrowser))
+        -- , ("M-e", spawn "pcmanfm")
         , ("M-M1-h", spawn (myTerminal ++ " -e htop"))
 
     -- KB_GROUP Kill windows
@@ -497,7 +516,7 @@ myKeys =
         , ("M-s m", namedScratchpadAction myScratchPads "mocp")
         , ("M-s c", namedScratchpadAction myScratchPads "calculator")
         , ("M-s v", namedScratchpadAction myScratchPads "pavucontrol")
-
+        , ("M-s b", namedScratchpadAction myScratchPads "brightness-controller")
     -- KB_GROUP Controls for mocp music player (SUPER-u followed by a key)
         , ("M-u p", spawn "mocp --play")
         , ("M-u l", spawn "mocp --next")
@@ -505,7 +524,8 @@ myKeys =
         , ("M-u <Space>", spawn "mocp --toggle-pause")
 
     -- KB_GROUP Emacs (SUPER-e followed by a key)
-        , ("M-e e", spawn (myEmacs ++ ("--eval '(dashboard-refresh-buffer)'")))   -- emacs dashboard
+        -- , ("M-e e", spawn (myEmacs ++ ("--eval '(dashboard-refresh-buffer)'")))   -- emacs dashboard
+        , ("M-e e", spawn myEmacs) -- emacs
         , ("M-e b", spawn (myEmacs ++ ("--eval '(ibuffer)'")))   -- list buffers
         , ("M-e d", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
         , ("M-e i", spawn (myEmacs ++ ("--eval '(erc)'")))       -- erc irc client
@@ -532,11 +552,12 @@ myKeys =
         , ("<XF86AudioMute>", spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
         , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
         , ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%; pactl set-sink-mute 0")
-        , ("<XF86HomePage>", spawn "qutebrowser https://www.youtube.com/c/DistroTube")
+        , ("<XF86HomePage>", spawn "qutebrowser https://www.duckduckgo.com")
         , ("<XF86Search>", spawn "dm-websearch")
         , ("<XF86Mail>", runOrRaise "thunderbird" (resource =? "thunderbird"))
         , ("<XF86Calculator>", runOrRaise "qalculate-gtk" (resource =? "qalculate-gtk"))
         , ("<XF86Eject>", spawn "toggleeject")
+        -- , ("<Print>", spawn "d​m-maim")
         , ("<Print>", spawn "dm-maim")
         ]
     -- The following lines are needed for named scratchpads.

@@ -36,9 +36,10 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
-eval "$(oh-my-posh --init --shell zsh --config ~/M365Princess.omp.json)"
+# eval "$(oh-my-posh --init --shell zsh --config ~/M365Princess.omp.json)"
+eval "$(oh-my-posh --init --shell zsh --config ~/night-owl.clone.omp.json)"
 
-source "$HOME/antigen.zsh"
+source $HOME/antigen.zsh
 
 # Load Antigen Config
 antigen init "$HOME/.antigenrc"
