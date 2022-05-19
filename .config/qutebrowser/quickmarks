@@ -18,8 +18,9 @@ mail https://www.mailgun.com/
 mast https://distrotoot.com/
 nf https://www.netflix.com/browse
 pa http://www.patreon.com/distrotube/
-py https://www.paypal.com/
+red https://www.reddit.com/
 sb https://socialblade.com/youtube/c/distrotube
+py https://www.paypal.com/
 sky https://www.skysilk.com/
 sp file:///home/dt/.surf/html/homepage.html
 suck https://suckless.org/
@@ -28,4 +29,4 @@ tt https://www.tastytrade.com/
 tw https://trade.tastyworks.com/
 ub https://www.urbandictionary.com/
 wiki https://www.wikipedia.org/
-yt https://www.youtube.com/DistroTube/?view_as=subscriber
+yt https://www.youtube.com/feed/subscriptions/
