@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# Script name: auto-suspend
+# Description: Automatically suspend the computer on low battery.
+# Dependencies: cron job to automatically run this script.
+# Github: https://www.github.com/appcreatorguy/dotfiles
+# Licence: https://www.github.com/appcreatorguy/dotfiles/LICENSE
+# Contributors: Manas Mengle
+
+# Set with the flags "-e", "-u","-o pipefail" cause the script to fail
+# if certain things happen, which is a good thing. Otherwise we can
+# get hidden bugs that are hard to discover
+set -eou pipefail
+
+if [ "$(cat /sys/class/power_supply/BAT0/status)" = Discharging ]; then
+    if [ "$(cat /sys/class/power_supply/BAT0/capacity)" -lt 10 ]; then
+        notify-send -u critical -i "critical-battery" "Critical Battery" "Laptop will shut off in 2 minutes"
+        sleep 120
+        if [ "$(cat /sys/class/power_supply/BAT0/status)" = Discharging ]; then # Check if laptop is still unplugged
+            systemctl suspend
+        fi
+    fi
+fi
