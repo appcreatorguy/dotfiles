@@ -124,6 +124,7 @@ myStartupHook = do
     spawnOnce "lxsession"
     spawnOnce "picom"
     spawnOnce "nm-applet"
+    spawnOnce "blueman-applet"
     -- spawnOnce "volumeicon"
     spawnOnce "pasystray"
     spawnOnce "/usr/bin/emacs --daemon" -- emacs daemon for the emacsclient
@@ -186,17 +187,15 @@ myAppGrid = [ ("Audacity", "audacity")
                  , ("Deadbeef", "deadbeef")
                  , ("Emacs", "emacsclient -c -a emacs")
                  , ("Firefox", "firefox")
-                 , ("Geany", "geany")
-                 , ("Geary", "geary")
-                 , ("Gimp", "gimp")
-                 , ("Kdenlive", "kdenlive")
                  , ("LibreOffice Impress", "loimpress")
                  , ("LibreOffice Writer", "lowriter")
-                 , ("OBS", "obs")
                  , ("PCManFM", "pcmanfm")
                  , ("Spotify", "LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify")
                  , ("Neovim", "nvim-qt")
                  , ("Alacritty", myTerminal)
+                 , ("Bluetooth Manager", "blueman-manager")
+                 , ("Whatsdesk", "Whatsdesk")
+                 , ("Document Viewer", "evince")
                  ]
 
 myScratchPads :: [NamedScratchpad]
