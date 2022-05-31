@@ -13,7 +13,7 @@
 # Uncomment this to still load settings configured via autoconfig.yml
 # config.load_autoconfig()
 # Or uncomment this line to load settings from config.py
-config.load_autoconfig(False)
+config.load_autoconfig(True)
 
 # Aliases for commands. The keys of the given dictionary are the
 # aliases, while the values are the commands they map to.
@@ -142,6 +142,9 @@ config.set('content.images', True, 'chrome-devtools://*')
 # Type: Bool
 config.set('content.images', True, 'devtools://*')
 
+# Disable Javascript globally, except for the following exceptions
+config.set('content.javascript.enabled', False)
+
 # Enable JavaScript.
 # Type: Bool
 config.set('content.javascript.enabled', True, 'chrome-devtools://*')
@@ -157,6 +160,10 @@ config.set('content.javascript.enabled', True, 'chrome://*/*')
 # Enable JavaScript.
 # Type: Bool
 config.set('content.javascript.enabled', True, 'qute://*/*')
+
+# Fix copy to clipboard button for github if JS is enabled.
+config.set('content.javascript.can_access_clipboard', True, 'https://*.github.com/*')
+
 
 config.set('auto_save.session', True)
 
@@ -381,6 +388,7 @@ c.fonts.statusbar = '11pt "Source Code Pro"'
 
 # Bindings for normal mode
 config.bind('M', 'hint links spawn mpv {hint-url}')
+# config.bind('M', 'hint links spawn umpv {hint-url}')
 config.bind('Z', 'hint links spawn st -e youtube-dl {hint-url}')
 config.bind('t', 'set-cmd-text -s :open -t')
 config.bind('xb', 'config-cycle statusbar.show always never')
@@ -388,6 +396,16 @@ config.bind('xt', 'config-cycle tabs.show always never')
 config.bind('xx', 'config-cycle statusbar.show always never;; config-cycle tabs.show always never')
 config.bind('J', 'tab-prev')
 config.bind('K', 'tab-next')
+
+# Bindings to selectively enable JS, as I prefer to disable it by default.
+# They are redefined from the default keybinds to prevent conflicts.
+config.bind(',tsh', 'config-cycle -p -t -u *://{url:host}/* content.javascript.enabled ;; reload') # Enables for domain
+config.bind(',tSh', 'config-cycle -p -u *://{url:host}/* content.javascript.enabled ;; reload') # Same, but permanently
+config.bind(',tsH', 'config-cycle -p -t -u *://*.{url:host}/* content.javascript.enabled ;; reload') # Enables for subdomains
+config.bind(',tSH', 'config-cycle -p -u *://*.{url:host}/* content.javascript.enabled ;; reload') # Same, but permanently
+config.bind(',tsu', 'config-cycle -p -t -u {url} content.javascript.enabled ;; reload') # Enables for unique url
+config.bind(',tsU', 'config-cycle -p -u {url} content.javascript.enabled ;; reload') # Same, but permanently
+
 
 # Bindings for cycling through CSS stylesheets from Solarized Everything CSS:
 # https://github.com/alphapapa/solarized-everything-css

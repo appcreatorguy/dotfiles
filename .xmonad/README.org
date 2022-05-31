@@ -118,7 +118,9 @@ import XMonad.Util.Cursor
       -- SolarizedDark
       -- SolarizedLight
       -- TomorrowNight
-import Colors.Dracula
+      -- Latte
+      -- Mocha
+import Colors.Mocha
 #+END_SRC
 
 * Variables
@@ -187,7 +189,8 @@ I like to use KDE Connect to connect my phone to my computer, so we'll start tha
 #+BEGIN_SRC haskell
     spawnOnce "/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd;/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd" -- Kde Connect, dunno why you have to run it twice b4 it picks up device
     spawnOnce "$HOME/tools/i3-battery-popup-1.0.0/i3-battery-popup -n -D -L 20 -l 10 -s $HOME/tools/i3-battery-popup-1.0.0/i3-battery-popup.wav" -- Battery Warning
-    spawnOnce "sleep 3 && xinput set-prop \"MSFT0001:01 06CB:7F28 Touchpad\" \"libinput Tapping Enabled\" 1"
+    spawnOnce "$HOME/tools/auto-suspend -s $HOME/tools/i3-battery-popup-1.0.0/i3-battery-popup.wav"
+    spawnOnce "sleep 3 && xinput set-prop \"MSFT0001:01 06CB:7F28 Touchpad\" \"libinput Tapping Enabled\" 1" -- Enable single taps on the touchpad to left click
 #+END_SRC
 
 We killed any running conky and trayer processes earlier in the autostart, so now we sleep for 2 seconds and then restart conky and trayer.
