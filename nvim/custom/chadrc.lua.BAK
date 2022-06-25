@@ -1,0 +1,35 @@
+local M = {}
+
+local override = require "custom.override"
+
+M.ui = {
+  theme_toggle = { "catppuccin", "catppuccin-latte" },
+  theme = "catppuccin-latte",
+  transparency = false,
+  hl_override = require "custom.highlights"
+}
+
+M.plugins = {
+  override = {
+    ["kyazdani42/nvim-tree.lua"] = override.nvimtree,
+    ["nvim-treesitter/nvim-treesitter"] = override.treesitter,
+  },
+
+  remove = {},
+
+  user = require "custom.plugins",
+
+  options = {
+    lspconfig = {
+      setup_lspconf = "custom.plugins.lspconfig",
+    },
+
+    statusline = {
+      separator_style = "round",
+    },
+  },
+}
+
+M.mappings = require "custom.mappings"
+
+return M

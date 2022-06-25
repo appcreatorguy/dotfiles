@@ -68,11 +68,30 @@ sudo apt install universal-ctags
 pip install pylint flake8 vint clangd
 
 # Install Nvim
-sudo snap install nvim --classic
-echo "Installing nvim plugins, please wait"
-"/snap/bin/nvim" -c "autocmd User PackerComplete quitall" -c "PackerSync"
 
-echo "Finished installing Nvim and its dependencies!"
+# sudo snap install nvim --classic
+# echo "Installing nvim plugins, please wait"
+# "/snap/bin/nvim" -c "autocmd User PackerComplete quitall" -c "PackerSync"
+#
+# echo "Finished installing Nvim and its dependencies!"
+
+# Install bob - nvim package manager
+
+# Install deps
+sudo apt install -y cargo
+
+# Install bob
+cargo install --git https://github.com/MordechaiHadad/bob.git
+$HOME/.cargo/bin/bob use nightly
+
+#refresh profile to include node, just in case
+source ~/.profile
+
+git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1 ; nvim # Remember to quit after its installed!
+
+ls -s "$HOME/nvim/custom/" "$HOME/.config/nvim/lua/custom"
+
+nvim -c ":PackerSync"
 
 # Build and Install Nvim-QT
 # Clone Repo

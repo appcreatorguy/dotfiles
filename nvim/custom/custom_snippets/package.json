@@ -1,0 +1,23 @@
+{
+  "name": "custom-snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": "javascript",
+        "path": "./snippets/generated.json"
+      },
+      {
+        "language": "javascriptreact",
+        "path": "./snippets/generated.json"
+      },
+      {
+        "language": "typescript",
+        "path": "./snippets/generated.json"
+      },
+      {
+        "language": "typescriptreact",
+        "path": "./snippets/generated.json"
+      }
+    ]
+  }
+}

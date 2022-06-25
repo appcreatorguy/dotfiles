@@ -39,11 +39,20 @@ export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 export LIBGL_ALWAYS_SOFTWARE=1
 export SPICETIFY_INSTALL="/home/manasmengle/.spicetify"
 export PATH="$SPICETIFY_INSTALL:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/tools/i3-battery-popup-1.0.0:$PATH"
 export PATH="$HOME/tools/platform-tools/:$PATH"
 export PATH="$HOME/tools/:$PATH"
+export PATH="$HOME/Android/sdk/emulator:$PATH"
+export PATH="$HOME/Android/sdk/platform-tools:$PATH"
+export PATH="$HOME/Android/sdk/cmdline-tools/latest/bin:$PATH"
+export PATH="$PATH:$HOME/tools/flutter/bin"
+export PATH="$PATH:$HOME/.local/share/neovim/bin" # nvim binaries for bob: https://github.com/MordechaiHadad/bob
+export PATH="$PATH:$HOME/go/bin" # go package bin dir
 export SPICE_PATH="$HOME/.config/spicetify"
+export ANDROID_SDK_ROOT="$HOME/Android/sdk/"
+export ANDROID_HOME="$HOME/Android/sdk"
+export CHROME_EXECUTABLE="/snap/bin/chromium"
+
 # set DISPLAY to use X terminal in WSL
 # in WSL2 the localhost and network interfaces are not the same than windows
 if grep -q WSL2 /proc/version; then
@@ -51,3 +60,4 @@ if grep -q WSL2 /proc/version; then
     DISPLAY=$(route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.0
 fi
 
+. "$HOME/.cargo/env"
