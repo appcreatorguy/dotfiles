@@ -1,5 +1,8 @@
 {
   "name": "custom-snippets",
+  "engines": {
+    "vscode": "^1.11.0"
+  },
   "contributes": {
     "snippets": [
       {
@@ -11,12 +14,52 @@
         "path": "./snippets/generated.json"
       },
       {
+        "language": "javascript",
+        "path": "./snippets/snippets-react-native-javascript.json"
+      },
+      {
+        "language": "javascriptreact",
+        "path": "./snippets/snippets-react-native-javascript.json"
+      },
+      {
+        "language": "typescript",
+        "path": "./snippets/snippets-react-native-typescript.json"
+      },
+      {
+        "language": "typescriptreact",
+        "path": "./snippets/snippets-react-native-typescript.json"
+      },
+      {
+        "language": "jsx",
+        "path": "./snippets/snippets-react-native-javascript.json"
+      },
+      {
         "language": "typescript",
         "path": "./snippets/generated.json"
       },
       {
         "language": "typescriptreact",
         "path": "./snippets/generated.json"
+      },
+      {
+        "language": "typescript",
+        "path": "./snippets/html.json"
+      },
+      {
+        "language": "typescriptreact",
+        "path": "./snippets/html.json"
+      },
+      {
+        "language": "javascript",
+        "path": "./snippets/html.json"
+      },
+      {
+        "language": "javascriptreact",
+        "path": "./snippets/html.json"
+      },
+      {
+        "language": "jsx",
+        "path": "./snippets/html.json"
       }
     ]
   }

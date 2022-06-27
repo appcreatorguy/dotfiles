@@ -30,6 +30,12 @@ M.plugins = {
   },
 }
 
+M.options = {
+  user = function()
+    vim.g.luasnippets_path = "~/.config/nvim/lua/custom/custom_snippets"
+  end
+}
+
 M.mappings = require "custom.mappings"
 
 return M

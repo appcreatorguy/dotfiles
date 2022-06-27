@@ -72,5 +72,13 @@ return {
     end
   },
 
+  ["jedrzejboczar/possession.nvim"] = {
+    opt = false,
+    after = "plenary.nvim",
+    config = function()
+      require "custom.plugins.possession"
+    end
+  },
+
   -- NodeJS/React Development
 }
