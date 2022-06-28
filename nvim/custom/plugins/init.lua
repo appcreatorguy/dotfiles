@@ -37,6 +37,13 @@ return {
     disable = false,
   },
 
+  ["andweeb/presence.nvim"] = {
+    opt = false,
+    config = function()
+      require "custom.plugins.presence"
+    end
+  },
+
   -- ["tzachar/cmp-tabnine"] = {
   --   wants = "nvim-cmp",
   --   after = "cmp=path",
