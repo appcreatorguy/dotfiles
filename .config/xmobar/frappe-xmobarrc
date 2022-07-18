@@ -1,7 +1,7 @@
 -- Xmobar (http://projects.haskell.org/xmobar/)
 -- This is one of the xmobar configurations for DTOS.
 -- This config is packaged in the DTOS repo as 'dtos-xmobar'
--- Color scheme: Dracula
+-- Color scheme: Catppuccin Frappe
 -- Dependencies: 
    -- otf-font-awesome 
    -- ttf-mononoki 
@@ -17,8 +17,8 @@ Config { font            = "xft:Ubuntu:weight=bold:pixelsize=11:antialias=true:h
                            , "xft:Font Awesome 6 Free Solid:pixelsize=12"
                            , "xft:Font Awesome 6 Brands:pixelsize=12"
                            ]
-       , bgColor      = "#282a36"
-       , fgColor      = "#f8f8f2"
+       , bgColor      = "#303446"
+       , fgColor      = "#c6d0f5"
        -- Position TopSize and BottomSize take 3 arguments:
        --   an alignment parameter (L/R/C) for Left, Right or Center.
        --   an integer for the percentage width, so 100 would be 100%.
@@ -66,5 +66,4 @@ Config { font            = "xft:Ubuntu:weight=bold:pixelsize=11:antialias=true:h
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " <icon=haskell_20.xpm/>   <fc=#666666>|</fc> %UnsafeStdinReader% }{ <box type=Bottom width=2 mb=2 color=#bd93f9><fc=#bd93f9>%penguin%  %kernel%</fc></box>    <box type=Bottom width=2 mb=2 color=#f1fa8c><fc=#f1fa8c><action=`alacritty -e htop`>%cpu%</action></fc></box>    <box type=Bottom width=2 mb=2 color=#ff5555><fc=#ff5555><action=`alacritty -e htop`>%memory%</action></fc></box>    <box type=Bottom width=2 mb=2 color=#5af78e><fc=#5af78e>%disku%</fc></box>    <box type=Bottom width=2 mb=2 color=#ff79c6><fc=#ff79c6>%uparrow%  %uptime%</fc></box>    <box type=Bottom width=2 mb=2 color=#8be9fd><fc=#8be9fd>%bell%  <action=`alacritty -e sudo apt upgrade`>%pacupdate%</action></fc></box>   <box type=Bottom width=2 mb=2 color=#ff5555><fc=#ff5555>%musicicon%  %music%</fc></box>   <box type=Bottom width=2 mb=2 color=#ff6e67><fc=#ff6e67>%baticon%  %battery%</fc></box>    <box type=Bottom width=2 mb=2 color=#caa9fa><fc=#caa9fa><action=`emacsclient -c -a 'emacs' --eval '(doom/window-maximize-buffer(dt/year-calendar))'`>%date%</action></fc></box> %trayerpad%"
-       }
+       , template = "    <icon=haskell_20.xpm/>   <fc=#b5bfe2>|</fc> %UnsafeStdinReader% }{ <box type=Bottom width=2 mb=2 color=#e78284><fc=#e78284>%penguin%  %kernel%</fc></box>    <box type=Bottom width=2 mb=2 color=#a6d189><fc=#a6d189><action=`alacritty -e htop`>%cpu%</action></fc></box>    <box type=Bottom width=2 mb=2 color=#85c1dc><fc=#85c1dc><action=`alacritty -e htop`>%memory%</action></fc></box>    <box type=Bottom width=2 mb=2 color=#e5c890><fc=#e5c890>%disku%</fc></box>    <box type=Bottom width=2 mb=2 color=#ca9ee6><fc=#ca9ee6>%uparrow%  %uptime%</fc></box>    <box type=Bottom width=2 mb=2 color=#99d1db><fc=#99d1db>%bell%  <action=`alacritty -e sudo apt upgrade`>%pacupdate%</action></fc></box>   <box type=Bottom width=2 mb=2 color=#ef9f76><fc=#ef9f76>%musicicon%  %music%</fc></box>   <box type=Bottom width=2 mb=2 color=#e78284><fc=#e78284>%baticon%  %battery%</fc></box>    <box type=Bottom width=2 mb=2 color=#8caaee><fc=#8caaee><action=`emacsclient -c -a 'emacs' --eval '(doom/window-maximize-buffer(dt/year-calendar))'`>%date%</action></fc></box> %trayerpad%"}

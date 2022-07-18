@@ -1,3 +1,4 @@
 # alias definitions to be sourced by both bash and zsh
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias vim='nvim'
+alias nvim-gui='neovide --neovim-bin $HOME/.local/share/neovim/bin/nvim --multigrid'

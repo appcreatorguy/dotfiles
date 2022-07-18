@@ -119,8 +119,10 @@ import XMonad.Util.Cursor
       -- SolarizedLight
       -- TomorrowNight
       -- Latte
+      -- Frappe
+      -- Macchiato
       -- Mocha
-import Colors.Mocha
+import Colors.Frappe
 #+END_SRC
 
 * Variables
@@ -175,7 +177,7 @@ myStartupHook = do
 
 #+BEGIN_SRC haskell
     spawnOnce "lxsession"
-    spawnOnce "picom"
+    spawnOnce "picom --experimental-backend"
     spawnOnce "nm-applet"
     spawnOnce "blueman-applet"
     -- spawnOnce "volumeicon"
@@ -187,7 +189,7 @@ myStartupHook = do
 
 I like to use KDE Connect to connect my phone to my computer, so we'll start that here. We also start a simple battery warning indicator and modify some settings for my laptop touch pads too.
 #+BEGIN_SRC haskell
-    spawnOnce "/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd;/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd" -- Kde Connect, dunno why you have to run it twice b4 it picks up device
+    spawnOnce "/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd;/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd;/usr/bin/kdeconnect-indicator" -- Kde Connect, dunno why you have to run it twice b4 it picks up device
     spawnOnce "$HOME/tools/i3-battery-popup-1.0.0/i3-battery-popup -n -D -L 20 -l 10 -s $HOME/tools/i3-battery-popup-1.0.0/i3-battery-popup.wav" -- Battery Warning
     spawnOnce "$HOME/tools/auto-suspend -s $HOME/tools/i3-battery-popup-1.0.0/i3-battery-popup.wav"
     spawnOnce "sleep 3 && xinput set-prop \"MSFT0001:01 06CB:7F28 Touchpad\" \"libinput Tapping Enabled\" 1" -- Enable single taps on the touchpad to left click
@@ -196,7 +198,7 @@ I like to use KDE Connect to connect my phone to my computer, so we'll start tha
 We killed any running conky and trayer processes earlier in the autostart, so now we sleep for 2 seconds and then restart conky and trayer.
 #+BEGIN_SRC haskell
     spawn ("sleep 2 && conky -c $HOME/.config/conky/xmonad/" ++ colorScheme ++ "-01.conkyrc")
-    spawn ("sleep 2 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 " ++ colorTrayer ++ " --height 22")
+    spawn ("sleep 2 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 " ++ colorTrayer ++ " --height 31")
 #+END_SRC
 
 Select only =ONE= of the following four ways to set the wallpaper.
@@ -260,7 +262,7 @@ myAppGrid = [ ("Audacity", "audacity")
                  , ("LibreOffice Writer", "lowriter")
                  , ("PCManFM", "pcmanfm")
                  , ("Spotify", "LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify")
-                 , ("Neovim", "nvim-qt")
+                 , ("Neovim", "neovide")
                  , ("Alacritty", myTerminal)
                  , ("Bluetooth Manager", "blueman-manager")
                  , ("Whatsdesk", "Whatsdesk")

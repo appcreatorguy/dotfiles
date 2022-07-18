@@ -18,7 +18,7 @@ config.load_autoconfig(True)
 # Aliases for commands. The keys of the given dictionary are the
 # aliases, while the values are the commands they map to.
 # Type: Dict
-c.aliases = {'q': 'quit', 'w': 'session-save', 'wq': 'quit --save'}
+c.aliases = {'q': 'quit', 'w': 'session-save', 'wq': 'quit --save','paywall': 'open https://12ft.io/proxy?q={url}', 'source': 'session-load'}
 
 # Setting dark mode
 #config.set("colors.webpage.darkmode.enabled", True)
@@ -220,7 +220,7 @@ c.url.start_pages = 'https://google.com/'
 # the search engine name to the search term, e.g. `:open google
 # qutebrowser`.
 # Type: Dict
-c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}', 'am': 'https://www.amazon.com/s?k={}', 'aw': 'https://wiki.archlinux.org/?search={}', 'goog': 'https://www.google.com/search?q={}', 'hoog': 'https://hoogle.haskell.org/?hoogle={}', 're': 'https://www.reddit.com/r/{}', 'ub': 'https://www.urbandictionary.com/define.php?term={}', 'wiki': 'https://en.wikipedia.org/wiki/{}', 'yt': 'https://www.youtube.com/results?search_query={}'}
+c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}','who': 'https://farside.link/whoogle/search?q={}&lang_interface=en','ddg': 'https://duckduckgo.com/?q={}', 'am': 'https://www.amazon.com/s?k={}', 'aw': 'https://wiki.archlinux.org/?search={}', 'goog': 'https://www.google.com/search?q={}', 'hoog': 'https://hoogle.haskell.org/?hoogle={}', 're': 'https://www.reddit.com/r/{}', 'ub': 'https://www.urbandictionary.com/define.php?term={}', 'wiki': 'https://en.wikipedia.org/wiki/{}', 'yt': 'https://www.youtube.com/results?search_query={}', 'gh': 'https://www.github.com/{}'}
 
 # Text color of the completion widget. May be a single color to use for
 # all columns or a list of three colors, one for each column.
@@ -387,15 +387,17 @@ c.fonts.statusbar = '11pt "Source Code Pro"'
 #config.bind('O', 'spawn --userscript dmenu-open --tab')
 
 # Bindings for normal mode
-config.bind('M', 'hint links spawn mpv {hint-url}')
+config.bind('M', 'hint links spawn umpv {hint-url}')
+config.bind(',M', 'spawn umpv {url}')
 # config.bind('M', 'hint links spawn umpv {hint-url}')
 config.bind('Z', 'hint links spawn st -e youtube-dl {hint-url}')
 config.bind('t', 'set-cmd-text -s :open -t')
 config.bind('xb', 'config-cycle statusbar.show always never')
 config.bind('xt', 'config-cycle tabs.show always never')
-config.bind('xx', 'config-cycle statusbar.show always never;; config-cycle tabs.show always never')
+config.bind('xx', 'config-cycle statusbar.show always in-mode;; config-cycle tabs.show always switching')
 config.bind('J', 'tab-prev')
 config.bind('K', 'tab-next')
+config.bind('O', 'set-cmd-text :open {url:pretty}')
 
 # Bindings to selectively enable JS, as I prefer to disable it by default.
 # They are redefined from the default keybinds to prevent conflicts.
@@ -414,3 +416,5 @@ config.bind(',dr', 'config-cycle content.user_stylesheets ~/.config/qutebrowser/
 config.bind(',gr', 'config-cycle content.user_stylesheets ~/.config/qutebrowser/solarized-everything-css/css/gruvbox/gruvbox-all-sites.css ""')
 config.bind(',sd', 'config-cycle content.user_stylesheets ~/.config/qutebrowser/solarized-everything-css/css/solarized-dark/solarized-dark-all-sites.css ""')
 config.bind(',sl', 'config-cycle content.user_stylesheets ~/.config/qutebrowser/solarized-everything-css/css/solarized-light/solarized-light-all-sites.css ""')
+config.bind(',la', 'config-cycle content.user_stylesheets ~/.config/qutebrowser/solarized-everything-css/css/latte/latte-all-sites.css ""')
+config.bind(',mo', 'config-cycle content.user_stylesheets ~/.config/qutebrowser/solarized-everything-css/css/mocha/mocha-all-sites.css ""')

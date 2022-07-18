@@ -16,6 +16,13 @@ M.treesitter = {
     "json",
     "typescript",
   },
+  autotag = {
+    enable = true,
+  },
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+  }
 }
 
 M.nvimtree = {

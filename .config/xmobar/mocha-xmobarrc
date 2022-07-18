@@ -24,7 +24,7 @@ Config { font            = "xft:Ubuntu:weight=bold:pixelsize=11:antialias=true:h
        --   an integer for the percentage width, so 100 would be 100%.
        --   an integer for the minimum pixel height for xmobar, so 24 would force a height of at least 24 pixels.
        --   NOTE: The height should be the same as the trayer (system tray) height.
-       , position       = TopSize L 100 24
+       , position       = TopSize L 100 32
        , lowerOnStart = True
        , hideOnStart  = False
        , allDesktops  = True
@@ -66,5 +66,5 @@ Config { font            = "xft:Ubuntu:weight=bold:pixelsize=11:antialias=true:h
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " <icon=haskell_20.xpm/>   <fc=#666666>|</fc> %UnsafeStdinReader% }{ <box type=Bottom width=2 mb=2 color=#f38ba8><fc=#f38ba8>%penguin%  %kernel%</fc></box>    <box type=Bottom width=2 mb=2 color=#a6e3a1><fc=#a6e3a1><action=`alacritty -e htop`>%cpu%</action></fc></box>    <box type=Bottom width=2 mb=2 color=#74c7ec><fc=#74c7ec><action=`alacritty -e htop`>%memory%</action></fc></box>    <box type=Bottom width=2 mb=2 color=#f9e2af><fc=#f9e2af>%disku%</fc></box>    <box type=Bottom width=2 mb=2 color=#cba6f7><fc=#cba6f7>%uparrow%  %uptime%</fc></box>    <box type=Bottom width=2 mb=2 color=#89dceb><fc=#89dceb>%bell%  <action=`alacritty -e sudo apt upgrade`>%pacupdate%</action></fc></box>   <box type=Bottom width=2 mb=2 color=#fab387><fc=#fab387>%musicicon%  %music%</fc></box>   <box type=Bottom width=2 mb=2 color=#f38ba8><fc=#f38ba8>%baticon%  %battery%</fc></box>    <box type=Bottom width=2 mb=2 color=#89b4fa><fc=#89b4fa><action=`emacsclient -c -a 'emacs' --eval '(doom/window-maximize-buffer(dt/year-calendar))'`>%date%</action></fc></box> %trayerpad%"
+       , template = "    <icon=haskell_20.xpm/>   <fc=#666666>|</fc> %UnsafeStdinReader% }{ <box type=Bottom width=2 mb=2 color=#f38ba8><fc=#f38ba8>%penguin%  %kernel%</fc></box>    <box type=Bottom width=2 mb=2 color=#a6e3a1><fc=#a6e3a1><action=`alacritty -e htop`>%cpu%</action></fc></box>    <box type=Bottom width=2 mb=2 color=#74c7ec><fc=#74c7ec><action=`alacritty -e htop`>%memory%</action></fc></box>    <box type=Bottom width=2 mb=2 color=#f9e2af><fc=#f9e2af>%disku%</fc></box>    <box type=Bottom width=2 mb=2 color=#cba6f7><fc=#cba6f7>%uparrow%  %uptime%</fc></box>    <box type=Bottom width=2 mb=2 color=#89dceb><fc=#89dceb>%bell%  <action=`alacritty -e sudo apt upgrade`>%pacupdate%</action></fc></box>   <box type=Bottom width=2 mb=2 color=#fab387><fc=#fab387>%musicicon%  %music%</fc></box>   <box type=Bottom width=2 mb=2 color=#f38ba8><fc=#f38ba8>%baticon%  %battery%</fc></box>    <box type=Bottom width=2 mb=2 color=#89b4fa><fc=#89b4fa><action=`emacsclient -c -a 'emacs' --eval '(doom/window-maximize-buffer(dt/year-calendar))'`>%date%</action></fc></box> %trayerpad%"
        }

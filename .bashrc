@@ -118,3 +118,4 @@ fi
 source ~/.bash_completion/alacritty
 export PATH="$PATH:$HOME/.spicetify"
 
+. "$HOME/.cargo/env"

@@ -53,7 +53,18 @@ return {
   --   end
   -- },
 
+  ["tpope/vim-obsession"] = {
+    opt = false,
+  },
+
+  -- Treesitter plugins
+
   ["p00f/nvim-ts-rainbow"] = {
+    opt = false,
+    after = "nvim-treesitter",
+  },
+
+  ["windwp/nvim-ts-autotag"] = {
     opt = false,
     after = "nvim-treesitter",
   },
@@ -85,6 +96,14 @@ return {
     config = function()
       require "custom.plugins.possession"
     end
+  },
+
+  -- Formatting and linting
+  ["jose-elias-alvarez/null-ls.nvim"] = {
+    after = "nvim-lspconfig",
+    config = function()
+      require "custom.plugins.null-ls"
+    end,
   },
 
   -- NodeJS/React Development

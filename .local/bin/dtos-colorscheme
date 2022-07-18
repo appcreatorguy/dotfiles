@@ -26,6 +26,8 @@ options=("DoomOne"
 "SolarizedLight"
 "TomorrowNight"
 "Latte"
+"Frappe"
+"Macchiato"
 "Mocha")
 
 choice=$(printf '%s\n' "${options[@]}" | ${DMENU} 'Choose color scheme:' "${@}")
