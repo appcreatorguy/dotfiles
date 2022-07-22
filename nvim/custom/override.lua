@@ -60,4 +60,14 @@ M.cmp = {
    },
 }
 
+M.ui = {
+  statusline = {
+    seperator_style = "round",
+  },
+
+  tabufline = {
+    lazyload = false,
+  }
+}
+
 return M

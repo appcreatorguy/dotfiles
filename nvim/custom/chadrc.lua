@@ -7,9 +7,6 @@ M.ui = {
   theme = "catppuccin",
   transparency = false,
   hl_override = require "custom.highlights",
-  statusline = {
-    separator_style = "round",
-  },
 }
 
 M.plugins = {
@@ -17,6 +14,7 @@ M.plugins = {
     ["kyazdani42/nvim-tree.lua"] = override.nvimtree,
     ["nvim-treesitter/nvim-treesitter"] = override.treesitter,
     ["hrsh7th/nvim-cmp"] = override.cmp,
+    ["NvChad/ui"] = override.ui
   },
 
   remove = {},
