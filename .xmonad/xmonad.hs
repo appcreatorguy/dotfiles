@@ -80,6 +80,7 @@ import XMonad.Util.Cursor
       -- SolarizedLight
       -- TomorrowNight
       -- Latte
+      -- Frappe
       -- Macchiato
       -- Mocha
 import Colors.Frappe
@@ -134,10 +135,11 @@ myStartupHook = do
     spawnOnce "/snap/bin/emacs --daemon" -- I'm stupid and installed the snap emacs package, so its here.
     spawnOnce "dunst" -- notification daemon
 
-    spawnOnce "/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd;/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd;/usr/bin/kdeconnect-indicator" -- Kde Connect, dunno why you have to run it twice b4 it picks up device
+    spawnOnce "/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd;/usr/lib/x86_64-linux-gnu/libexec/kdeconnectd" -- Kde Connect, dunno why you have to run it twice b4 it picks up device
     spawnOnce "$HOME/tools/i3-battery-popup-1.0.0/i3-battery-popup -n -D -L 20 -l 10 -s $HOME/tools/i3-battery-popup-1.0.0/i3-battery-popup.wav" -- Battery Warning
     spawnOnce "$HOME/tools/auto-suspend -s $HOME/tools/i3-battery-popup-1.0.0/i3-battery-popup.wav"
     spawnOnce "sleep 3 && xinput set-prop \"MSFT0001:01 06CB:7F28 Touchpad\" \"libinput Tapping Enabled\" 1" -- Enable single taps on the touchpad to left click
+    spawnOnce "sleep 1 && /usr/bin/kdeconnect-indicator"
 
     spawn ("sleep 2 && conky -c $HOME/.config/conky/xmonad/" ++ colorScheme ++ "-01.conkyrc")
     spawn ("sleep 2 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 " ++ colorTrayer ++ " --height 31")
