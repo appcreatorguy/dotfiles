@@ -1,0 +1,2 @@
+#! /bin/sh
+python3 $HOME/tools/brightness-controller/src/init.py

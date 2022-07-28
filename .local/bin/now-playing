@@ -17,9 +17,9 @@ source "$HOME/.config/dmscripts/config"
 
 if [ $(pgrep spotify | wc -l) -gt 0 ]; then
     if [ $(playerctl -p spotify status | grep -c "Playing") -eq 1 ]; then
-        echo -n "<fn=2></fn>"
+        echo -n ""
     else
-        echo -n "<fn=2></fn>"
+        echo -n ""
     fi
 
     echo -n " - $(playerctl -p spotify metadata artist | cut -c -20)"

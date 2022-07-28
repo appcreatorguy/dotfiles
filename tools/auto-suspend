@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+#
+# Script name: auto-suspend
+# Description: Automatically suspend the computer on low battery.
+# Dependencies:
+# Github: https://www.github.com/appcreatorguy/dotfiles
+# Licence: https://www.github.com/appcreatorguy/dotfiles/LICENSE
+# Contributors: Manas Mengle
+
+# Set with the flags "-e", "-u","-o pipefail" cause the script to fail
+# if certain things happen, which is a good thing. Otherwise we can
+# get hidden bugs that are hard to discover
+# set -eou pipefail
+
+error () {
+    echo "$1" >&2
+    echo "Exiting" >&2
+    exit "$2"
+}
+
+while getopts 's:v' opt; do
+    case $opt in
+        s)
+            [ -f "$OPTARG" ] || error "{opt}: ${OPTARG}: no such file" 2
+            SOUND_TO_PLAY="${OPTARG}"
+            ;;
+        v)
+            SOUND_VOLUME_PERC="${OPTARG}"
+            echo "${OPTARG}"
+            [[ $OPTARG -ge 0 && $OPTARG -le 100 ]] || error "${opt}: ${OPTARG}: not an integer between 0 and 100" 2
+            SOUND_VOLUME=$(( OPTARG * 65536 / 100 ))
+            ;;
+        :)
+            error "Option -$OPTARG requires an argument" 2
+            ;;
+        \?)
+            exit 2
+            ;;
+    esac
+done
+
+is_battery_discharging() {
+    grep STATUS=Discharging "/sys/class/power_supply/BAT0/uevent" && return 0
+    return 1
+} >/dev/null
+
+get_battery_perc() {
+    cat "/sys/class/power_supply/BAT0/capacity"
+}
+
+play_sound(){
+    if [[ -n $SOUND_TO_PLAY ]]; then
+        paplay "$SOUND_TO_PLAY" --volume $SOUND_VOLUME
+    fi
+}
+
+show_notify() {
+    play_sound
+    notify-send -u critical -i "critical-battery" "Critical Battery" "Laptop will shut off in 2 minutes unless power is given."
+}
+
+debug(){
+    echo "$1"
+}
+
+main(){
+    SOUND_VOLUME="${SOUND_VOLUME:-65536}"
+
+    while true; do
+        debug "Checking.. "
+
+        PERC=$(get_battery_perc)
+        debug "got ${PERC}%"
+
+        if is_battery_discharging; then
+            debug "Battery is discharging"
+
+            if [[ $PERC -lt 10 ]]; then
+                debug "showing warning"
+                show_notify
+
+                debug "sleeping for 2 minutes"
+                sleep "2m"
+
+                if is_battery_discharging; then
+                    debug "Battery is still discharging, suspending"
+                    systemctl suspend
+                fi
+            fi
+        fi
+
+        debug "sleeping for 5 mins"
+        sleep "5m"
+    done
+}
+
+# if [ "$(cat /sys/class/power_supply/BAT0/status)" = Discharging ]; then
+#     if [ "$(cat /sys/class/power_supply/BAT0/capacity)" -lt 10 ]; then
+#         notify-send -u critical -i "critical-battery" "Critical Battery" "Laptop will shut off in 2 minutes"
+#         sleep 120
+#         if [ "$(cat /sys/class/power_supply/BAT0/status)" = Discharging ]; then # Check if laptop is still unplugged
+#             systemctl suspend
+#         fi
+#     fi
+# fi
+
+main

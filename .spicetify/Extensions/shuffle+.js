@@ -205,7 +205,7 @@
      */
     const fetchAlbum = async (uri) => {
         const arg = uri.split(":")[2];
-        const res = await Spicetify.CosmosAsync.get(`hm://album/v1/album-app/album/${arg}/desktop`);
+        const res = await Spicetify.CosmosAsync.get(`wg://album/v1/album-app/album/${arg}/desktop`);
         const items = [];
         for (const disc of res.discs) {
             const availables = disc.tracks.filter((track) => track.playable);
@@ -231,7 +231,7 @@
      * @returns {Promise<string[]>}
      */
     const fetchArtist = async (uriBase62) => {
-        const res = await Spicetify.CosmosAsync.get(`hm://artist/v1/${uriBase62}/desktop?format=json`);
+        const res = await Spicetify.CosmosAsync.get(`wg://artist/v1/${uriBase62}/desktop?format=json`);
         return res.top_tracks.tracks.map((item) => item.uri);
     };
 
@@ -242,7 +242,7 @@
      */
     const fetchDiscography = async (uriBase62) => {
         Spicetify.showNotification(`Fetching albums list...`);
-        let res = await Spicetify.CosmosAsync.get(`hm://artist/v1/${uriBase62}/desktop?format=json`);
+        let res = await Spicetify.CosmosAsync.get(`wg://artist/v1/${uriBase62}/desktop?format=json`);
         let albums = res.releases.albums.releases;
         const tracks = [];
         for (const album of albums) {

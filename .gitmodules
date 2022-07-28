@@ -1,3 +1,9 @@
 [submodule ".config/nvim"]
 	path = .config/nvim.old
 	url = https://github.com/appcreatorguy/nvim-config.git
+[submodule ".config/spicetify/Themes/Dracula-Spicetify"]
+	path = .config/spicetify/Themes/Dracula-Spicetify
+	url = https://github.com/Darkempire78/Dracula-Spicetify.git
+[submodule ".config/spicetify/Themes/catppuccin"]
+	path = .config/spicetify/Themes/catppuccin
+	url = https://github.com/catppuccin/spicetify.git

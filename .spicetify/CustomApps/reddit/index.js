@@ -1,4 +1,4 @@
-// Run "npm i @type/react" to have this type package available in workspace
+// Run "npm i @types/react-dom @types/react" to have this type package available in workspace
 /// <reference types="react" />
 /// <reference types="react-dom" />
 
@@ -61,6 +61,8 @@ const typesLocale = {
 };
 
 class Grid extends react.Component {
+    viewportSelector = "#main .os-viewport";
+
     constructor(props) {
         super(props);
         Object.assign(this, props);
@@ -201,7 +203,7 @@ class Grid extends react.Component {
         this.configButton = new Spicetify.Menu.Item("Reddit config", false, openConfig);
         this.configButton.register();
 
-        const viewPort = document.querySelector("main .os-viewport");
+        const viewPort = document.querySelector(this.viewportSelector);
         this.checkScroll = this.isScrolledBottom.bind(this);
         viewPort.addEventListener("scroll", this.checkScroll);
 
@@ -218,7 +220,7 @@ class Grid extends react.Component {
 
     componentWillUnmount() {
         gridUpdateTabs = gridUpdatePostsVisual = null;
-        const viewPort = document.querySelector("main .os-viewport");
+        const viewPort = document.querySelector(this.viewportSelector);
         lastScroll = viewPort.scrollTop;
         viewPort.removeEventListener("scroll", this.checkScroll);
         this.configButton.deregister();
@@ -253,9 +255,12 @@ class Grid extends react.Component {
                 "div",
                 {
                     id: "reddit-grid",
-                    className: "main-gridContainer-gridContainer",
+                    className: "main-gridContainer-gridContainer main-gridContainer-fixedWidth",
                     style: {
                         "--minimumColumnWidth": "180px",
+                        "--column-width": "minmax(var(--minimumColumnWidth),1fr)",
+                        "--column-count": "auto-fill",
+                        "--grid-gap": "24px",
                     },
                 },
                 [...cardList]
@@ -321,7 +326,7 @@ async function fetchPlaylist(post) {
 async function fetchAlbum(post) {
     const arg = post.uri.split(":")[2];
     try {
-        const metadata = await Spicetify.CosmosAsync.get(`hm://album/v1/album-app/album/${arg}/desktop`);
+        const metadata = await Spicetify.CosmosAsync.get(`wg://album/v1/album-app/album/${arg}/desktop`);
         return {
             type: typesLocale.album,
             uri: post.uri,

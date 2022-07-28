@@ -12,7 +12,7 @@
         return;
     }
 
-    const SCROLL_STEP = 50;
+    const SCROLL_STEP = 25;
 
     /**
      * Register your own keybind with function `registerBind`
@@ -109,7 +109,7 @@
     }
 
     function clickQueueButton() {
-        document.querySelector("div.ExtraControls div.control-button-wrapper > button").click();
+        document.querySelector(".main-nowPlayingBar-right .control-button-wrapper > button").click();
     }
 
     function clickNavigatingBackButton() {
@@ -123,14 +123,24 @@
     function appScrollDown() {
         const app = focusOnApp();
         if (app) {
-            app.scrollBy(0, SCROLL_STEP);
+            const scrollInterval = setInterval(() => {
+                app.scrollTop += SCROLL_STEP;
+            }, 10);
+            document.addEventListener("keyup", () => {
+                clearInterval(scrollInterval);
+            });
         }
     }
 
     function appScrollUp() {
         const app = focusOnApp();
         if (app) {
-            app.scrollBy(0, -SCROLL_STEP);
+            const scrollInterval = setInterval(() => {
+                app.scrollTop -= SCROLL_STEP;
+            }, 10);
+            document.addEventListener("keyup", () => {
+                clearInterval(scrollInterval);
+            });
         }
     }
 
@@ -145,19 +155,19 @@
     }
 
     function nextSong() {
-        document.querySelector(".main-skipForwardButton-button").click();
+        document.querySelector("button[aria-label='Next']").click();
     }
 
     function previousSong() {
-        document.querySelector(".main-skipBackButton-button").click();
+        document.querySelector("button[aria-label='Previous']").click();
     }
 
     function increaseVolume() {
-        Spicetify.Player.origin.setVolume(Spicetify.Player.getVolume() + 0.1);
+        Spicetify.Player.setVolume(Spicetify.Player.getVolume() + 0.05);
     }
 
     function decreaseVolume() {
-        Spicetify.Player.origin.setVolume(Spicetify.Player.getVolume() - 0.1);
+        Spicetify.Player.setVolume(Spicetify.Player.getVolume() - 0.05);
     }
 
     /**
@@ -205,11 +215,12 @@
     }
 
     function focusOnApp() {
-        return document.querySelector("main .os-viewport");
+        return document.querySelector(".Root__main-view .os-viewport");
     }
 
     /**
-     * @returns {number}
+     * @returns {number | undefined}
+     * @param {NodeListOf<Element>} allItems
      */
     function findActiveIndex(allItems) {
         const active = document.querySelector(
@@ -398,6 +409,9 @@ function VimBind() {
         }
     }
 
+    /**
+     * @param {HTMLElement} element
+     */
     function click(element) {
         if (element.hasAttribute("href") || element.tagName === "BUTTON") {
             element.click();
@@ -405,7 +419,7 @@ function VimBind() {
         }
 
         const findButton = element.querySelector(`button[data-ta-id="play-button"]`) || element.querySelector(`button[data-button="play"]`);
-        if (findButton) {
+        if (findButton instanceof HTMLButtonElement) {
             findButton.click();
             return;
         }
@@ -424,6 +438,12 @@ function VimBind() {
         }
     }
 
+    /**
+     * @param {Element} target
+     * @param {string} key
+     * @param {string | number} top
+     * @param {string | number} left
+     */
     function createKey(target, key, top, left) {
         const div = document.createElement("span");
         div.classList.add("vim-key");

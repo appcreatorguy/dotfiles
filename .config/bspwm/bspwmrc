@@ -1,0 +1,78 @@
+#! /bin/sh
+
+COLORSCHEME="latte"
+
+#### AUTOSTART ####
+killall conky &
+killall trayer &
+
+sxhkd -c ~/.config/sxhkd/sxhkdrc &
+# killall picom; picom &
+nm-applet &
+blueman-applet &
+killall pasystray; pasystray &
+killall dunst; dunst &
+/home/manasmengle/.config/polybar/launch.sh
+
+mpd &
+kdeconnect-cli & # ADD DEVICE NAME
+kdeconnect-indicator &
+/home/manasmengle/tools/auto-suspend -s /home/manasmengle/tools/i3-battery-popup.wav
+sleep 1 && conky -c "$HOME/.config/conky/xmonad/$COLORSCHEME-01.conkyrc" &
+sleep 0.1 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0xe6e9ef --height 31 & 
+# feh --randomize -bg-fill ~/wallpapers/* &
+nitrogen --random --set-zoom-fill &
+betterlockscreen -u ~/wallpapers/ &
+
+xsetroot -cursor_name left_ptr &
+wmname LG3D
+
+# Bodge: swap windows twice to fix display errors
+xrandr --output eDP-1-1 --primary --auto --left-of HDMI-0 &
+sleep 0.5 &
+xrandr --output HDMI-0 --primary --auto --left-of eDP-1-1 &
+
+
+
+
+#### MONITORS ####
+bspc monitor Virtual1 -d dev www sys doc vbox chat mus vid gfx
+bspc monitor eDP-1-1 -d dev www sys doc vbox chat mus vid gfx
+bspc monitor HDMI-0 -d dev www sys doc vbox chat mus vid gfx
+
+#### BSPWM configuration ####
+bspc config border_width                  2
+bspc config window_gap                    10
+bspc config top_padding                   20
+bspc config bottom_padding                0
+bspc config left_padding                  0
+bspc config right_padding                 0
+bspc config top_monocole_padding          -30 # counter top_padding
+bspc config single_monocle                false
+bspc config click_to_focus                true
+bspc config split_ratio                   0.50
+bspc config borderless_monocle            true
+bspc config gapless_monocle               true
+bspc config focus_by_distance             true
+bspc config focus_follows_pointer         true
+bspc config history_aware_focus           true
+bspc config remove_disabled_monitors      true
+bspc config merge_overlapping_monitors    true
+bspc config pointer_modifier mod4
+bspc config pointer_action1 move
+bspc config pointer_action2 resize_side
+bspc config pointer_action3 resize_corner
+
+#### BSPWM coloring ####
+bspc config normal_border_color		      "#4c566a"
+bspc config active_border_color	          "#1e1e1e"
+bspc config focused_border_color	      "#5e81ac"
+bspc config presel_feedback_color	      "#5e81ac"
+bspc config urgent_border_color 	      "#dd2727"
+
+#polybar hidden when fullscreen for vlc, youtube, mpv ...
+#find out the name of your monitor with xrandr
+xdo below -t $(xdo id -n root) $(xdo id -a polybar-main_XWAYLAND0)
+xdo below -t $(xdo id -n root) $(xdo id -a polybar-main_eDP-1-1)
+
+# bspc rule -a qutebrowser desktop='^2'

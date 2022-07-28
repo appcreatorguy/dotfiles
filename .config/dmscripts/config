@@ -19,9 +19,9 @@ DMTERM="alacritty -e"
 
 #DMEDITOR="emacsclient -c -a emacs"
 #DMEDITOR="${DMTERM} /home/manasmengle/.local/share/neovim/bin/nvim"
-#DMEDITOR="${DMTERM} nvim"
+DMEDITOR="${DMTERM} nvim"
 #DMEDITOR="nvim-qt"
-DMEDITOR="neovide"
+# DMEDITOR="neovide"
 
 # TODO: Rename this variable to something more traditional
 # logout_locker='slock'

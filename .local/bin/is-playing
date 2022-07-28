@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#
+# Script name: is-playing
+# Description: Check if a playerctl compatible player is currently running.
+# Dependencies: playerctl
+# Github: https://www.github.com/appcreatorguy/dotfiles
+# Licence: https://www.github.com/appcreatorguy/dotfiles/LICENSE
+# Contributors: Manas Mengle
+
+# Set with the flags "-e", "-u","-o pipefail" cause the script to fail
+# if certain things happen, which is a good thing. Otherwise, we can
+# get hidden bugs that are hard to discover
+set -eou pipefail
+
+playerstatus=$(2>/dev/null playerctl status)
+noplayers='No players found'
+
+if [[ "$playerstatus" == *"$noplayers"* ]]; then
+    exit 1
+else
+    exit 0
+fi
