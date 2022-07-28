@@ -17,7 +17,7 @@ set -eou pipefail
 
 # if [[ "$playerstatus" == *"$noplayers"* ]]; then
 
-if [ $(pgrep spotify Vy| wc -l) -gt 0 ]; then
+if [ $(pgrep spotify | wc -l) -gt 0 ]; then
     exit 0
 elif [ $(pgrep mocp | wc -l) -gt 0 ]; then
     exit 0
