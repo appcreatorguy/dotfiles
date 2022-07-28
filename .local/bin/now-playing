@@ -15,7 +15,7 @@ set -eou pipefail
 # shellcheck disable=SC1091
 source "$HOME/.config/dmscripts/config"
 
-if [ $(pgrep spotify Vy| wc -l) -gt 0 ]; then
+if [ $(pgrep spotify | wc -l) -gt 0 ]; then
     if [ $(playerctl -p spotify status | grep -c "Playing") -eq 1 ]; then
         echo -n ""
     else
