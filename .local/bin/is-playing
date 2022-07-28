@@ -12,11 +12,17 @@
 # get hidden bugs that are hard to discover
 set -eou pipefail
 
-playerstatus=$(2>/dev/null playerctl status)
-noplayers='No players found'
+# playerstatus=$(2>/dev/null playerctl status)
+# noplayers='No players found'
 
-if [[ "$playerstatus" == *"$noplayers"* ]]; then
-    exit 1
-else
+# if [[ "$playerstatus" == *"$noplayers"* ]]; then
+
+if [ $(pgrep spotify Vy| wc -l) -gt 0 ]; then
     exit 0
+elif [ $(pgrep mocp | wc -l) -gt 0 ]; then
+    exit 0
+elif [ $(pgrep ncmpcpp | wc -l) -gt 0 ]; then
+    exit 0
+else
+    exit 1
 fi
