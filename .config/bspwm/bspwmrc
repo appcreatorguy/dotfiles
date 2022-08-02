@@ -28,17 +28,18 @@ xsetroot -cursor_name left_ptr &
 wmname LG3D
 
 # Bodge: swap windows twice to fix display errors
-xrandr --output eDP-1-1 --primary --auto --left-of HDMI-0 &
-sleep 0.5 &
-xrandr --output HDMI-0 --primary --auto --left-of eDP-1-1 &
-
-
-
+if [[ $HOSTNAME == manas-laptop ]]; then
+  xrandr --output eDP-1 --primary --auto --left-of HDMI-0 &
+  sleep 0.5 &
+  xrandr --output HDMI-1-0 --primary --auto --left-of eDP-1-1 &
+fi
 
 #### MONITORS ####
 bspc monitor Virtual1 -d dev www sys doc vbox chat mus vid gfx
-bspc monitor eDP-1-1 -d dev www sys doc vbox chat mus vid gfx
-bspc monitor HDMI-0 -d dev www sys doc vbox chat mus vid gfx
+if [[ $HOSTNAME == manas-laptop ]]; then
+  bspc monitor eDP-1 -d dev www sys doc vbox chat mus vid gfx
+  bspc monitor HDMI-1-0 -d dev www sys doc vbox chat mus vid gfx
+fi
 
 #### BSPWM configuration ####
 bspc config border_width                  2
