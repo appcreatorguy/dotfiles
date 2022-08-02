@@ -15,16 +15,17 @@ set -euo pipefail
 # shellcheck disable=SC1091
 source "$HOME/.config/dmscripts/config"
 
-options=("DoomOne"
-"Dracula"
-"GruvboxDark"
-"MonokaiPro"
-"Nord"
-"OceanicNext"
-"Palenight"
-"SolarizedDark"
-"SolarizedLight"
-"TomorrowNight"
+# options=("DoomOne"
+options=(
+# "Dracula"
+# "GruvboxDark"
+# "MonokaiPro"
+# "Nord"
+# "OceanicNext"
+# "Palenight"
+# "SolarizedDark"
+# "SolarizedLight"
+# "TomorrowNight"
 "Latte"
 "Frappe"
 "Macchiato"
@@ -38,10 +39,18 @@ if [ "$choice" ]; then
     sed  -i "s/import Colors.*/import Colors.$choice/g" "$HOME"/.xmonad/xmonad.hs || echo "Cannot modify xmonad.hs"
     sed  -i 's`@theme "/home/manasmengle/.local/share/rofi/themes/catppuccin-.*`@theme "/home/manasmengle/.local/share/rofi/themes/catppuccin-'$choice.rasi'"`g' /home/manasmengle/.config/rofi/config.rasi || echo "Cannot modify config.rasi"
     sed  -i 's`include-file = colors/.*`include-file = colors/'$choice'.ini`g' /home/manasmengle/.config/polybar/config.ini || echo "Cannot modify config.ini"
-    sed  -i 's`COLORSCHEME=.*`COLORSCHEME="'$choicelower'"`g' /home/manasmengle/.config/bspwm/bspwmrc || echo "Cannor modify bspwmrc"
-    xmonad --restart
-    bspc wm -r 
+    sed  -i 's`COLORSCHEME=.*`COLORSCHEME="'$choicelower'"`g' /home/manasmengle/.config/bspwm/bspwmrc || echo "Cannot modify bspwmrc"
+    sed  -i 's`current_theme           = catppuccin-.*`current_theme           = catppuccin-'$choicelower'`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
+    # xmonad --restart
+    if command -v xmonad &> /dev/null; then
+      xmonad --restart
+    fi
+    if command -v bspc &> /dev/null; then
+      bspc wm -r
+    fi
+    # bspc wm -r 
     # /home/manasmengle/.config/polybar/launch.sh
+    spicetify apply
 
     sed -i "s/^colors: .*/colors: \*$choice/g" "$HOME"/.config/alacritty/alacritty.yml
 
