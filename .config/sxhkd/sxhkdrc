@@ -198,7 +198,15 @@ XF86Calculator
   qalculate-gtk
 Print
   dm-maim
-    
+XF86MonBrightnessUp
+  brightnessctl set +10%
+XF86MonBrightnessDown
+  brightnessctl set 10%-
+  
+
+# Lock Screen
+super + alt + l
+  betterlockscreen -l dim
     
 # DMENU SCRIPTS (super + p)
 
