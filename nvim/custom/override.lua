@@ -70,4 +70,16 @@ M.ui = {
   }
 }
 
+M.mason = {
+  ensure_installed = {
+    "lua-language-server",
+    "stylua",
+    "shfmt",
+    "shellcheck",
+    "typescript-language-server",
+    "eslint-lsp",
+    "html-lsp",
+  },
+}
+
 return M

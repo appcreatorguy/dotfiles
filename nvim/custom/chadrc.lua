@@ -4,7 +4,7 @@ local override = require "custom.override"
 
 M.ui = {
   theme_toggle = { "catppuccin", "catppuccin-latte" },
-  theme = "catppuccin-latte",
+  theme = "catppuccin",
   transparency = false,
   hl_override = require "custom.highlights",
 }
@@ -14,7 +14,8 @@ M.plugins = {
     ["kyazdani42/nvim-tree.lua"] = override.nvimtree,
     ["nvim-treesitter/nvim-treesitter"] = override.treesitter,
     ["hrsh7th/nvim-cmp"] = override.cmp,
-    ["NvChad/ui"] = override.ui
+    ["NvChad/ui"] = override.ui,
+    ["williamboman/mason"] = override.mason,
   },
 
   remove = {},
