@@ -12,6 +12,6 @@ sleep 0.1
 # Launch bar1
 # polybar -c ~/.config/polybar/config.ini main &
 
-for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+for m in $(polybar --list-monitors | cut -d":" -f1); do
   MONITOR=$m polybar -q main -c ~/.config/polybar/config.ini &
 done
