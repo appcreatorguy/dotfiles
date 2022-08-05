@@ -37,8 +37,12 @@ super + g
 	bspc node -s biggest
 
 # switch monitor focussed
-super + {.,comma}
+super + {comma,period}
   bspc monitor --focus {prev,next}
+
+# send node to monitor
+super + shift + {comma,period}
+      bspc node -m {prev,next} --follow
 
 # change inner gaps
 ctrl + super + {k, j}
@@ -202,7 +206,11 @@ XF86MonBrightnessUp
   brightnessctl set +10%
 XF86MonBrightnessDown
   brightnessctl set 10%-
-  
+
+
+# Show last notification
+alt + grave
+  dunstctl history-pop  
 
 # Lock Screen
 super + alt + l

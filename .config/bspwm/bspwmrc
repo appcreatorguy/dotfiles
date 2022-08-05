@@ -1,10 +1,11 @@
 #! /bin/sh
 
-COLORSCHEME="latte"
+COLORSCHEME="macchiato"
 
 #### AUTOSTART ####
 killall conky &
 killall trayer &
+killall cava &
 
 killall sxhkd; sleep 0.2;  sxhkd -c ~/.config/sxhkd/sxhkdrc &
 killall picom; sleep 0.2; picom &
@@ -12,7 +13,8 @@ nm-applet &
 blueman-applet &
 killall pasystray; pasystray &
 killall dunst; dunst &
-/home/manasmengle/.config/polybar/launch.sh
+libinput-gestures &
+xinput set-prop "MSFT0001:01 06CB:7F28 Touchpad" "libinput Tapping Enabled" 1 & # Enable tap to click
 
 mpd &
 kdeconnect-cli -n SM-M515F & # ADD DEVICE NAME
@@ -29,18 +31,19 @@ wmname LG3D &
 
 # Bodge: swap windows twice to fix display errors
 if [[ $HOSTNAME == "manas-laptop" ]]; then
-  xrandr --output eDP-1 --primary --auto --left-of HDMI-0 &
-  sleep 0.5 &
-  xrandr --output HDMI-1-0 --primary --auto --left-of eDP-1-1 &
+  xrandr --output eDP-1 --primary --auto --left-of HDMI-1-0 &
+  # echo "hello"
+  sleep 0.5; xrandr --output HDMI-1-0 --primary --auto --left-of eDP-1 &
 fi
 
 #### MONITORS ####
-bspc monitor Virtual1 -d dev www sys doc vbox chat mus vid gfx &
+# bspc monitor Virtual1 -d dev www sys doc vbox chat mus vid gfx &
 if [[ $HOSTNAME == "manas-laptop" ]]; then
   bspc monitor eDP-1 -d dev www sys doc vbox chat mus vid gfx &
-  echo "test"
-  bspc monitor HDMI-1-0 -d dev www sys doc vbox chat mus vid gfx &
+  sleep 0.5;  bspc monitor HDMI-1-0 -d dev www sys doc vbox chat mus vid gfx &
 fi
+
+sleep 0.5; /home/manasmengle/.config/polybar/launch.sh &
 
 #### BSPWM configuration ####
 bspc config border_width                  2
