@@ -22,8 +22,8 @@ if [ $(pgrep spotify | wc -l) -gt 0 ]; then
         echo -n ""
     fi
 
-    echo -n " - $(playerctl -p spotify metadata artist | cut -c -20)"
-    echo -n " - $(playerctl -p spotify metadata title | cut -c -20)"
+    echo -n " - $(playerctl -p spotify metadata artist | cut -c -15)"
+    echo -n " - $(playerctl -p spotify metadata title | cut -c -15)"
 
 elif [ $(pgrep mocp | wc -l) -gt 0 ]; then
     if [ $(mocp -Q "%state" | grep -c "PLAY") -eq 1 ]; then
