@@ -889,7 +889,7 @@ schemes:
 # *Macchiato
 # *Mocha
 
-colors: *Latte
+colors: *Macchiato
 
 #######################################
 ##       END OF COLOR SCHEMES        ##
