@@ -19,7 +19,11 @@ fi
 mkfifo $pipe
 
 # write cava config
-config_file="/tmp/polybar_cava_config"
+if pgrep -f 'cava -p /tmp/polybar_cava_config' > /dev/null; then
+  config_file="/tmp/polybar_cava_config_1"
+else
+  config_file="/tmp/polybar_cava_config"
+fi
 echo "
 [general]
 bars = 15

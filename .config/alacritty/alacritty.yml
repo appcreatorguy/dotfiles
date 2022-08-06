@@ -870,6 +870,38 @@ schemes:
       magenta: '#f5c2e7' # pink
       cyan:    '#94e2d5' # teal
       white:   '#bac2de' # subtext1
+      
+  ### Quixotic ###
+  macchiato: &Quixotic
+  
+    primary:
+      background: '#101313'
+      foreground: '#d7d7d7'
+  
+    cursor:
+      text:   CellBackground
+      cursor: '#f076ab'
+  
+    normal:
+      black:   '#232525'
+      red:     '#f85858'
+      green:   '#2ac68e'
+      yellow:  '#f076ab'
+      blue:    '#008ce3'
+      magenta: '#a07dde'
+      cyan:    '#3dddd8'
+      white:   '#d7d7d7' 
+    
+    bright:
+      black:   '#3F59AA'
+      red:     '#f85858'
+      green:   '#2ac68e'
+      yellow:  '#f076ab'
+      blue:    '#008ce3'
+      magenta: '#a07dde'
+      cyan:    '#3dddd8'
+      white:   '#d7d7d7'
+
 ######################################################################
 ## SET THEME: Choose ONE color scheme from those in the above list. ##
 ## ###################################################################
@@ -888,8 +920,9 @@ schemes:
 # *Frappe
 # *Macchiato
 # *Mocha
+# *Quixotic
 
-colors: *Macchiato
+colors: *Quixotic
 
 #######################################
 ##       END OF COLOR SCHEMES        ##

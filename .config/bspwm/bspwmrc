@@ -1,6 +1,6 @@
 #! /bin/sh
 
-COLORSCHEME="macchiato"
+COLORSCHEME="quixotic"
 
 #### AUTOSTART ####
 killall conky &
@@ -8,7 +8,7 @@ killall trayer &
 killall cava &
 
 killall sxhkd; sleep 0.2;  sxhkd -c ~/.config/sxhkd/sxhkdrc &
-killall picom; sleep 0.2; picom &
+# killall picom; sleep 0.2; picom &
 nm-applet &
 blueman-applet &
 killall pasystray; pasystray &
@@ -18,8 +18,8 @@ xinput set-prop "MSFT0001:01 06CB:7F28 Touchpad" "libinput Tapping Enabled" 1 & 
 
 mpd &
 kdeconnect-cli -n SM-M515F & # ADD DEVICE NAME
-kdeconnect-indicator &
-/home/manasmengle/tools/auto-suspend -s /home/manasmengle/tools/i3-battery-popup.wav &
+killall kdeconnect-indicator; kdeconnect-indicator &
+pgrep -f 'auto-suspend' | xargs kill; sleep 0.1; /home/manasmengle/tools/auto-suspend -s /home/manasmengle/tools/i3-battery-popup.wav &
 sleep 1 && conky -c "$HOME/.config/conky/xmonad/$COLORSCHEME-01.conkyrc" &
 sleep 0.1 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0xe6e9ef --height 31 & 
 # feh --randomize -bg-fill ~/wallpapers/* &

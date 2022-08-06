@@ -2,3 +2,5 @@
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias vim='nvim'
 alias nvim-gui='neovide --neovim-bin $HOME/.local/share/neovim/bin/nvim --multigrid'
+alias ranger='source ranger'
+alias neovide='nvidia-launcher neovide'
