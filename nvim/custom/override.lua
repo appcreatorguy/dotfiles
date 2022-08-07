@@ -15,6 +15,7 @@ M.treesitter = {
     "javascript",
     "json",
     "typescript",
+    "toml",
   },
   autotag = {
     enable = true,
@@ -79,6 +80,8 @@ M.mason = {
     "typescript-language-server",
     "eslint-lsp",
     "html-lsp",
+    "pyright",
+    "taplo",
   },
 }
 

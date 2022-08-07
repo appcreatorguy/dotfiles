@@ -8,6 +8,12 @@ M.truzen = {
   },
 }
 
+M.general = {
+  n = {
+    ["<leader>q"] = { "<cmd> qa <CR>", "   quit"},
+  },
+}
+
 M.shade = {
    n = {
       ["<leader>s"] = {
