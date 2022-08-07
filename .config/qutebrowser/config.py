@@ -23,6 +23,7 @@ c.aliases = {'q': 'quit', 'w': 'session-save', 'wq': 'quit --save','paywall': 'o
 # Setting dark mode
 #config.set("colors.webpage.darkmode.enabled", True)
 
+config.set('content.autoplay', False)
 
 # Which cookies to accept. With QtWebEngine, this setting also controls
 # other features with tracking capabilities similar to those of cookies;
@@ -388,7 +389,7 @@ c.fonts.statusbar = '11pt "Source Code Pro"'
 
 # Bindings for normal mode
 config.bind('M', 'hint links spawn umpv {hint-url}')
-config.bind(',M', 'spawn umpv {url}')
+config.bind(',M', 'spawn umpv-nvidia {url}')
 # config.bind('M', 'hint links spawn umpv {hint-url}')
 config.bind('Z', 'hint links spawn st -e youtube-dl {hint-url}')
 config.bind('t', 'set-cmd-text -s :open -t')
