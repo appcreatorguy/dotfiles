@@ -217,7 +217,7 @@ alt + grave
   dunstctl history-pop  
 
 # Lock Screen
-super + alt + l
+super + shift + l
   betterlockscreen -l dim
     
 # DMENU SCRIPTS (super + p)
