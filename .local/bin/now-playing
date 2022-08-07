@@ -36,4 +36,7 @@ elif [ $(pgrep mocp | wc -l) -gt 0 ]; then
     echo -n " - $(mocp -Q "%artist" | cut -c -15)"
     echo -n " - $(mocp -Q "%song" | cut -c -15)"
     echo -n " - $(mocp -Q "%ct/%tt")"
+
+elif [ $(pgrep ncmpcpp | wc -l) -gt 0 ]; then
+    echo -n "$(ncmpcpp --current-song 2> /dev/null | grep '(' | cut -c -35)"
 fi
