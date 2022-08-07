@@ -56,7 +56,7 @@ ctrl + super + {k, j}
 super + {t,shift + t,shift + s,f}
   bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
-# set the node flags
+# set the node flags (marked, locked, sticky, private)
 super + ctrl + {m,x,y,z}
 	bspc node -g {marked,locked,sticky,private}
 
@@ -141,6 +141,9 @@ super + b
 # launch mocp
 super + alt + c
     alacritty -e mocp
+# launch ncmpcpp
+super + alt + m
+    alacritty -e ncmpcpp
 # launch joplin
 # super + alt + j
 #     st -e joplin
@@ -149,7 +152,8 @@ super + alt + c
 #     st -e toot curses
 # launch newsboat feed reeder
 super + alt + n
-    st -e newsboat
+    # st -e newsboat
+    flatpak run com.gitlab.newsflash
 # launch pianobar
 # super + alt + p
 #     st -e pianobar
