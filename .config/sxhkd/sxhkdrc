@@ -184,7 +184,7 @@ super + shift + Return
 
 # SCRATCHPADS (super + s)
 super + s ; {t,m,c,v,b}
-  bspwmfloat {scratchpad "alacritty -t scratchpad",mocp "alacritty -t mocp -e mocp",Qalculate! qalculate-gtk,"Volume Control" pavucontrol, brightness-controller}
+  bspwmfloat {scratchpad "alacritty -t scratchpad",ncmpcpp "alacritty -t ncmpcpp -e ncmpcpp",Qalculate! qalculate-gtk,"Volume Control" pavucontrol, brightness-controller}
 
 # Show help on key bindings
 super + F1
