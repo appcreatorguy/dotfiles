@@ -182,7 +182,7 @@ super + s ; {t,m,c,v,b}
 
 # Show help on key bindings
 super + F1
-  bspwmfloat alacritty -t BSPWM_Keybinds -e ~/.config/sxhkd/show-keys.sh
+  bspwmfloat Keybinds "alacritty -t Keybinds -e $HOME/.config/sxhkd/show-keys.sh"
 #  ~/.config/sxhkd/show-keys.sh
 
 # MOCP Controls
