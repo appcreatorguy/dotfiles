@@ -120,8 +120,8 @@ super + ctrl + shift + space
 	# bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
 
 # contract a window by moving one of its side inward
-# ctrl + alt + shift + {h,j,k,l}
-	# bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+ctrl + alt + shift + {h,j,k,l}
+	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
 
 # Expand/contract a window by moving one of its side outward/inward
 ctrl + alt + {h,j,k,l}
@@ -184,7 +184,7 @@ super + shift + Return
 
 # SCRATCHPADS (super + s)
 super + s ; {t,m,c,v,b}
-  bspwmfloat {scratchpad "alacritty -t scratchpad",ncmpcpp "alacritty -t ncmpcpp -e ncmpcpp",Qalculate! qalculate-gtk,"Volume Control" pavucontrol, brightness-controller}
+  bspwmfloat {scratchpad "alacritty -t scratchpad",ncmpcpp "alacritty -t ncmpcpp -e ncmpcpp",Qalculate! qalculate-gtk,"Volume Control" pavucontrol, "Bluetooth Devices" blueman-manager}
 
 # Show help on key bindings
 super + F1
