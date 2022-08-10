@@ -3,8 +3,10 @@ local M = {}
 local override = require "custom.override"
 
 M.ui = {
-  theme_toggle = { "catppuccin", "catppuccin-latte" },
-  theme = "catppuccin",
+  -- theme_toggle = { "catppuccin", "catppuccin_latte" },
+  theme_toggle = { "rosepine", "everforest_light" },
+  -- theme = "catppuccin",
+  theme = "everforest_light",
   transparency = false,
   hl_override = require "custom.highlights",
 }

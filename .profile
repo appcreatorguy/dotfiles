@@ -49,6 +49,7 @@ export PATH="$PATH:$HOME/tools/flutter/bin"
 export PATH="$PATH:$HOME/.local/share/neovim/bin" # nvim binaries for bob: https://github.com/MordechaiHadad/bob
 export PATH="$PATH:$HOME/go/bin" # go package bin dir
 export PATH="$PATH:$HOME/.cargo/bin"
+export PATH="$PATH:$HOME/tools/godot"
 export SPICE_PATH="$HOME/.config/spicetify"
 export ANDROID_SDK_ROOT="$HOME/Android/sdk/"
 export ANDROID_HOME="$HOME/Android/sdk"

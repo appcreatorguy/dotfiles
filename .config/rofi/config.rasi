@@ -144,4 +144,4 @@ configuration {
 /*	me-accept-custom: "Control+MouseDPrimary";*/
 }
 @import "/usr/share/rofi/themes/arthur.rasi"
-@theme "/home/manasmengle/.local/share/rofi/themes/catppuccin-Quixotic.rasi"
+@theme "/home/manasmengle/.local/share/rofi/themes/catppuccin-RosePineDawn.rasi"

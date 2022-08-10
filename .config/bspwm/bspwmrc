@@ -1,6 +1,6 @@
 #! /bin/sh
 
-COLORSCHEME="quixotic"
+COLORSCHEME="rosepinedawn"
 
 #### AUTOSTART ####
 killall conky &

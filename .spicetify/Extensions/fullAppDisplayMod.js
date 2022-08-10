@@ -1,12 +1,12 @@
 // @ts-check
 // NAME: Full App Display
 // AUTHOR: khanhas
-// VERSION: 1.0
+// VERSION: 1.2
 // DESCRIPTION: Fancy artwork and track status display.
 
 /// <reference path="../globals.d.ts" />
 (function FullAppDisplay() {
-    if (!Spicetify.Keyboard || !Spicetify.React || !Spicetify.ReactDOM) {
+    if (!Spicetify.Keyboard || !Spicetify.React || !Spicetify.ReactDOM || !Spicetify.Platform) {
         setTimeout(FullAppDisplay, 200);
         return;
     }
@@ -15,6 +15,22 @@
     const { useState, useEffect } = react;
 
     const CONFIG = getConfig();
+
+    if (
+        !CONFIG["colorChoice"] ||
+        CONFIG["colorChoice"] == "colorDark" ||
+        CONFIG["colorChoice"] == "colorLight" ||
+        CONFIG["colorChoice"] == "colorRaw"
+    ) {
+        CONFIG["colorChoice"] = "LIGHT_VIBRANT";
+        saveConfig();
+    }
+
+    if (!CONFIG["version"]) {
+        CONFIG["version"] = "1.2";
+        saveConfig();
+    }
+
     let updateVisual;
     let nextUri, prevColor, nextColor, finImage;
     let isHidden = false;
@@ -81,15 +97,52 @@
 #fad-progress {
     width: 100%;
     height: 6px;
+    margin: 6px 0 6px;
     border-radius: 6px;
     background-color: #ffffff50;
     overflow: hidden;
 }
 #fad-progress-inner {
     height: 100%;
+    transition: width 100ms ease;
     border-radius: 6px;
     background-color: #ffffff;
     box-shadow: 4px 0 12px rgba(0, 0, 0, 0.8) !important;
+}
+#fad-volume {
+    width: 4rem;
+    height: 16rem;
+    position: fixed;
+    left: 1rem;
+    transition: opacity ease 350ms;
+}
+#fad-volume:hover {
+    opacity: 1 !important;
+}
+#fad-volicon {
+    height: fit-content;
+    display: grid;
+    justify-content: start;
+}
+#fad-volbar {
+    display: flex;
+    height: 200px;
+    width: 8px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #ffffff50;
+    justify-content: center;
+    padding-top: 10px;
+    align-items: end;
+    margin-left: 27.5px;
+    margin-top: 10px;
+    position: absolute;
+}
+#fad-volbar-inner {
+    width: 8px;
+    border-radius: 6px;
+    background-color: rgb(255, 255, 255);
+    transition: height 0.5s ease 0s;
 }
 #fad-duration {
     margin-left: 10px;
@@ -118,7 +171,7 @@ body.video-full-screen.video-full-screen--hide-ui {
     padding: 0 5px;
     pointer-events: auto;
 }
-#fad-controls button:hover, #fad-extracontrols button:hover{
+#fad-controls button:hover, #fad-extracontrols button:hover, #fad-volicon button:hover{
     transform: scale(1.1);
 }
 #fad-artist svg, #fad-album svg {
@@ -154,7 +207,7 @@ body.video-full-screen.video-full-screen--hide-ui {
 }
 #fad-upnext-details{
     margin-left: 15px;
-    margin-top: 8px;
+    align-self: center;
     font-size: 14.5px;
     display: flex;
     flex-direction: column;
@@ -388,30 +441,44 @@ body.video-full-screen.video-full-screen--hide-ui {
                 className: "fad-update",
             },
             `
-            This update brings a lot of needed features:
-            `,
-            react.createElement(
-                "li",
-                {},
-                "Added upnext display: Now when you hover over the next button, it shows the preview of the next song in queue."
-            ),
-            react.createElement(
-                "li",
-                {},
-                "Added extra controls (togglable in the settings): Now you can toggle shuffle, repeat, like songs and view queue from FAD!  The queue is just an extension of the upnext feature, scroll on the queue popup to see the next song"
-            ),
-            react.createElement("li", {}, "Added auto-hide lyrics: If a song doesn't have any lyrics, the lyrics auto-hide."),
-            react.createElement(
-                "li",
-                {},
-                "Added toggleable dev options: These features are WIP, and are bound to be buggy (or ugly). Use at your own risk!"
-            )
+             This update brings:
+             `,
+            react.createElement("li", {}, "Added seekable progress bar: Now you can seek songs from FAD itself, click on it to seek!"),
+            react.createElement("li", {}, "Added show only on hover mode for volume bar (change in settings)"),
+            react.createElement("li", {}, "Bug Fixes: Reworked the upnext and queue function, to account for the scale.")
         );
         Spicetify.PopupModal.display({
-            title: "Update Notes: ",
+            title: "What's New with FullAppDisplayMod",
             content: updateText,
             isLarge: true,
         });
+    }
+
+    if (CONFIG["version"] == "1.1") {
+        displayUpdate();
+        CONFIG["version"] = "1.2";
+        saveConfig();
+    }
+
+    async function fetchColors(uri) {
+        let colors = {};
+
+        try {
+            const body = await Spicetify.CosmosAsync.get(`wg://colorextractor/v1/extract-presets?uri=${uri}&format=json`);
+            for (const color of body.entries[0].color_swatches) {
+                colors[color.preset] = `#${color.color.toString(16).padStart(6, "0")}`;
+            }
+        } catch {
+            colors = {
+                DARK_VIBRANT: "#000000",
+                DESATURATED: "#000000",
+                LIGHT_VIBRANT: "#000000",
+                PROMINENT: "#000000",
+                VIBRANT: "#000000",
+                VIBRANT_NON_ALARMING: "#000000",
+            };
+        }
+        return colors;
     }
 
     function lightnessColor(hex) {
@@ -462,7 +529,9 @@ body.video-full-screen.video-full-screen--hide-ui {
     const ProgressBar = () => {
         const [value, setValue] = useState(Spicetify.Player.getProgress());
         useEffect(() => {
-            const update = ({ data }) => setValue(data);
+            const update = ({ data }) => {
+                setValue(data);
+            };
             Spicetify.Player.addEventListener("onprogress", update);
             // @ts-ignore
             return () => Spicetify.Player.removeEventListener("onprogress", update);
@@ -474,7 +543,19 @@ body.video-full-screen.video-full-screen--hide-ui {
             react.createElement("span", { id: "fad-elapsed" }, Spicetify.Player.formatTime(value)),
             react.createElement(
                 "div",
-                { id: "fad-progress" },
+                {
+                    id: "fad-progress",
+                    onClick: (e) => {
+                        e.persist();
+                        console.log(e);
+                        let coors = document.querySelector("#fad-progress").getBoundingClientRect();
+                        let temp = (e.screenX - coors.x) / coors.width;
+                        console.log(temp);
+                        Spicetify.Player.seek(temp);
+                        setTimeout(console.log(Spicetify.Player.getProgressPercent()), 200);
+                        document.querySelector("#fad-progress-inner").style.width = `${temp}%`;
+                    },
+                },
                 react.createElement("div", {
                     id: "fad-progress-inner",
                     style: {
@@ -486,29 +567,105 @@ body.video-full-screen.video-full-screen--hide-ui {
         );
     };
 
+    // @ts-ignore
+    const VolumeBar = () => {
+        // @ts-ignore
+        const [value, setValue] = useState(Spicetify.Player.getVolume());
+        let isHover = false;
+        if (CONFIG["volumeBar"] == "onlyHover") {
+            isHover = true;
+        }
+        return react.createElement(
+            "div",
+            {
+                id: "fad-volume",
+                style: {
+                    top: `${(window.innerHeight - 256) / 2}px`,
+                    opacity: isHover ? 0 : 1,
+                },
+                onWheel: (event) => {
+                    let dir = event.deltaY < 0 ? 1 : -1;
+                    let temp = parseInt(document.querySelector("#fad-volbar-inner").style.height) / 2 + dir * 1;
+                    if (temp < 0) {
+                        temp = 0;
+                    } else if (temp > 100) {
+                        temp = 100;
+                    }
+                    Spicetify.Player.setVolume(temp / 100);
+                    document.querySelector("#fad-volbar-inner").style.height = `${2 * temp}px`;
+                },
+            },
+            react.createElement(
+                "div",
+                { id: "fad-volicon" },
+                react.createElement(ButtonIcon, {
+                    style: {
+                        marginLeft: "18px",
+                        backgroundColor: "transparent",
+                        border: "0",
+                        color: "white",
+                        padding: "0 5px",
+                        pointerEvents: "auto",
+                    },
+                    // @ts-ignore
+                    icon: Spicetify.Player.getMute() ? Spicetify.SVGIcons["volume-off"] : Spicetify.SVGIcons["volume"],
+                    onClick: () => {
+                        if (!Spicetify.Player.getMute()) {
+                            document.querySelector("#fad-volicon svg").innerHTML = Spicetify.SVGIcons["volume-off"];
+                            document.querySelector("#fad-volbar-inner").style.height = `0px`;
+                            Spicetify.Player.toggleMute();
+                        } else {
+                            Spicetify.Player.toggleMute();
+                            document.querySelector("#fad-volicon svg").innerHTML = Spicetify.SVGIcons["volume"];
+                            setTimeout(() => {
+                                document.querySelector("#fad-volbar-inner").style.height = `${Spicetify.Player.getVolume() * 200}px`;
+                            }, 200);
+                        }
+                    },
+                })
+            ),
+            react.createElement(
+                "div",
+                {
+                    id: "fad-volbar",
+                    onClick: (e) => {
+                        let temp = 200 - e.nativeEvent.layerY;
+                        if (temp < 0) {
+                            temp = 0;
+                        }
+                        Spicetify.Player.setVolume(temp / 200);
+                        document.querySelector("#fad-volbar-inner").style.height = `${temp}px`;
+                    },
+                },
+                react.createElement("div", {
+                    id: "fad-volbar-inner",
+                    style: {
+                        height: `${value * 200}px`,
+                    },
+                })
+            )
+        );
+    };
+
     const upNext = async ({ index, queue }) => {
-        let top,
-            left,
-            meta,
+        let meta,
             uri,
+            bottom = -100,
+            right = 0,
             color,
             context,
-            invert = false,
+            invertDetails = false,
+            invertWhole = false,
             isContext = false,
             isColor = false;
 
-        let deets = document.querySelector("#fad-controls");
+        let deets = document.querySelector("#fad-details");
         const coor = deets.getBoundingClientRect();
-        let scale = 1 + (CONFIG["scale"] - 1) / 2;
-        if (coor.bottom + 105 > window.innerHeight) {
-            top = window.innerHeight - 110;
-            left = coor.right + 175;
-        } else {
-            top = !CONFIG.vertical && CONFIG.enableExtraControl ? coor.bottom + 40 : coor.bottom + 20;
-            left = CONFIG.vertical || CONFIG.enableExtraControl ? coor.left + (coor.width / 2 - 199.5) : coor.left;
+        let scale = CONFIG["scale"];
+        if (coor.bottom + scale * 90 + 10 > window.innerHeight) {
+            bottom = bottom + (coor.bottom + 90 * scale + 10 - window.innerHeight) / scale + 10;
+            right = -409;
         }
-        top = top / scale;
-        left = left / scale;
 
         if (Spicetify.Player.getRepeat() == 2) {
             uri = Spicetify.Player.data.track.uri;
@@ -555,14 +712,17 @@ body.video-full-screen.video-full-screen--hide-ui {
 
         if (CONFIG["optionBackground"] === "colorText") {
             isColor = true;
-            color = await Spicetify.colorExtractor(uri);
-            color = color[CONFIG["colorChoice"] ?? "LIGHT_VIBRANT"];
+            color = await fetchColors(uri);
+            color = color[CONFIG["colorChoice"]];
             const luma =
                 parseInt(color.substring(1, 3), 16) * 0.2126 +
                 parseInt(color.substring(3, 5), 16) * 0.7152 +
                 parseInt(color.substring(5, 7), 16) * 0.0722;
             if (luma > 180) {
-                invert = true;
+                invertDetails = true;
+            }
+            if (deets.style.filter == "invert(1)") {
+                invertWhole = true;
             }
         }
 
@@ -570,10 +730,9 @@ body.video-full-screen.video-full-screen--hide-ui {
             "div",
             {
                 id: "fad-upnext",
-                className: !queue ? "dont-scale" : "",
                 style: {
-                    top: queue ? "" : top,
-                    left: queue ? "" : left,
+                    bottom: queue ? "" : `${bottom}px`,
+                    right: queue ? "" : `${right}px`,
                     backgroundColor: isColor ? color : "",
                     backgroundImage: isColor ? "" : `url(${meta.image_url})`,
                     backgroundPosition: isColor ? "" : "center",
@@ -581,9 +740,10 @@ body.video-full-screen.video-full-screen--hide-ui {
                     backgroundSize: isColor ? "" : "cover",
                     border: isColor ? "" : "2px solid",
                     borderColor: isColor ? "" : "white",
-                    boxShadow: !queue ? "0 0 8px rgb(0 0 0 / 30%)" : "",
                     clipPath: queue ? (index == 0 ? "inset(0px 0px 0px)" : "inset(90px 0px 0px)") : "",
+                    filter: invertWhole ? "invert(1)" : "invert(0)",
                 },
+                ref: (el) => !queue && el && el.style.setProperty("box-shadow", "0 0 8px rgb(0 0 0 / 30%)", "important"),
             },
             !isColor &&
                 react.createElement("div", {
@@ -599,7 +759,7 @@ body.video-full-screen.video-full-screen--hide-ui {
                 "div",
                 {
                     id: "fad-upnext-details",
-                    style: { filter: invert ? "invert(1)" : "invert(0)" },
+                    style: { filter: invertDetails ? "invert(1)" : "invert(0)" },
                 },
                 react.createElement(
                     "p",
@@ -682,7 +842,7 @@ body.video-full-screen.video-full-screen--hide-ui {
                     timer = setTimeout(async () => {
                         let cont = document.createElement("div");
                         cont.id = "fad-upnext-container";
-                        let fore = document.querySelector("#fad-foreground");
+                        let fore = document.querySelector("#fad-details");
                         fore.append(cont);
                         reactDOM.render(await upNext({ index: 0, queue: false }), cont);
                     }, 450);
@@ -702,10 +862,13 @@ body.video-full-screen.video-full-screen--hide-ui {
         const [isShuffle, setShuffle] = useState(Spicetify.Player.getShuffle());
         const [isRepeat, setRepeat] = useState(Spicetify.Player.getRepeat());
         const [isHeart, setHeart] = useState(Spicetify.Player.getHeart());
+        const [isPodcast, setPodcast] = useState(Spicetify.URI.isEpisode(Spicetify.Player.data.track.uri));
         useEffect(() => {
             const update = ({ data }) => {
                 data.track.metadata["collection.in_collection"] == "true" ? setHeart(true) : setHeart(false);
 
+                setPodcast(Spicetify.URI.isEpisode(Spicetify.Player.data.track.uri));
+                // @ts-ignore
                 const state = Spicetify.Player.origin._state;
                 if (!state.restrictions?.canToggleShuffle) {
                     setShuffle(undefined);
@@ -715,6 +878,7 @@ body.video-full-screen.video-full-screen--hide-ui {
                 }
             };
             Spicetify.Player.addEventListener("songchange", update);
+            // @ts-ignore
             return () => Spicetify.Player.removeEventListener("songchange", update);
         });
         return react.createElement(
@@ -731,12 +895,14 @@ body.video-full-screen.video-full-screen--hide-ui {
                 // @ts-ignore
                 className: isShuffle
                     ? "dot-after"
-                    : !Spicetify.Player.origin._state.restrictions?.canToggleShuffle || isShuffle == undefined
+                    : // @ts-ignore
+                    !Spicetify.Player.origin._state.restrictions?.canToggleShuffle || isShuffle == undefined
                     ? "crossed-out"
                     : "",
                 style: {
                     marginLeft: CONFIG.vertical ? "18px" : "",
                 },
+                // @ts-ignore
                 icon: Spicetify.SVGIcons["shuffle"],
                 onClick: () => {
                     Spicetify.Player.toggleShuffle();
@@ -747,11 +913,14 @@ body.video-full-screen.video-full-screen--hide-ui {
                 // @ts-ignore
                 className: isRepeat
                     ? "dot-after"
-                    : !Spicetify.Player.origin._state.restrictions?.canToggleRepeatContext ||
+                    : // @ts-ignore
+                    !Spicetify.Player.origin._state.restrictions?.canToggleRepeatContext ||
+                      // @ts-ignore
                       !Spicetify.Player.origin._state.restrictions?.canToggleRepeatTrack ||
                       isRepeat == undefined
                     ? "crossed-out"
                     : "",
+                // @ts-ignore
                 icon: Spicetify.SVGIcons[isRepeat == 2 ? "repeat-once" : "repeat"],
                 onClick: () => {
                     Spicetify.Player.toggleRepeat();
@@ -760,7 +929,9 @@ body.video-full-screen.video-full-screen--hide-ui {
             }),
             react.createElement(ButtonIcon, {
                 // @ts-ignore
-                icon: Spicetify.SVGIcons[isHeart ? "heart-active" : "heart"],
+                icon: isPodcast
+                    ? Spicetify.SVGIcons[isHeart ? "check-alt-fill" : "plus-alt"]
+                    : Spicetify.SVGIcons[isHeart ? "heart-active" : "heart"],
                 style: {
                     marginLeft: CONFIG.vertical || CONFIG.enableControl ? "auto" : "",
                     marginRight: !CONFIG.vertical && !CONFIG.enableControl ? "10px" : "",
@@ -775,6 +946,7 @@ body.video-full-screen.video-full-screen--hide-ui {
                     // @ts-ignore
                     icon: '<path d="M2 2v5l4.33-2.5L2 2zm0 12h14v-1H2v1zm0-4h14V9H2v1zm7-5v1h7V5H9z"></path>',
                     className: "fad-queue-button",
+                    // @ts-ignore
                     // @ts-ignore
                     onClick: async (e) => {
                         let ele = document.querySelector(".fad-queue-button");
@@ -800,8 +972,8 @@ body.video-full-screen.video-full-screen--hide-ui {
                         }, 1000);
 
                         const next = await upNext({ index: 0, queue: false });
-                        const top = next.props.style.top;
-                        const left = next.props.style.left;
+                        const bottom = next.props.style.bottom;
+                        const right = next.props.style.right;
 
                         CONFIG["viewing"] = 0;
 
@@ -818,10 +990,9 @@ body.video-full-screen.video-full-screen--hide-ui {
                             "div",
                             {
                                 id: "scroll-queue",
-                                className: "dont-scale",
                                 style: {
-                                    top: top,
-                                    left: left,
+                                    bottom: bottom,
+                                    right: right,
                                     borderRadius: "10px",
                                     boxShadow: "0 0 8px rgb(0 0 0 / 30%)",
                                 },
@@ -851,7 +1022,7 @@ body.video-full-screen.video-full-screen--hide-ui {
                             },
                             tracks
                         );
-                        let fore = document.querySelector("#fad-foreground");
+                        let fore = document.querySelector("#fad-details");
                         let wrapper = document.createElement("div");
                         wrapper.id = "fad-queue-container";
                         fore.append(wrapper);
@@ -878,9 +1049,12 @@ body.video-full-screen.video-full-screen--hide-ui {
 
         async getAlbumDate(uri) {
             const id = uri.replace("spotify:album:", "");
-            const albumInfo = await Spicetify.CosmosAsync.get(`hm://album/v1/album-app/album/${id}/desktop`);
+            // const albumInfo = await Spicetify.CosmosAsync.get(`hm://album/v1/album-app/album/${id}/desktop`);
 
-            const albumDate = new Date(albumInfo.year, (albumInfo.month || 1) - 1, albumInfo.day || 0);
+            // const albumDate = new Date(albumInfo.year, (albumInfo.month || 1) - 1, albumInfo.day || 0);
+            // hermes protocol deprecated 1.1.81 onwards
+            const albumInfo = await Spicetify.CosmosAsync.get(`https://api.spotify.com/v1/albums/${id}`);
+            const albumDate = new Date(albumInfo.release_date);
             const recentDate = new Date();
             recentDate.setMonth(recentDate.getMonth() - 6);
             return albumDate.toLocaleString("default", albumDate > recentDate ? { year: "numeric", month: "short" } : { year: "numeric" });
@@ -891,18 +1065,19 @@ body.video-full-screen.video-full-screen--hide-ui {
             const prevUri = nextUri;
             nextUri = Spicetify.Player.data.track.uri;
             const uriFinal = nextUri.split(":")[2];
-            let isLocal = Spicetify.URI.isLocalTrack(Spicetify.Player.data.track.uri);
+            let isLocalOrEpisode =
+                Spicetify.URI.isLocalTrack(Spicetify.Player.data.track.uri) || Spicetify.URI.isEpisode(Spicetify.Player.data.track.uri);
 
-            if (isHidden) {
-                updateStyle();
-                isHidden = false;
-            }
-
-            if (!isLocal) {
+            if (!isLocalOrEpisode) {
                 const ximage = await Spicetify.CosmosAsync.get("https://api.spotify.com/v1/tracks/" + uriFinal);
                 finImage = ximage.album.images[0].url;
+                updateStyle();
             } else {
                 finImage = meta.image_xlarge_url;
+                style.innerHTML =
+                    styleBase +
+                    styleChoices[CONFIG.vertical ? 1 : 0] +
+                    (window.innerHeight > window.innerWidth && CONFIG.verticalMonitor ? verticalMonitorStyle : "");
             }
 
             // prepare title
@@ -949,12 +1124,17 @@ body.video-full-screen.video-full-screen--hide-ui {
                     artist: artistName || "",
                     album: albumText || "",
                 });
-                if (CONFIG["optionBackground"] === "colorText" && !isLocal) {
+                if (CONFIG["optionBackground"] === "colorText" && !isLocalOrEpisode) {
                     this.animateCanvasColor(prevUri, prevUri);
                 } else {
                     this.animateCanvas(this.currTrackImg, this.currTrackImg);
                 }
                 return;
+            }
+
+            if (isHidden) {
+                isHidden = false;
+                updateStyle();
             }
 
             // TODO: Pre-load next track
@@ -963,7 +1143,7 @@ body.video-full-screen.video-full-screen--hide-ui {
             this.currTrackImg.src = finImage;
             this.currTrackImg.onload = () => {
                 const bgImage = `url("${this.currTrackImg.src}")`;
-                if (CONFIG["optionBackground"] === "colorText" && !isLocal) {
+                if (CONFIG["optionBackground"] === "colorText" && !isLocalOrEpisode) {
                     this.animateCanvasColor(prevUri, nextUri);
                 } else {
                     this.animateCanvas(previousImg, this.currTrackImg);
@@ -998,6 +1178,9 @@ body.video-full-screen.video-full-screen--hide-ui {
             const dim = width > height ? width : height;
 
             this.deets.style.filter = "invert(0)";
+            if (!(CONFIG["volumeBar"] === "disable")) {
+                document.querySelector("#fad-volume").style.filter = "invert(0)";
+            }
 
             if (CONFIG.lyricsPlus) {
                 this.lyrics.style.setProperty("--lyrics-color-active", "#ffffff");
@@ -1038,30 +1221,8 @@ body.video-full-screen.video-full-screen--hide-ui {
         }
 
         async animateCanvasColor(prevUri, nextUri) {
-            try {
-                prevColor = await Spicetify.colorExtractor(prevUri);
-            } catch {
-                prevColor = {
-                    DARK_VIBRANT: "#000000",
-                    DESATURATED: "#000000",
-                    LIGHT_VIBRANT: "#000000",
-                    PROMINENT: "#000000",
-                    VIBRANT: "#000000",
-                    VIBRANT_NON_ALARMING: "#000000",
-                };
-            }
-            try {
-                nextColor = await Spicetify.colorExtractor(nextUri);
-            } catch {
-                nextColor = {
-                    DARK_VIBRANT: "#000000",
-                    DESATURATED: "#000000",
-                    LIGHT_VIBRANT: "#000000",
-                    PROMINENT: "#000000",
-                    VIBRANT: "#000000",
-                    VIBRANT_NON_ALARMING: "#000000",
-                };
-            }
+            prevColor = await fetchColors(prevUri);
+            nextColor = await fetchColors(nextUri);
 
             const { innerWidth: width, innerHeight: height } = window;
             this.back.width = width;
@@ -1074,6 +1235,10 @@ body.video-full-screen.video-full-screen--hide-ui {
             saveConfig();
 
             this.deets.style.filter = "invert(0)";
+
+            if (!(CONFIG["volumeBar"] === "disable")) {
+                document.querySelector("#fad-volume").style.filter = "invert(0)";
+            }
 
             if (CONFIG.lyricsPlus) {
                 this.lyrics.style.setProperty("--lyrics-color-active", "#ffffff");
@@ -1113,8 +1278,8 @@ body.video-full-screen.video-full-screen--hide-ui {
                     nextColor.addColorStop(1, colorsarr[2] ?? colorsarr[1] ?? colorsarr[0]);
                 }
             } else {
-                prevColor = prevColor[CONFIG["colorChoice"] ?? "LIGHT_VIBRANT"];
-                nextColor = nextColor[CONFIG["colorChoice"] ?? "LIGHT_VIBRANT"];
+                prevColor = prevColor[CONFIG["colorChoice"]];
+                nextColor = nextColor[CONFIG["colorChoice"]];
                 const luma =
                     parseInt(nextColor.substring(1, 3), 16) * 0.2126 +
                     parseInt(nextColor.substring(3, 5), 16) * 0.7152 +
@@ -1123,6 +1288,10 @@ body.video-full-screen.video-full-screen--hide-ui {
                 console.log(nextColor);
                 if (luma > 180) {
                     this.deets.style.filter = "invert(1)";
+
+                    if (!(CONFIG["volumeBar"] === "disable")) {
+                        document.querySelector("#fad-volume").style.filter = "invert(1)";
+                    }
                     if (CONFIG.lyricsPlus) {
                         this.lyrics.style.setProperty("--lyrics-color-active", "#000000");
                         this.lyrics.style.setProperty("--lyrics-color-inactive", "#00000050");
@@ -1277,6 +1446,8 @@ body.video-full-screen.video-full-screen--hide-ui {
                             )
                         )
                     ),
+                    // @ts-ignore
+                    !(CONFIG["volumeBar"] === "disable") && react.createElement(VolumeBar),
                     CONFIG.lyricsPlus &&
                         react.createElement("div", {
                             id: "fad-lyrics-plus-container",
@@ -1312,11 +1483,6 @@ body.video-full-screen.video-full-screen--hide-ui {
         document.body.classList.add(...classes);
         document.body.append(style, container);
         reactDOM.render(react.createElement(FAD), container);
-        if (!CONFIG.showUpdate) {
-            displayUpdate();
-            CONFIG.showUpdate = true;
-            saveConfig();
-        }
 
         requestLyricsPlus();
     }
@@ -1349,7 +1515,7 @@ body.video-full-screen.video-full-screen--hide-ui {
         style.innerHTML =
             styleBase +
             styleChoices[CONFIG.vertical ? 1 : 0] +
-            (CONFIG.lyricsPlus
+            (CONFIG.lyricsPlus && !isHidden
                 ? lyricsPlusBase +
                   lyricsPlusStyleChoices[CONFIG.vertical ? 1 : 0] +
                   (window.innerHeight > window.innerWidth && CONFIG.verticalMonitor ? verticalMonitorStyle : "")
@@ -1357,12 +1523,14 @@ body.video-full-screen.video-full-screen--hide-ui {
     }
 
     function autoHideLyrics() {
+        // @ts-ignore
         if (!document.querySelector("#fad-lyrics-plus-container").innerText) {
             setTimeout(autoHideLyrics, 100);
         } else {
+            // @ts-ignore
             if (document.querySelector("#fad-lyrics-plus-container").innerText == "(• _ • )") {
-                style.innerHTML = styleBase + styleChoices[CONFIG.vertical ? 1 : 0];
                 isHidden = true;
+                updateStyle();
             }
         }
     }
@@ -1477,13 +1645,15 @@ body.video-full-screen.video-full-screen--hide-ui {
                         backgroundColor: CONFIG["color"][color],
                     },
                     // @ts-ignore
+                    // @ts-ignore
                     onMouseEnter: (e) => {
-                        originalColor = CONFIG["colorChoice"] ?? "LIGHT_VIBRANT";
+                        originalColor = CONFIG["colorChoice"];
                         CONFIG["colorChoice"] = color;
                         // @ts-ignore
                         modal[0].style.opacity = 0.37;
                         updateVisual();
                     },
+                    // @ts-ignore
                     // @ts-ignore
                     onMouseLeave: (e) => {
                         CONFIG["colorChoice"] = originalColor;
@@ -1491,6 +1661,7 @@ body.video-full-screen.video-full-screen--hide-ui {
                         modal[0].style.opacity = 1;
                         updateVisual();
                     },
+                    // @ts-ignore
                     // @ts-ignore
                     onClick: (e) => {
                         CONFIG["colorChoice"] = color;
@@ -1618,6 +1789,16 @@ select {
                 func: updateVisual,
             }),
             react.createElement(ConfigItem, { name: "Enable progress bar", field: "enableProgress", func: updateVisual }),
+            react.createElement(ConfigSelection, {
+                name: "Enable volume bar",
+                field: "volumeBar",
+                options: {
+                    disable: "Disable",
+                    onlyHover: "Show on hover only",
+                    alwaysOn: "Show always",
+                },
+                func: updateVisual,
+            }),
             react.createElement(ConfigItem, { name: "Enable controls", field: "enableControl", func: updateVisual }),
             react.createElement(ConfigItem, { name: "Enable extra controls", field: "enableExtraControl", func: updateVisual }),
             react.createElement(ConfigSelection, {
@@ -1644,6 +1825,7 @@ select {
             CONFIG.enableDev &&
                 CONFIG["optionBackground"] == "colorText" &&
                 react.createElement(ConfigItem, { name: "Enable gradient", field: "enableGrad", func: updateVisual }),
+
             CONFIG.enableDev &&
                 react.createElement(ConfigSelection, {
                     name: "Color Choice (Press F6 for colors)",

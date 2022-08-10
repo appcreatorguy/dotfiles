@@ -5,7 +5,7 @@
 # Dependencies: dmenu, dmscripts
 # GitLab: https://www.gitlab.com/dwt1/dtos
 # License: https://www.gitlab.com/dwt1/dtos/LICENSE
-# Contributors: Derek Taylor
+# Contributors: Derek Taylor, Manas Mengle
 
 # Set with the flags "-e", "-u","-o pipefail" cause the script to fail
 # if certain things happen, which is a good thing.  Otherwise, we can
@@ -30,7 +30,9 @@ options=(
 "Frappe"
 "Macchiato"
 "Mocha"
-"Quixotic")
+"Quixotic"
+"RosePineDawn"
+"RosePineMoon")
 
 optionsWithAllSchemes=(
 "DoomOne"
@@ -48,6 +50,25 @@ optionsWithAllSchemes=(
 "Macchiato"
 "Mocha")
 
+optionsWithRofi=(
+"Latte"
+"Frappe"
+"Macchiato"
+"Mocha"
+"Quixotic"
+"RosePineDawn"
+"RosePineMoon")
+
+catppuccinOptions=(
+"Latte"
+"Frappe"
+"Macchiato"
+"Mocha")
+
+rosePineOptions=(
+"RosePineDawn"
+"RosePineMoon")
+
 choice=$(printf '%s\n' "${options[@]}" | ${DMENU} 'Choose color scheme:' "${@}")
 choicelower=$(echo "$choice" | awk '{print tolower($0)}')
 
@@ -55,12 +76,21 @@ if [ "$choice" ]; then
     if echo "${optionsWithAllSchemes[@]}" | fgrep --word-regexp "$choice"; then # Don't have all the colorschemes for these places yet
         sed  -i "s/import Colors.*/import Colors.$choice/g" "$HOME"/.xmonad/README.org || echo "Cannot modify README.org"
         sed  -i "s/import Colors.*/import Colors.$choice/g" "$HOME"/.xmonad/xmonad.hs || echo "Cannot modify xmonad.hs"
-        sed  -i 's`current_theme           = catppuccin-.*`current_theme           = catppuccin-'$choicelower'`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
     fi
-    sed  -i 's`@theme "/home/manasmengle/.local/share/rofi/themes/catppuccin-.*`@theme "/home/manasmengle/.local/share/rofi/themes/catppuccin-'$choice.rasi'"`g' /home/manasmengle/.config/rofi/config.rasi || echo "Cannot modify config.rasi"
+    if echo "${catppuccinOptions[@]}" | fgrep --word-regexp "$choice"; then
+        sed  -i 's`current_theme           = .*`current_theme           = catppuccin-'$choicelower'`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
+        sed  -i 's`color_scheme            = .*`color_scheme            = lavender`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
+    fi
+    if echo "${rosePineOptions[@]}" | fgrep --word-regexp "$choice"; then
+        sed  -i 's`current_theme           = .*`current_theme           = Ziro`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
+        sed  -i 's`color_scheme            = .*`color_scheme            = '$choicelower'`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
+    fi
+    if echo "${optionsWithRofi[@]}" | fgrep --word-regexp "$choice"; then
+        sed  -i 's`@theme "/home/manasmengle/.local/share/rofi/themes/catppuccin-.*`@theme "/home/manasmengle/.local/share/rofi/themes/catppuccin-'$choice.rasi'"`g' /home/manasmengle/.config/rofi/config.rasi || echo "Cannot modify config.rasi"
+    fi
     sed  -i 's`include-file = colors/.*`include-file = colors/'$choice'.ini`g' /home/manasmengle/.config/polybar/config.ini || echo "Cannot modify config.ini"
     sed  -i 's`COLORSCHEME=.*`COLORSCHEME="'$choicelower'"`g' /home/manasmengle/.config/bspwm/bspwmrc || echo "Cannot modify bspwmrc"
-    sed -i "s/^colors: .*/colors: \*$choice/g" "$HOME"/.config/alacritty/alacritty.yml
+    sed  -i "s/^colors: .*/colors: \*$choice/g" "$HOME"/.config/alacritty/alacritty.yml
     
     if command -v xmonad &> /dev/null; then
       xmonad --restart

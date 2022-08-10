@@ -98,6 +98,18 @@ return {
     end
   },
 
+  ["neovim/nvim-lspconfig"] = {
+    config = function()
+      require "plugins.configs.lspconfig"
+      require "custom.plugins.lspconfig"
+    end,
+  },
+
+  ["habamax/vim-godot"] = {
+    opt = false,
+    after = "nvim-lspconfig",
+  },
+
   -- Formatting and linting
   -- ["jose-elias-alvarez/null-ls.nvim"] = {
   --   after = "nvim-lspconfig",
@@ -105,6 +117,10 @@ return {
   --     require "custom.plugins.null-ls"
   --   end,
   -- },
+
+  ["folke/which-key.nvim"] = {
+    disable = false,
+  }
 
   -- NodeJS/React Development
 }

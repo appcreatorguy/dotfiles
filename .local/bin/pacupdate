@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cupd=$(apt list --upgradeable | wc -l)
-echo "$(($cupd - 1))"
+cupd=$(dnf list upgrades | wc -l)
+echo "$(($cupd - 2))"
