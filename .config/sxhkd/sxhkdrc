@@ -50,6 +50,10 @@ ctrl + super + {k, j}
     [ $(bspc config -d focused window_gap) -ge 10 ] && \
     bspc config -d focused window_gap $(( $(bspc config -d focused window_gap) - 10 )) }
 
+# cycle layout
+alt + {Tab, shift + Tab}
+  ~/.config/polybar/bsp-layout-change.sh {next,previous}
+
 # STATE/FLAGS
 
 # set the window state

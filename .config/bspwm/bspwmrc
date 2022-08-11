@@ -16,6 +16,8 @@ killall dunst; dunst &
 libinput-gestures &
 xinput set-prop "MSFT0001:01 06CB:7F28 Touchpad" "libinput Tapping Enabled" 1 & # Enable tap to click
 
+/usr/libexec/polkit-gnome-authentication-agent-1 & # enable auth agent
+
 mpd &
 killall mpDris2; sleep 0.1; mpDris2 &
 kdeconnect-cli -n SM-M515F & # ADD DEVICE NAME
