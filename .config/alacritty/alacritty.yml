@@ -1008,7 +1008,7 @@ schemes:
 # *Mocha
 # *Quixotic
 
-colors: *RosePineDawn
+colors: *RosePineMoon
 
 #######################################
 ##       END OF COLOR SCHEMES        ##
