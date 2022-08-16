@@ -23,8 +23,8 @@ options=(
 # "Nord"
 # "OceanicNext"
 # "Palenight"
-# "SolarizedDark"
-# "SolarizedLight"
+"SolarizedDark"
+"SolarizedLight"
 # "TomorrowNight"
 "Latte"
 "Frappe"
@@ -57,7 +57,9 @@ optionsWithRofi=(
 "Mocha"
 "Quixotic"
 "RosePineDawn"
-"RosePineMoon")
+"RosePineMoon"
+"SolarizedDark"
+"SolarizedLight")
 
 catppuccinOptions=(
 "Latte"
