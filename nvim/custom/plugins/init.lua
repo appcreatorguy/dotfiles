@@ -19,6 +19,13 @@ return {
   --   end,
   -- },
 
+  ["nvim-orgmode/orgmode"] = {
+    ft = "org",
+    config = function()
+      require "custom.plugins.orgmode"
+    end,
+  },
+
   ["andreadev-it/shade.nvim"] = {
     opt = false,
     module = "shade",

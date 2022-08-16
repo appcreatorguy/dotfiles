@@ -16,6 +16,7 @@ M.treesitter = {
     "json",
     "typescript",
     "toml",
+    "org",
   },
   autotag = {
     enable = true,
@@ -23,7 +24,12 @@ M.treesitter = {
   rainbow = {
     enable = true,
     extended_mode = true,
-  }
+  },
+  highlight = {
+    additional_vim_regex_highlighting = {
+      'org'
+    },
+  },
 }
 
 M.nvimtree = {
