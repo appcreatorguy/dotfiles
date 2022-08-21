@@ -181,6 +181,11 @@ super + alt + e
 # super + alt + y
 #     st -e youtube-viewer
 
+
+# launch emacs
+super + e ; e
+  bspc rule -a * -o state=tiled; emacs
+
 # launch rofi
 super + shift + Return
   rofi-custom-combi
