@@ -17,7 +17,7 @@ source "$HOME/.config/dmscripts/config"
 
 # options=("DoomOne"
 options=(
-# "Dracula"
+"Dracula"
 # "GruvboxDark"
 # "MonokaiPro"
 # "Nord"
@@ -59,7 +59,8 @@ optionsWithRofi=(
 "RosePineDawn"
 "RosePineMoon"
 "SolarizedDark"
-"SolarizedLight")
+"SolarizedLight"
+"Dracula")
 
 catppuccinOptions=(
 "Latte"
