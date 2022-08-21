@@ -36,6 +36,9 @@ M.traversal = {
 M.buffers = {
   i = {
     ["<C-s>"] = { "<cmd> w <CR>", "﬚  save file" },
+  },
+  n = {
+    ["<leader>bs"] = { "<cmd> w <CR>", "﬚  save file"},
   }
 }
 
