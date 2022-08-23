@@ -1,1 +1,1 @@
-rofi -show combi -combi-modi drun,window,run -icon-theme Suru -show-icons
+rofi -show combi -combi-modi drun,window,run -icon-theme Suru -show-icons -combi-hide-mode-prefix
