@@ -54,7 +54,7 @@ conky.config = {
 
 	--Textual
 	format_human_readable = true,				-- KiB, MiB rather then number of bytes
-	font  = 'Source Code Pro:bold:size=10',  	-- the default font used
+	font  = 'Source Code Pro:bold:size=8',  	-- the default font used
 	font2 = 'Raleway:bold:size=30',         	-- font for the time
 	font3 = 'Ubuntu:size=14',               	-- font for the date
 	font4 = 'Raleway:bold:size=9',              -- font for the keybindings heading
