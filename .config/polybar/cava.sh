@@ -26,7 +26,7 @@ else
 fi
 echo "
 [general]
-bars = 15
+bars = 12
 
 [output]
 method = raw
