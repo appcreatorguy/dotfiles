@@ -46,6 +46,10 @@ if [[ $HOSTNAME == "manas-laptop" ]]; then
   bspc monitor eDP-1 -d dev www sys doc vbox chat mus vid gfx &
   sleep 0.5;  bspc monitor HDMI-1-0 -d dev www sys doc vbox chat mus vid gfx &
 fi
+if [[ $HOSTNAME == "tejas-laptop" ]]; then
+  bspc monitor eDP-1 -d dev www sys doc vbox chat mus vid gfx &
+  sleep 0.5;  bspc monitor HDMI-1 -d dev www sys doc vbox chat mus vid gfx &
+fi
 
 sleep 0.5; /home/manasmengle/.config/polybar/launch.sh &
 
