@@ -18,6 +18,13 @@ if [ -p $pipe ]; then
 fi
 mkfifo $pipe
 
+# set bars number
+if [[ $# -gt 0 ]]; then
+  BARS="$1"
+else
+  BARS="12"
+fi
+
 # write cava config
 if pgrep -f 'cava -p /tmp/polybar_cava_config' > /dev/null; then
   config_file="/tmp/polybar_cava_config_1"
@@ -26,7 +33,7 @@ else
 fi
 echo "
 [general]
-bars = 12
+bars = $BARS
 
 [output]
 method = raw
