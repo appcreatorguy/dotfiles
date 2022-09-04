@@ -21,10 +21,8 @@ xinput set-prop "MSFT0001:01 06CB:7F28 Touchpad" "libinput Tapping Enabled" 1 & 
 mpd &
 playerctld &
 killall mpDris2; sleep 0.1; mpDris2 &
-if [[ $HOSTNAME == "manas-laptop" ]]; then
-  kdeconnect-cli -n SM-M515F & # ADD DEVICE NAME
-  killall kdeconnect-indicator; kdeconnect-indicator &
-fi
+kdeconnect-cli -n SM-M515F & # ADD DEVICE NAME
+killall kdeconnect-indicator; kdeconnect-indicator &
 pgrep -f 'auto-suspend' | xargs kill; sleep 0.1; /home/manasmengle/tools/auto-suspend -s /home/manasmengle/tools/i3-battery-popup.wav &
 sleep 1 && conky -c "$HOME/.config/conky/bspwm/$COLORSCHEME-01.conkyrc" &
 sleep 0.1 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0xe6e9ef --height 31 & 
