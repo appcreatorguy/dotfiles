@@ -33,7 +33,9 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ; (setq doom-theme 'doom-one)
-(setq doom-theme 'catppuccin)
+; (setq doom-theme 'catppuccin)
+; (setq doom-theme 'doom-solarized-dark)
+(setq doom-theme 'catppuccin-mocha)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -468,3 +470,27 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 (setq org-odt-preferred-output-format "docx")
 (setq org-odt-category-map-alist
       '(("__Figure__" "Figure" "value" "Figure" org-odt--enumerable-image-p)))
+
+(with-eval-after-load 'org
+  (require 'ox-latex)
+  (add-to-list 'org-latex-classes
+               '("bjmarticle"
+               "\\documentclass{article}
+\\usepackage[utf8]{inputenc}
+\\usepackage[T1]{fontenc}
+\\usepackage{graphicx}
+\\usepackage{longtable}
+\\usepackage{hyperref}
+\\usepackage{natbib}
+\\usepackage{amssymb}
+\\usepackage{amsmath}
+\\usepackage{geometry}
+\\geometry{a4paper,left=2.5cm,top=2cm,right=2.5cm,bottom=2cm,marginparsep=7pt, marginparwidth=.6in}"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+(use-package autothemer
+  :ensure t)

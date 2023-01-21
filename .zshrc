@@ -71,7 +71,7 @@ ZSH_THEME="spaceship"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git adb pip command-not-found z bgnotify sudo pip python virtualenv zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(git adb pip command-not-found z bgnotify sudo pip python virtualenv poetry zsh-syntax-highlighting zsh-autosuggestions fzf)
 
 source $ZSH/oh-my-zsh.sh
 

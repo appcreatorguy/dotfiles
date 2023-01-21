@@ -1,6 +1,6 @@
 #! /bin/sh
 
-COLORSCHEME="rosepinemoon"
+COLORSCHEME="macchiato"
 
 #### AUTOSTART ####
 killall conky &
@@ -21,6 +21,7 @@ xinput set-prop "MSFT0001:01 06CB:7F28 Touchpad" "libinput Tapping Enabled" 1 & 
 mpd &
 playerctld &
 killall mpDris2; sleep 0.1; mpDris2 &
+/usr/libexec/kdeconnectd &
 kdeconnect-cli -n SM-M515F & # ADD DEVICE NAME
 killall kdeconnect-indicator; kdeconnect-indicator &
 pgrep -f 'auto-suspend' | xargs kill; sleep 0.1; /home/manasmengle/tools/auto-suspend -s /home/manasmengle/tools/i3-battery-popup.wav &
@@ -35,20 +36,22 @@ wmname LG3D &
 
 # Bodge: swap windows twice to fix display errors
 if [[ $HOSTNAME == "manas-laptop" ]]; then
-  xrandr --output eDP-1 --primary --auto --left-of HDMI-1-0 &
+  xrandr --output eDP-1 --primary --auto --right-of HDMI-1-0 &
   # echo "hello"
-  sleep 0.5; xrandr --output HDMI-1-0 --primary --auto --left-of eDP-1 &
+  sleep 0.5; xrandr --output HDMI-1-0 --primary --auto --right-of eDP-1 &
+  # sleep 0.5; xrandr --output DP-1-0 --primary --auto --right-of eDP-1 &
 fi
 
 #### MONITORS ####
 # bspc monitor Virtual1 -d dev www sys doc vbox chat mus vid gfx &
 if [[ $HOSTNAME == "manas-laptop" ]]; then
-  bspc monitor eDP-1 -d dev www sys doc vbox chat mus vid gfx &
-  sleep 0.5;  bspc monitor HDMI-1-0 -d dev www sys doc vbox chat mus vid gfx &
+  bspc monitor eDP-1 -d dev www sys doc notes chat mus vid gfx &
+  sleep 0.5;  bspc monitor HDMI-1-0 -d dev www sys doc notes chat mus vid gfx &
+  # sleep 0.5;  bspc monitor DP-1-0 -d dev www sys doc notes chat mus vid gfx &
 fi
 if [[ $HOSTNAME == "tejas-laptop" ]]; then
-  bspc monitor eDP-1 -d dev www sys doc vbox chat mus vid gfx &
-  sleep 0.5;  bspc monitor HDMI-1 -d dev www sys doc vbox chat mus vid gfx &
+  bspc monitor eDP-1 -d dev www sys doc notes chat mus vid gfx &
+  sleep 0.5;  bspc monitor HDMI-1 -d dev www sys doc notes chat mus vid gfx &
 fi
 
 sleep 0.5; /home/manasmengle/.config/polybar/launch.sh &

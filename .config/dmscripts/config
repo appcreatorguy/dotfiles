@@ -13,7 +13,8 @@
 DMENU="rofi -dmenu -i -lines -p"
 
 # DMBROWSER="brave"
-DMBROWSER="qutebrowser"
+# DMBROWSER="qutebrowser"
+DMBROWSER="firefox"
 
 # DMTERM="st -e"
 DMTERM="alacritty -e"

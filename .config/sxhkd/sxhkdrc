@@ -147,7 +147,7 @@ super + Return
 #     st -e ncpamixer
 # launch browser
 super + b
-    qutebrowser
+	firefox
 # launch mocp
 super + alt + c
     alacritty -e mocp
@@ -180,6 +180,9 @@ super + alt + e
 # launch youtube viewer
 # super + alt + y
 #     st -e youtube-viewer
+# launch zathura pdf viewer
+super + z
+    zathura
 
 
 # launch emacs
@@ -225,6 +228,9 @@ XF86MonBrightnessUp
   brightnessctl set +10%
 XF86MonBrightnessDown
   brightnessctl set 10%-
+## change between hdmi out and internal speakers/headphones using pactl (thanks to: https://www.ypsidanger.com/headphone-speaker-fast-switching-with-pipewire/)
+ctrl + shift + {s,h}
+	pactl set-default-sink {alsa_output.pci-0000_01_00.1.hdmi-stereo,alsa_output.pci-0000_00_1f.3.analog-stereo}
 
 
 # Show last notification

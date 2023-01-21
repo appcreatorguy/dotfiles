@@ -27,5 +27,5 @@ elif [[ $HOSTNAME == "tejas-laptop" ]]; then
 fi
 
 for m in $(polybar --list-monitors | cut -d":" -f1); do
-  FONT_0="$FONT_0" FONT_1="$FONT_1" FONT_2="$FONT_2" FONT_3="$FONT_3" CAVA_SCRIPT="$CAVA_SCRIPT" MONITOR=$m polybar -q main -c ~/.config/polybar/config.ini &
+  FONT_0="$FONT_0" FONT_1="$FONT_1" FONT_2="$FONT_2" FONT_3="$FONT_3" CAVA_SCRIPT="$CAVA_SCRIPT" MONITOR=$m polybar -q main -c ~/.config/polybar/config.ini & sleep 0.5 
 done

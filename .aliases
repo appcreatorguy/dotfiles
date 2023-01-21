@@ -1,6 +1,8 @@
 # alias definitions to be sourced by both bash and zsh
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias vim='nvim'
+alias n='nvim'
 alias nvim-gui='neovide --neovim-bin $HOME/.local/share/neovim/bin/nvim --multigrid'
 alias ranger='source ranger'
-alias neovide='nvidia-launcher neovide'
+# alias neovide='nvidia-launcher neovide'
+alias noise='amixer -D pulse sset Master 50%; play -n synth brownnoise synth pinknoise mix synth sine amod 0.1 30'
