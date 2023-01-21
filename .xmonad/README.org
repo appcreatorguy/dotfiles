@@ -122,7 +122,7 @@ import XMonad.Util.Cursor
       -- Frappe
       -- Macchiato
       -- Mocha
-import Colors.Mocha
+import Colors.Macchiato
 #+END_SRC
 
 * Variables

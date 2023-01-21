@@ -11,6 +11,10 @@ M.truzen = {
 M.general = {
   n = {
     ["<leader>q"] = { "<cmd> qa <CR>", "   quit"},
+    ["<M-x>"] = { ":", "focus command line"},
+  },
+  i = {
+    ["<M-x>"] = { ":", "focus command line"},
   },
 }
 

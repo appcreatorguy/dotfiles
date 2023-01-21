@@ -6,43 +6,100 @@
 
 config_version: 2
 settings:
+  content.geolocation:
+    https://alphacerium.tk: true
+    https://www.alphacerium.tk: true
+    https://www.google.com: true
+  content.headers.user_agent:
+    global: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like
+      Gecko) Chrome/97.0.4692.99 Safari/537.36
   content.javascript.enabled:
+    '*://*.12ft.io/*': true
+    '*://*.192.168.2.69/*': true
+    '*://*.account.live.com/*': true
     '*://*.accounts.google.com/*': true
+    '*://*.alphacerium.tk/*': true
     '*://*.betterdiscord.app/*': false
+    '*://*.bitwarden.com/*': true
     '*://*.catppuccin-discord-customizer.vercel.app/*': true
     '*://*.cht.sh/*': true
+    '*://*.classroom.google.com/*': true
     '*://*.discord.com/*': true
     '*://*.docs.fedoraproject.org/*': true
     '*://*.docs.godotengine.org/*': true
     '*://*.docs.google.com/*': true
     '*://*.duckduckgo.com/*': true
     '*://*.editor.godotengine.org/*': true
+    '*://*.explore.osmaps.com/*': true
+    '*://*.extensions.gnome.org/*': true
+    '*://*.f1livegp.me/*': true
     '*://*.flathub.org/*': true
     '*://*.genius.com/*': true
     '*://*.github.com/*': true
+    '*://*.githubnext.com/*': true
     '*://*.gitlab.com/*': true
+    '*://*.isaacphysics.org/*': true
+    '*://*.lnk.to/*': true
     '*://*.localhost/*': true
     '*://*.login.live.com/*': true
+    '*://*.login.microsoftonline.com/*': true
     '*://*.m3.material.io/*': true
     '*://*.mail.google.com/*': true
+    '*://*.manas-laptop/*': true
     '*://*.material.io/*': true
+    '*://*.mcstacker.net/*': true
+    '*://*.medium.com/*': true
     '*://*.nvchad.github.io/*': true
     '*://*.old.reddit.com/*': true
+    '*://*.oskarstalberg.com/*': true
+    '*://*.outlook.live.com/*': true
+    '*://*.outlook.office.com/*': true
+    '*://*.pdfjs/*': true
+    '*://*.reg.ebay.co.uk/*': true
+    '*://*.scdschool-my.sharepoint.com/*': true
     '*://*.sed.js.org/*': true
     '*://*.siduck.github.io/*': true
-    '*://*.solidtorrents.to/*': false
+    '*://*.signin.ebay.co.uk/*': true
+    '*://*.signup.ebay.co.uk/*': true
+    '*://*.solidtorrents.to/*': true
+    '*://*.store.epicgames.com/*': true
+    '*://*.store.gorillaz.com/*': true
+    '*://*.thetvdb.com/*': true
     '*://*.twitter.com/*': true
+    '*://*.wallhaven.cc/*': true
+    '*://*.wasm.continuation-labs.com/*': true
+    '*://*.www.alphacerium.tk/*': true
+    '*://*.www.bloomberg.com/*': true
+    '*://*.www.calculatorsoup.com/*': true
+    '*://*.www.cnbc.com/*': true
+    '*://*.www.desmos.com/*': true
+    '*://*.www.ebay.co.uk/*': true
+    '*://*.www.epicgames.com/*': true
     '*://*.www.figma.com/*': true
     '*://*.www.gnome-look.org/*': true
+    '*://*.www.gog.com/*': true
     '*://*.www.google.com/*': true
+    '*://*.www.gorillaz.com/*': true
+    '*://*.www.gumtree.com/*': true
+    '*://*.www.mathpapa.com/*': true
     '*://*.www.nerdfonts.com/*': true
+    '*://*.www.office.com/*': true
+    '*://*.www.omnicalculator.com/*': true
     '*://*.www.reddit.com/*': true
+    '*://*.www.thelastcult.org/*': true
+    '*://*.www.twitch.tv/*': true
+    '*://*.www.wagamama.com/*': true
     '*://*.www.youtube.com/*': true
+    https://alphacerium.tk/startpage/: true
   content.mouse_lock:
     https://www.figma.com: true
   content.notifications.enabled:
     http://localhost:8096: true
+  content.register_protocol_handler:
+    https://mail.google.com?extsrc=mailto&url=%25s: false
+  content.user_stylesheets:
+    global: null
   statusbar.show:
-    global: always
+    global: in-mode
   tabs.show:
     global: always
