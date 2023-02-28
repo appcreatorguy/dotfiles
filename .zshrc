@@ -85,8 +85,6 @@ HISTFILE=~/.zsh_history
 ### Send files with https://transfer.sh with transfer [FILE] ###
 transfer(){ if [ $# -eq 0 ];then echo "No arguments specified.\nUsage:\n transfer <file|directory>\n ... | transfer <file_name>">&2;return 1;fi;if tty -s;then file="$1";file_name=$(basename "$file");if [ ! -e "$file" ];then echo "$file: No such file or directory">&2;return 1;fi;if [ -d "$file" ];then file_name="$file_name.zip" ,;(cd "$file"&&zip -r -q - .)|curl --progress-bar --upload-file "-" "https://transfer.sh/$file_name"|tee /dev/null,;else cat "$file"|curl --progress-bar --upload-file "-" "https://transfer.sh/$file_name"|tee /dev/null;fi;else file_name=$1;curl --progress-bar --upload-file "-" "https://transfer.sh/$file_name"|tee /dev/null;fi;}
 
-### RANDOM COLOR SCRIPT ###
-colorscript random
 
 source "$HOME/.aliases"
 source "$HOME/.profile"
@@ -124,6 +122,8 @@ export PATH=$PATH:/home/manasmengle/.spicetify
 if [[ $HOSTNAME == "manas-laptop" ]]; then
   eval $(thefuck --alias)
   xset b off
+  ### RANDOM COLOR SCRIPT ###
+  colorscript random
 fi
 
 
