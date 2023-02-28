@@ -94,7 +94,7 @@ export PATH="$PATH:$HOME/.spicetify"
 PATH="$HOME/.emacs.d/bin:$PATH"
 
 # omz custom dir
-export ZSH_CUSTOM="/home/manasmengle/.oh-my-zsh/custom"
+export ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -123,9 +123,9 @@ export PATH=$PATH:/home/manasmengle/.spicetify
 
 if [[ $HOSTNAME == "manas-laptop" ]]; then
   eval $(thefuck --alias)
+  xset b off
 fi
 
-xset b off
 
 # export KUBECONFIG="~/.kube/config"
 # export KUBECONFIG="$KUBECONFIG:~/.kube/config-rpi-k3s"
