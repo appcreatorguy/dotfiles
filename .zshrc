@@ -71,7 +71,7 @@ ZSH_THEME="spaceship"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git adb pip command-not-found z bgnotify sudo pip python virtualenv poetry zsh-syntax-highlighting zsh-autosuggestions fzf)
+plugins=(git adb pip command-not-found z bgnotify sudo pip python virtualenv poetry zsh-syntax-highlighting zsh-autosuggestions fzf kubectl)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -121,4 +121,11 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH=$PATH:/home/manasmengle/.spicetify
 
-eval $(thefuck --alias)
+if [[ $HOSTNAME == "manas-laptop" ]]; then
+  eval $(thefuck --alias)
+fi
+
+xset b off
+
+# export KUBECONFIG="~/.kube/config"
+# export KUBECONFIG="$KUBECONFIG:~/.kube/config-rpi-k3s"
