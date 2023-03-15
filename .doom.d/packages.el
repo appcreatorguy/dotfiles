@@ -51,12 +51,12 @@
 
 
 (package! elcord :pin "eb4ae2e7e03a5fc26b054ba2fa9a1d308e239c76")
-(package! org-pretty-table
-  :recipe (:host github :repo "Fuco1/org-pretty-table") :pin "7bd68b420d3402826fea16ee5099d04aa9879b78")
+;; (package! org-pretty-table
+;;   :recipe (:host github :repo "Fuco1/org-pretty-table") :pin "7bd68b420d3402826fea16ee5099d04aa9879b78")
 (package! org-appear :recipe (:host github :repo "awth13/org-appear")
   :pin "303fcc8d5d85a4ebff2798dab50b2ccc0255ea5f")
-(use-package! org-pretty-table
-  :commands (org-pretty-table-mode global-org-pretty-table-mode))
+;; (use-package! org-pretty-table
+;;   :commands (org-pretty-table-mode global-org-pretty-table-mode))
 (package! catppuccin-theme)
 (package! autothemer)
 (package! rose-pine-emacs :recipe (:host github :repo "thongpv87/rose-pine-emacs" :branch "master"))
