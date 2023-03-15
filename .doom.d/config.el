@@ -43,8 +43,8 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-(setq org-agenda-files '("~/org/agenda.org"))
+(setq org-directory "~/Documents/Notes/")
+(setq org-agenda-files '("~/Documents/Notes/journal"))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -453,6 +453,13 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
     :priority_d    "[#D]"
     :priority_e    "[#E]")
   (plist-put +ligatures-extra-symbols :name "⁍")
+  (setq org-todo-keywords `((sequence "TODO" "NEXT" "|" "DONE"))
+        org-todo-keyword-faces `(("TODO" . "deep sky blue") ("NEXT" . "yellow") ("DONE" . "green"))
+        )
+  (setq org-capture-templates
+        `(("T" "Todo Personal Item" entry
+           (file+olp "~/Documents/Notes/journal/todo.org",(format-time-string "%B %Y" ))
+           "* TODO %?\nSCHEDULED: %^t\nCREATED:%U")))
 )
 
 (use-package catppuccin-theme
@@ -494,3 +501,19 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 
 (use-package autothemer
   :ensure t)
+
+(setq org-journal-file-type `monthly
+      org-journal-dir "~/Documents/Notes/journal/"
+      org-journal-file-header "#+TITLE: %b %Y"
+      org-journal-file-format "%b%Y.org"
+      org-journal-date-prefix "* "
+      org-journal-date-format "[%Y-%m-%d %a]")
+
+;; (add-to-list 'org-capture-templates
+;;       '("T" "Todo" entry (file+olp "~/Documents/Notes/todo.org" [ (format-time-string "%b &y") ])
+;;          "* TODO %?\nSCHEDULED: %^t\n %U" :empty-lines 1))
+;; (setq org-capture-templates
+;;       '(("T" "Todo Personal Item" entry
+;;          (file+headline "~/Documents/Notes/journal/todo.org"
+;;          (format-time-string "%"))
+;;          "* %<%H:%M>\n%?\n")))
