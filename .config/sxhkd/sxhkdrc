@@ -194,10 +194,13 @@ super + z
 super + e ; {e, a, b}
   bspc rule -a * -o state=tiled; emacsclient -c -a 'emacs' {_,--eval '(org-agenda)',--eval '(ibuffer)'}
 
-# launch rofi
+# launch ulauncher
 super + shift + Return
   ulauncher-toggle
-  # rofi-custom-combi
+
+# launch rofi
+super + ctrl + Return
+  rofi-custom-combi
 
 
 # SCRATCHPADS (super + s)
