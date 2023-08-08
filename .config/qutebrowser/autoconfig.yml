@@ -7,6 +7,7 @@
 config_version: 2
 settings:
   content.geolocation:
+    https://alphacerium.dev: true
     https://alphacerium.tk: true
     https://www.alphacerium.tk: true
     https://www.google.com: true
@@ -18,6 +19,7 @@ settings:
     '*://*.192.168.2.69/*': true
     '*://*.account.live.com/*': true
     '*://*.accounts.google.com/*': true
+    '*://*.alphacerium.dev/*': true
     '*://*.alphacerium.tk/*': true
     '*://*.betterdiscord.app/*': false
     '*://*.bitwarden.com/*': true
