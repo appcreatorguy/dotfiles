@@ -127,4 +127,6 @@ ${color1}[S]+p, s${alignr}${color2}dm-websearch${color}
 ${color1}${hr}${color}
 ${color1}[S]+[SHIFT]+r${alignr}${color2}restart bspwm${color}
 ${color1}[S]+[SHIFT]+q${alignr}${color2}quit bwpsm${color}
+${color1}${hr}${color}
+${color2}${execpi 300 gcalcli --conky agenda --military --nostarted --calendar=Timetable now tonight}${color}
 ]];
