@@ -60,3 +60,5 @@
 (package! catppuccin-theme)
 (package! autothemer)
 (package! rose-pine-emacs :recipe (:host github :repo "thongpv87/rose-pine-emacs" :branch "master"))
+(package! org-wild-notifier)
+(package! org-ref)

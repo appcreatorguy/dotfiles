@@ -460,6 +460,8 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
         `(("T" "Todo Personal Item" entry
            (file+olp "~/Documents/Notes/journal/todo.org",(format-time-string "%B %Y" ))
            "* TODO %?\nSCHEDULED: %^t\nCREATED:%U")))
+  (use-package! org-ref
+    :init)
 )
 
 (use-package catppuccin-theme
@@ -499,6 +501,13 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
+;; (setq org-latex-pdf-process
+;;       '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+;;              "bibtex %b"
+;;              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+;;              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+(setq org-latex-pdf-process
+      (list "latexmk -f -pdf %f"))
 (use-package autothemer
   :ensure t)
 
@@ -508,6 +517,8 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
       org-journal-file-format "%b%Y.org"
       org-journal-date-prefix "* "
       org-journal-date-format "[%Y-%m-%d %a]")
+
+(setq org-latex-logfiles-extensions (quote ("lof" "lot" "tex" "aux" "idx" "log" "out" "toc" "nav" "snm" "vrb" "dvi" "fdb_latexmk" "blg" "brf" "fls" "entoc" "ps" "spl" "bbl" "pygtex" "pygstyle")))
 
 ;; (add-to-list 'org-capture-templates
 ;;       '("T" "Todo" entry (file+olp "~/Documents/Notes/todo.org" [ (format-time-string "%b &y") ])
