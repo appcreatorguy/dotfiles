@@ -137,6 +137,10 @@ ctrl + alt + {h,j,k,l}
 super + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
+# refresh desktop background
+super + shift + d
+  nitrogen --random --set-zoom-fill
+
 # APPLICATION KEYBINDINGS (Super + Alt + Key)
 
 # terminal emulator
@@ -172,8 +176,9 @@ super + alt + n
 #     st -e rtv
 # launch vifm file manager
 super + alt + e
+      pcmanfm -n
 #     st -e ./.config/vifm/scripts/vifmrun
-      nautilus --new-window
+      # nautilus --new-window
 # launch wopr
 # super + alt + w
 #     st -e wopr report.xml
@@ -186,12 +191,13 @@ super + z
 
 
 # launch emacs
-super + e ; e
-  bspc rule -a * -o state=tiled; emacs
+super + e ; {e, a, b}
+  bspc rule -a * -o state=tiled; emacsclient -c -a 'emacs' {_,--eval '(org-agenda)',--eval '(ibuffer)'}
 
 # launch rofi
 super + shift + Return
-  rofi-custom-combi
+  ulauncher-toggle
+  # rofi-custom-combi
 
 
 # SCRATCHPADS (super + s)
@@ -228,9 +234,10 @@ XF86MonBrightnessUp
   brightnessctl set +10%
 XF86MonBrightnessDown
   brightnessctl set 10%-
-## change between hdmi out and internal speakers/headphones using pactl (thanks to: https://www.ypsidanger.com/headphone-speaker-fast-switching-with-pipewire/)
-ctrl + shift + {s,h}
-	pactl set-default-sink {alsa_output.pci-0000_01_00.1.hdmi-stereo,alsa_output.pci-0000_00_1f.3.analog-stereo}
+## change between hdmi/internal speakers/headphones using pactl (thanks to: https://www.ypsidanger.com/headphone-speaker-fast-switching-with-pipewire/)
+ctrl + shift + {s,l,h}
+	pactl set-default-sink {alsa_output.usb-DisplayLink_LAPDOCK_U3D2338906360-02.analog-stereo,alsa_output.pci-0000_00_1f.3.analog-stereo,bluez_output.00_00_00_00_05_1D.1}
+	# pactl set-default-sink {alsa_output.pci-0000_01_00.1.hdmi-stereo,alsa_output.pci-0000_00_1f.3.analog-stereo,bluez_output.00_00_00_00_05_1D.1}
 
 
 # Show last notification
@@ -245,4 +252,5 @@ super + alt + l
 
 # allows access to all dmscripts
 super + p ; {h,a,b,c,e,i,k,m,o,q,s,t}
-    {dm-hub,dm-sounds,dm-setbg,dtos-colorscheme,dm-confedit,dm-maim,dm-kill,dm-man,dm-bookman,dm-logout,dm-websearch,dm-translate}
+    {dm-hub,dm-sounds,dm-setbg,dtos-colorscheme,dm-confedit,dm-maim,dm-kill,dm-man,dm-bookman,dm-logout,dm-websearch duckduckgo,dm-translate}
+    # {dm-hub,dm-sounds,dm-setbg,dtos-colorscheme,dm-confedit,dm-maim,dm-kill,dm-man,dm-bookman,dm-logout,dm-websearch,dm-translate}
