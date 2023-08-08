@@ -27,6 +27,9 @@
     left: 0;
     top: 0;
 }
+#full-app-display.hide-cursor {
+	cursor: none;
+}
 #fad-header {
     position: fixed;
     width: 100%;
@@ -132,7 +135,7 @@ body.video-full-screen.video-full-screen--hide-ui {
     color: currentColor;
     padding: 0 5px;
 }
-#fad-artist svg, #fad-album svg {
+#fad-artist svg, #fad-album svg, #fad-release-date svg {
     display: inline-block;
 }
 ::-webkit-scrollbar {
@@ -161,11 +164,11 @@ body.video-full-screen.video-full-screen--hide-ui {
     font-size: 87px;
     font-weight: var(--glue-font-weight-black);
 }
-#fad-artist, #fad-album {
+#fad-artist, #fad-album, #fad-release-date {
     font-size: 54px;
     font-weight: var(--glue-font-weight-medium);
 }
-#fad-artist svg, #fad-album svg {
+#fad-artist svg, #fad-album svg, #fad-release-date svg {
     margin-right: 5px;
 }
 #fad-status {
@@ -203,11 +206,11 @@ body.video-full-screen.video-full-screen--hide-ui {
     font-size: 54px;
     font-weight: var(--glue-font-weight-black);
 }
-#fad-artist, #fad-album {
+#fad-artist, #fad-album, #fad-release-date {
     font-size: 33px;
     font-weight: var(--glue-font-weight-medium);
 }
-#fad-artist svg, #fad-album svg {
+#fad-artist svg, #fad-album svg, #fad-release-date svg {
     width: 25px;
     height: 25px;
     margin-right: 5px;
@@ -243,6 +246,7 @@ body.video-full-screen.video-full-screen--hide-ui {
     width: 50vw;
 }
 #fad-lyrics-plus-container {
+    position: relative;
     width: 50vw;
 }
 `;
@@ -351,6 +355,7 @@ body.video-full-screen.video-full-screen--hide-ui {
 				title: "",
 				artist: "",
 				album: "",
+				releaseDate: "",
 				cover: "",
 				heart: Spicetify.Player.getHeart()
 			};
@@ -365,9 +370,11 @@ body.video-full-screen.video-full-screen--hide-ui {
 			const albumInfo = await Spicetify.CosmosAsync.get(`https://api.spotify.com/v1/albums/${id}`);
 
 			const albumDate = new Date(albumInfo.release_date);
-			const recentDate = new Date();
-			recentDate.setMonth(recentDate.getMonth() - 6);
-			return albumDate.toLocaleString("default", albumDate > recentDate ? { year: "numeric", month: "short" } : { year: "numeric" });
+			return albumDate.toLocaleString("default", {
+				year: "numeric",
+				month: "short",
+				day: "numeric"
+			});
 		}
 
 		async fetchInfo() {
@@ -396,20 +403,24 @@ body.video-full-screen.video-full-screen--hide-ui {
 				artistName = meta.artist_name;
 			}
 
-			// prepare album
-			let albumText = meta.album_title || "";
-			if (CONFIG.showAlbum) {
+			// prepare release date
+			let releaseDate;
+			if (CONFIG.showReleaseDate) {
 				const albumURI = meta.album_uri;
 				if (albumURI?.startsWith("spotify:album:")) {
-					albumText += " • " + (await this.getAlbumDate(albumURI));
+					releaseDate = await this.getAlbumDate(albumURI);
 				}
 			}
+
+			// prepare album
+			let albumText = meta.album_title || "";
 
 			if (meta.image_xlarge_url === this.currTrackImg.src) {
 				this.setState({
 					title: rawTitle || "",
 					artist: artistName || "",
-					album: albumText || ""
+					album: albumText || "",
+					releaseDate: releaseDate || ""
 				});
 				return;
 			}
@@ -426,6 +437,7 @@ body.video-full-screen.video-full-screen--hide-ui {
 					title: rawTitle || "",
 					artist: artistName || "",
 					album: albumText || "",
+					releaseDate: releaseDate || "",
 					cover: bgImage
 				});
 			};
@@ -610,6 +622,12 @@ body.video-full-screen.video-full-screen--hide-ui {
 									text: this.state.album,
 									icon: Spicetify.SVGIcons.album
 								}),
+							CONFIG.showReleaseDate &&
+								react.createElement(SubInfo, {
+									id: "fad-release-date",
+									text: this.state.releaseDate,
+									icon: Spicetify.SVGIcons.clock
+								}),
 							react.createElement(
 								"div",
 								{
@@ -639,12 +657,47 @@ body.video-full-screen.video-full-screen--hide-ui {
 	const container = document.createElement("div");
 	container.id = "fad-main";
 	let lastApp;
+	let cursorTimeout;
+	let fad;
 
 	async function toggleFullscreen() {
 		if (CONFIG.enableFullscreen) {
 			await document.documentElement.requestFullscreen();
+			toggleCursor(false);
 		} else if (document.webkitIsFullScreen) {
 			await document.exitFullscreen();
+			toggleCursor(true);
+		}
+	}
+
+	function eventListener() {
+		showCursor();
+		cursorTimeout = setTimeout(hideCursor, 2000);
+	}
+
+	function showCursor() {
+		fad.classList.remove("hide-cursor");
+		clearTimeout(cursorTimeout);
+	}
+
+	function hideCursor() {
+		fad.classList.add("hide-cursor");
+	}
+
+	function toggleCursor(show = true) {
+		fad = document.getElementById("full-app-display");
+
+		if (!fad) {
+			setTimeout(toggleCursor, 300, show);
+			return;
+		}
+
+		if (show) {
+			document.removeEventListener("mousemove", eventListener);
+			showCursor();
+		} else {
+			cursorTimeout = setTimeout(hideCursor, 2000);
+			document.addEventListener("mousemove", eventListener);
 		}
 	}
 
@@ -662,6 +715,7 @@ body.video-full-screen.video-full-screen--hide-ui {
 		if (CONFIG.enableFullscreen || document.webkitIsFullScreen) {
 			document.exitFullscreen();
 		}
+		toggleCursor(true);
 		document.body.classList.remove(...classes);
 		reactDOM.unmountComponentAtNode(container);
 		style.remove();
@@ -741,7 +795,10 @@ body.video-full-screen.video-full-screen--hide-ui {
 							func();
 						}
 					},
-					react.createElement(DisplayIcon, { icon: Spicetify.SVGIcons.check, size: 16 })
+					react.createElement(DisplayIcon, {
+						icon: Spicetify.SVGIcons.check,
+						size: 16
+					})
 				)
 			)
 		);
@@ -801,15 +858,56 @@ button.switch[disabled] {
 				},
 				disabled: !checkLyricsPlus()
 			}),
-			react.createElement(ConfigItem, { name: "Enable progress bar", field: "enableProgress", func: updateVisual }),
-			react.createElement(ConfigItem, { name: "Enable controls", field: "enableControl", func: updateVisual }),
-			react.createElement(ConfigItem, { name: "Trim title", field: "trimTitle", func: updateVisual }),
-			react.createElement(ConfigItem, { name: "Show album", field: "showAlbum", func: updateVisual }),
-			react.createElement(ConfigItem, { name: "Show all artists", field: "showAllArtists", func: updateVisual }),
-			react.createElement(ConfigItem, { name: "Show icons", field: "icons", func: updateVisual }),
-			react.createElement(ConfigItem, { name: "Vertical mode", field: "vertical", func: updateStyle }),
-			react.createElement(ConfigItem, { name: "Enable fullscreen", field: "enableFullscreen", func: toggleFullscreen }),
-			react.createElement(ConfigItem, { name: "Enable song change animation", field: "enableFade", func: updateVisual })
+			react.createElement(ConfigItem, {
+				name: "Enable progress bar",
+				field: "enableProgress",
+				func: updateVisual
+			}),
+			react.createElement(ConfigItem, {
+				name: "Enable controls",
+				field: "enableControl",
+				func: updateVisual
+			}),
+			react.createElement(ConfigItem, {
+				name: "Trim title",
+				field: "trimTitle",
+				func: updateVisual
+			}),
+			react.createElement(ConfigItem, {
+				name: "Show album",
+				field: "showAlbum",
+				func: updateVisual
+			}),
+			react.createElement(ConfigItem, {
+				name: "Show all artists",
+				field: "showAllArtists",
+				func: updateVisual
+			}),
+			react.createElement(ConfigItem, {
+				name: "Show release date",
+				field: "showReleaseDate",
+				func: updateVisual
+			}),
+			react.createElement(ConfigItem, {
+				name: "Show icons",
+				field: "icons",
+				func: updateVisual
+			}),
+			react.createElement(ConfigItem, {
+				name: "Vertical mode",
+				field: "vertical",
+				func: updateStyle
+			}),
+			react.createElement(ConfigItem, {
+				name: "Enable fullscreen",
+				field: "enableFullscreen",
+				func: toggleFullscreen
+			}),
+			react.createElement(ConfigItem, {
+				name: "Enable song change animation",
+				field: "enableFade",
+				func: updateVisual
+			})
 		);
 		Spicetify.PopupModal.display({
 			title: "Full App Display",

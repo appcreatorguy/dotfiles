@@ -37,6 +37,75 @@ const SwapButton = ({ icon, disabled, onClick }) => {
 	);
 };
 
+const CacheButton = () => {
+	let lyrics = {};
+
+	try {
+		const localLyrics = JSON.parse(localStorage.getItem("lyrics-plus:local-lyrics"));
+		if (!localLyrics || typeof localLyrics !== "object") {
+			throw "";
+		}
+		lyrics = localLyrics;
+	} catch {
+		lyrics = {};
+	}
+
+	const [count, setCount] = useState(Object.keys(lyrics).length);
+	const text = !!count ? "Clear cached lyrics" : "No cached lyrics";
+
+	return react.createElement(
+		"button",
+		{
+			className: "btn",
+			onClick: () => {
+				localStorage.removeItem("lyrics-plus:local-lyrics");
+				setCount(0);
+			},
+			disabled: !count
+		},
+		text
+	);
+};
+
+const RefreshTokenButton = ({ setTokenCallback }) => {
+	const [buttonText, setButtonText] = useState("Refresh token");
+
+	useEffect(() => {
+		if (buttonText === "Refreshing token...") {
+			Spicetify.CosmosAsync.get(`https://apic-desktop.musixmatch.com/ws/1.1/token.get?app_id=web-desktop-app-v1.0`, null, {
+				authority: "apic-desktop.musixmatch.com"
+			})
+				.then(({ message: response }) => {
+					if (response.header.status_code === 200 && response.body.user_token) {
+						setTokenCallback(response.body.user_token);
+						setButtonText("Token refreshed");
+					} else if (response.header.status_code === 401) {
+						setButtonText("Too many attempts");
+					} else {
+						setButtonText("Failed to refresh token");
+						console.error("Failed to refresh token", response);
+					}
+				})
+				.catch(error => {
+					setButtonText("Failed to refresh token");
+					console.error("Failed to refresh token", error);
+				});
+		}
+	}, [buttonText]);
+
+	return react.createElement(
+		"button",
+		{
+			className: "btn",
+			onClick: () => {
+				setButtonText("Refreshing token...");
+			},
+			disabled: buttonText !== "Refresh token"
+		},
+		buttonText
+	);
+};
+
 const ConfigSlider = ({ name, defaultValue, onChange = () => {} }) => {
 	const [active, setActive] = useState(defaultValue);
 
@@ -84,8 +153,14 @@ const ConfigSelection = ({ name, defaultValue, options, onChange = () => {} }) =
 			setValue(value);
 			onChange(value);
 		},
-		[value]
+		[value, options]
 	);
+
+	useEffect(() => {
+		setValue(defaultValue);
+	}, [defaultValue]);
+
+	if (!Object.keys(options).length) return null;
 
 	return react.createElement(
 		"div",
@@ -107,6 +182,7 @@ const ConfigSelection = ({ name, defaultValue, options, onChange = () => {} }) =
 			react.createElement(
 				"select",
 				{
+					className: "main-dropDown-dropDown",
 					value,
 					onChange: setValueCallback
 				},
@@ -261,15 +337,25 @@ const ConfigHotkey = ({ name, defaultValue, onChange = () => {} }) => {
 	);
 };
 
+const ServiceAction = ({ item, setTokenCallback }) => {
+	switch (item.name) {
+		case "local":
+			return react.createElement(CacheButton);
+		case "musixmatch":
+			return react.createElement(RefreshTokenButton, { setTokenCallback });
+		default:
+			return null;
+	}
+};
+
 const ServiceOption = ({ item, onToggle, onSwap, isFirst = false, isLast = false, onTokenChange = null }) => {
 	const [token, setToken] = useState(item.token);
 	const [active, setActive] = useState(item.on);
 
 	const setTokenCallback = useCallback(
-		event => {
-			const value = event.target.value;
-			setToken(value);
-			onTokenChange(item.name, value);
+		token => {
+			setToken(token);
+			onTokenChange(item.name, token);
 		},
 		[item.token]
 	);
@@ -300,6 +386,10 @@ const ServiceOption = ({ item, onToggle, onSwap, isFirst = false, isLast = false
 				{
 					className: "col action"
 				},
+				react.createElement(ServiceAction, {
+					item,
+					setTokenCallback
+				}),
 				react.createElement(SwapButton, {
 					icon: Spicetify.SVGIcons["chart-up"],
 					onClick: () => onSwap(item.name, -1),
@@ -326,7 +416,7 @@ const ServiceOption = ({ item, onToggle, onSwap, isFirst = false, isLast = false
 			react.createElement("input", {
 				placeholder: `Place your ${item.name} token here`,
 				value: token,
-				onChange: setTokenCallback
+				onChange: event => setTokenCallback(event.target.value)
 			})
 	);
 };
@@ -361,9 +451,23 @@ const ServiceList = ({ itemsList, onListChange = () => {}, onToggle = () => {}, 
 	});
 };
 
-const OptionList = ({ items, onChange }) => {
-	const [_, setItems] = useState(items);
-	return items.map(item => {
+const OptionList = ({ type, items, onChange }) => {
+	const [itemList, setItemList] = useState(items);
+	const [, forceUpdate] = useState();
+
+	useEffect(() => {
+		if (!type) return;
+
+		const eventListener = event => {
+			if (event.detail?.type !== type) return;
+			setItemList(event.detail.items);
+		};
+		document.addEventListener("lyrics-plus", eventListener);
+
+		return () => document.removeEventListener("lyrics-plus", eventListener);
+	}, []);
+
+	return itemList.map(item => {
 		if (!item || (item.when && !item.when())) {
 			return;
 		}
@@ -379,7 +483,7 @@ const OptionList = ({ items, onChange }) => {
 				defaultValue: CONFIG.visual[item.key],
 				onChange: value => {
 					onChangeItem(item.key, value);
-					setItems([...items]);
+					forceUpdate({});
 				}
 			}),
 			item.info &&
@@ -401,6 +505,21 @@ function openConfig() {
 		react.createElement("h2", null, "Options"),
 		react.createElement(OptionList, {
 			items: [
+				{
+					desc: "Playbar button",
+					key: "playbar-button",
+					info: "Replace Spotify's lyrics button with Lyrics Plus.",
+					type: ConfigSlider
+				},
+				{
+					desc: "Global delay",
+					info: "Offset (in ms) across all tracks.",
+					key: "global-delay",
+					type: ConfigAdjust,
+					min: -10000,
+					max: 10000,
+					step: 250
+				},
 				{
 					desc: "Font size",
 					info: "(or Ctrl + Mouse scroll in main app)",
@@ -475,13 +594,39 @@ function openConfig() {
 					key: "highlight-color",
 					type: ConfigInput,
 					when: () => !CONFIG.visual["colorful"]
+				},
+				{
+					desc: "Text convertion: Japanese Detection threshold (Advanced)",
+					info: "Checks if whenever Kana is dominant in lyrics. If the result passes the threshold, it's most likely Japanese, and vice versa. This setting is in percentage.",
+					key: "ja-detect-threshold",
+					type: ConfigAdjust,
+					min: thresholdSizeLimit.min,
+					max: thresholdSizeLimit.max,
+					step: thresholdSizeLimit.step
+				},
+				{
+					desc: "Text convertion: Traditional-Simplified Detection threshold (Advanced)",
+					info: "Checks if whenever Traditional or Simplified is dominant in lyrics. If the result passes the threshold, it's most likely Simplified, and vice versa. This setting is in percentage.",
+					key: "hans-detect-threshold",
+					type: ConfigAdjust,
+					min: thresholdSizeLimit.min,
+					max: thresholdSizeLimit.max,
+					step: thresholdSizeLimit.step
 				}
 			],
 			onChange: (name, value) => {
 				CONFIG.visual[name] = value;
-				console.log(CONFIG.visual, APP_NAME, name, value);
 				localStorage.setItem(`${APP_NAME}:visual:${name}`, value);
 				lyricContainerUpdate && lyricContainerUpdate();
+
+				const configChange = new CustomEvent("lyrics-plus", {
+					detail: {
+						type: "config",
+						name: name,
+						value: value
+					}
+				});
+				window.dispatchEvent(configChange);
 			}
 		}),
 		react.createElement("h2", null, "Providers"),

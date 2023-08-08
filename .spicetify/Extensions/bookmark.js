@@ -119,6 +119,11 @@
 				uri.type === URI.Type.PLAYLIST;
 
 			this.innerHTML = `
+<style>
+.bookmark-card .ButtonInner-md-iconOnly:hover {
+	transform: scale(1.06);
+}
+</style>
 <div class="bookmark-card">
     ${
 			info.imageUrl
@@ -143,15 +148,16 @@
     </div>
     ${
 			isPlayable
-				? `<button class="main-playButton-PlayButton main-playButton-primary" aria-label="Play" title="Play" style="--size:48px;"><svg role="img" height="24" width="24" viewBox="0 0 16 16" fill="currentColor"><path d="M4.018 14L14.41 8 4.018 2z"></path></svg></button>`
+				? `<div class="ButtonInner-md-iconOnly"><button class="main-playButton-PlayButton main-playButton-primary" data-tippy-content="Play" style="--size:48px;"><svg role="img" height="24" width="24" viewBox="0 0 16 16" fill="currentColor"><path d="M4.018 14L14.41 8 4.018 2z"></path></svg></button></div>`
 				: ""
 		}
-    <button class="bookmark-controls" title="${REMOVE_TEXT}"><svg width="8" height="8" viewBox="0 0 16 16" fill="currentColor">${
-				Spicetify.SVGIcons.x
-			}</svg></button>
+    <button class="bookmark-controls" data-tippy-content="${REMOVE_TEXT}"><svg width="8" height="8" viewBox="0 0 16 16" fill="currentColor">${
+			Spicetify.SVGIcons.x
+		}</svg></button>
 </div>
 `;
 
+			Spicetify.Tippy(this.querySelectorAll("[data-tippy-content]"), Spicetify.TippyProps);
 			if (isPlayable) {
 				/** @type {HTMLButtonElement} */
 				const playButton = this.querySelector("button.main-playButton-PlayButton");
@@ -218,9 +224,15 @@
 	async function storeThisPage() {
 		let title;
 		let description;
+		let contextUri;
 
 		const context = Spicetify.Platform.History.location.pathname;
-		const contextUri = Spicetify.URI.fromString(context);
+		try {
+			contextUri = Spicetify.URI.fromString(context);
+		} catch (e) {
+			Spicetify.showNotification("Cannot bookmark this page", true);
+			return;
+		}
 		const uri = contextUri.toURI();
 
 		let titleElem =
@@ -423,7 +435,7 @@
 	 * Handle Link click event when item context is a playlist
 	 */
 	async function onLinkClick(info) {
-		if (info?.context?.startsWith("/")) {
+		if (info.context?.startsWith("/")) {
 			Spicetify.Platform.History.push(info.context);
 			return;
 		}
@@ -437,24 +449,27 @@
 		if (info.time) {
 			options.seekTo = info.time;
 		}
-		if (info?.context?.startsWith("/")) {
+		if (info.context?.startsWith("/")) {
 			uri = URI.fromString(info.context).toURI();
-			options.skipTo = {};
-			options.skipTo.uid = info.context.split("?uid=", 2)[1];
-			options.skipTo.uri = info.uri;
+			if (uri !== info.uri) {
+				options.skipTo = {};
+				options.skipTo.uid = info.context.split("?uid=", 2)[1];
+				options.skipTo.uri = info.uri;
+			}
 		}
 
 		Spicetify.Player.playUri(uri, {}, options);
 	}
 
 	const fetchAlbum = async uri => {
-		const base62 = uri.split(":")[2];
-		const res = await CosmosAsync.get(`wg://album/v1/album-app/album/${base62}/desktop`);
+		const { getAlbum } = Spicetify.GraphQL.Definitions;
+		const { data } = await Spicetify.GraphQL.Request(getAlbum, { uri, locale: Spicetify.Locale.getLocale(), offset: 0, limit: 10 });
+		const res = data.albumUnion;
 		return {
 			uri,
 			title: res.name,
 			description: "Album",
-			imageUrl: res.cover.uri
+			imageUrl: res.coverArt.sources.reduce((prev, curr) => (prev.width > curr.width ? prev : curr)).url
 		};
 	};
 
@@ -472,13 +487,20 @@
 	};
 
 	const fetchArtist = async uri => {
-		const base62 = uri.split(":")[2];
-		const res = await CosmosAsync.get(`wg://artist/v1/${base62}/desktop?format=json`);
+		const { queryArtistOverview } = Spicetify.GraphQL.Definitions;
+		const { data } = await Spicetify.GraphQL.Request(queryArtistOverview, {
+			uri,
+			locale: Spicetify.Locale.getLocale(),
+			includePrerelease: false
+		});
+		const res = data.artistUnion;
 		return {
 			uri,
-			title: res.info.name,
+			title: res.profile.name,
 			description: "Artist",
-			imageUrl: res.header_image.image
+			imageUrl:
+				res.visuals.avatarImage?.sources.reduce((prev, curr) => (prev.width > curr.width ? prev : curr)).url ||
+				res.visuals.headerImage?.sources[0].url
 		};
 	};
 
@@ -486,7 +508,7 @@
 		const base62 = uri.split(":")[2];
 		const res = await CosmosAsync.get(`https://api.spotify.com/v1/tracks/${base62}`);
 		if (context && uid && Spicetify.URI.isPlaylistV1OrV2(context)) {
-			context = Spicetify.URI.from(context).toURLPath(true) + "?uid=" + uid;
+			context = Spicetify.URI.fromString(context).toURLPath(true) + "?uid=" + uid;
 		}
 		return {
 			uri,

@@ -244,13 +244,13 @@ function openConfig() {
 					type: ConfigSlider,
 					when: () => CONFIG["music"]
 				},
-				{
+				/* {
 					desc: Spicetify.Locale.get("artist.appears-on"),
 					key: "appears-on",
 					defaultValue: CONFIG["appears-on"],
 					type: ConfigSlider,
 					when: () => CONFIG["music"]
-				},
+				}, */
 				{
 					desc: Spicetify.Locale.get("artist.compilations"),
 					key: "compilations",
@@ -269,7 +269,30 @@ function openConfig() {
 				}
 				localStorage.setItem(`${APP_NAME}:${name}`, value);
 			}
-		})
+		}),
+		react.createElement(
+			"div",
+			{
+				className: "setting-row"
+			},
+			react.createElement(
+				"label",
+				{
+					className: "col description"
+				},
+				"Dismissed releases"
+			),
+			react.createElement(
+				"div",
+				{
+					className: "col action"
+				},
+				react.createElement(ButtonText, {
+					text: Spicetify.Locale.get("equalizer.reset"),
+					onClick: removeCards.bind(this, null, "reset")
+				})
+			)
+		)
 	);
 
 	Spicetify.PopupModal.display({

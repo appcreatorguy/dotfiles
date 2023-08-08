@@ -1,9 +1,19 @@
+function DraggableComponent({ uri, title, children }) {
+	const dragHandler = Spicetify.ReactHook.DragHandler?.([uri], title);
+	return dragHandler
+		? react.cloneElement(children, {
+				onDragStart: dragHandler,
+				draggable: "true"
+		  })
+		: children;
+}
+
 class Card extends react.Component {
 	constructor(props) {
 		super(props);
 		Object.assign(this, props);
-		this.href = URI.from(this.uri).toURLPath(true);
-		this.artistHref = URI.from(this.artist.uri).toURLPath(true);
+		this.href = URI.fromString(this.uri).toURLPath(true);
+		this.artistHref = URI.fromString(this.artist.uri).toURLPath(true);
 		const uriType = Spicetify.URI.fromString(this.uri)?.type;
 		switch (uriType) {
 			case Spicetify.URI.Type.ALBUM:
@@ -16,6 +26,12 @@ class Card extends react.Component {
 
 	play(event) {
 		Spicetify.Player.playUri(this.uri, this.context);
+		event.stopPropagation();
+	}
+
+	closeButtonClicked(event) {
+		removeCards(this.props.uri);
+		Spicetify.showNotification(`Dismissed <b>${this.title}</b> from <b>${this.artist.name}</b>`);
 		event.stopPropagation();
 	}
 
@@ -41,120 +57,157 @@ class Card extends react.Component {
 					}
 				},
 				react.createElement(
-					"div",
+					DraggableComponent,
 					{
-						className: "main-card-draggable",
-						draggable: "true"
+						uri: this.uri,
+						title: this.title
 					},
 					react.createElement(
 						"div",
 						{
-							className: "main-card-imageContainer"
+							className: "main-card-draggable"
 						},
 						react.createElement(
 							"div",
 							{
-								className: "main-cardImage-imageWrapper"
-							},
-							react.createElement(
-								"div",
-								{},
-								react.createElement("img", {
-									"aria-hidden": "false",
-									draggable: "false",
-									loading: "lazy",
-									src: this.imageURL,
-									className: "main-image-image main-cardImage-image"
-								})
-							)
-						),
-						react.createElement(
-							"div",
-							{
-								className: "main-card-PlayButtonContainer"
+								className: "main-card-imageContainer"
 							},
 							react.createElement(
 								"div",
 								{
-									className: "main-playButton-PlayButton main-playButton-primary",
-									"aria-label": Spicetify.Locale.get("play"),
-									style: { "--size": "40px" },
-									onClick: this.play.bind(this)
+									className: "main-cardImage-imageWrapper"
 								},
 								react.createElement(
-									"button",
-									null,
+									"div",
+									{},
+									react.createElement("img", {
+										"aria-hidden": "false",
+										draggable: "false",
+										loading: "lazy",
+										src: this.imageURL,
+										className: "main-image-image main-cardImage-image"
+									})
+								)
+							),
+							react.createElement(
+								"div",
+								{
+									className: "main-card-PlayButtonContainer"
+								},
+								react.createElement(
+									"div",
+									{
+										className: "main-playButton-PlayButton main-playButton-primary",
+										"aria-label": Spicetify.Locale.get("play"),
+										style: { "--size": "40px" },
+										onClick: this.play.bind(this)
+									},
 									react.createElement(
-										"span",
+										"button",
 										null,
 										react.createElement(
-											"svg",
-											{
-												height: "24",
-												role: "img",
-												width: "24",
-												viewBox: "0 0 24 24",
-												"aria-hidden": "true"
-											},
-											react.createElement("polygon", {
-												points: "21.57 12 5.98 3 5.98 21 21.57 12",
-												fill: "currentColor"
-											})
+											"span",
+											null,
+											react.createElement(
+												"svg",
+												{
+													height: "24",
+													role: "img",
+													width: "24",
+													viewBox: "0 0 24 24",
+													"aria-hidden": "true"
+												},
+												react.createElement("polygon", {
+													points: "21.57 12 5.98 3 5.98 21 21.57 12",
+													fill: "currentColor"
+												})
+											)
 										)
 									)
 								)
-							)
-						)
-					),
-					react.createElement(
-						"div",
-						{
-							className: "main-card-cardMetadata"
-						},
-						react.createElement(
-							"a",
-							{
-								draggable: "false",
-								title: this.title,
-								className: "main-cardHeader-link",
-								dir: "auto",
-								href: this.href
-							},
+							),
 							react.createElement(
-								"div",
-								{
-									className: "main-cardHeader-text main-type-balladBold",
-									as: "div"
-								},
-								this.title
+								Spicetify.ReactComponent.TooltipWrapper,
+								{ label: "Dismiss" },
+								react.createElement(
+									"button",
+									{
+										className: "main-card-closeButton",
+										onClick: this.closeButtonClicked.bind(this)
+									},
+									react.createElement(
+										"svg",
+										{
+											width: "16",
+											height: "16",
+											viewBox: "0 0 16 16",
+											xmlns: "http://www.w3.org/2000/svg",
+											className: "main-card-closeButton-svg"
+										},
+										react.createElement("path", {
+											d: "M1.47 1.47a.75.75 0 0 1 1.06 0L8 6.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L9.06 8l5.47 5.47a.75.75 0 1 1-1.06 1.06L8 9.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L6.94 8 1.47 2.53a.75.75 0 0 1 0-1.06z",
+											fill: "var(--spice-text)",
+											fillRule: "evenodd"
+										})
+									)
+								)
 							)
 						),
-						detail.length > 0 &&
-							react.createElement(
-								"div",
-								{
-									className: "main-cardSubHeader-root main-type-mestoBold new-releases-cardSubHeader",
-									as: "div"
-								},
-								react.createElement("span", null, detail.join(" • "))
-							),
 						react.createElement(
-							"a",
+							"div",
 							{
-								className: `main-cardSubHeader-root main-type-mesto new-releases-cardSubHeader`,
-								href: this.artistHref,
-								onClick: event => {
-									History.push(this.artistHref);
-									event.stopPropagation();
-									event.preventDefault();
-								}
+								className: "main-card-cardMetadata"
 							},
-							react.createElement("span", null, this.artist.name)
-						)
-					),
-					react.createElement("div", {
-						className: "main-card-cardLink"
-					})
+							react.createElement(
+								"a",
+								{
+									draggable: "false",
+									title: this.title,
+									className: "main-cardHeader-link",
+									dir: "auto",
+									href: this.href
+								},
+								react.createElement(
+									"div",
+									{
+										className: "main-cardHeader-text main-type-balladBold"
+									},
+									this.title
+								)
+							),
+							detail.length > 0 &&
+								react.createElement(
+									"div",
+									{
+										className: "main-cardSubHeader-root main-type-mestoBold new-releases-cardSubHeader"
+									},
+									react.createElement("span", null, detail.join(" • "))
+								),
+							react.createElement(
+								DraggableComponent,
+								{
+									uri: this.artist.uri,
+									title: this.artist.name
+								},
+								react.createElement(
+									"a",
+									{
+										className: `main-cardSubHeader-root main-type-mesto new-releases-cardSubHeader`,
+										href: this.artistHref,
+										onClick: event => {
+											History.push(this.artistHref);
+											event.stopPropagation();
+											event.preventDefault();
+										}
+									},
+									react.createElement("span", null, this.artist.name)
+								)
+							)
+						),
+						react.createElement("div", {
+							className: "main-card-cardLink"
+						})
+					)
 				)
 			)
 		);

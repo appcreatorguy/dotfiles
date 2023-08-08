@@ -32,9 +32,9 @@ class Card extends react.Component {
 
 	getSubtitle() {
 		let subtitle;
-		if (this.uriType === URI.Type.ALBUM || this.uriType === URI.Type.TRACK) {
+		if ((this.uriType === URI.Type.ALBUM || this.uriType === URI.Type.TRACK) && Array.isArray(this.subtitle)) {
 			subtitle = this.subtitle.map(artist => {
-				const artistHref = URI.from(artist.uri).toURLPath(true);
+				const artistHref = URI.fromString(artist.uri).toURLPath(true);
 				return react.createElement(
 					"a",
 					{

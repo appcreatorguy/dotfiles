@@ -1,4 +1,5 @@
 const CreditFooter = react.memo(({ provider, copyright }) => {
+	if (provider === "local") return null;
 	const credit = [Spicetify.Locale.get("web-player.lyrics.providedBy", provider)];
 	if (copyright) {
 		credit.push(...copyright.split("\n"));
@@ -83,8 +84,9 @@ const SyncedLyricsPage = react.memo(({ lyrics = [], provider, copyright, isKara 
 
 	useTrackPosition(() => {
 		const newPos = Spicetify.Player.getProgress();
+		const delay = CONFIG.visual["global-delay"] + CONFIG.visual.delay;
 		if (newPos != position) {
-			setPosition(newPos + CONFIG.visual.delay);
+			setPosition(newPos + delay);
 		}
 	});
 
@@ -119,26 +121,7 @@ const SyncedLyricsPage = react.memo(({ lyrics = [], provider, copyright, isKara 
 		offset += -(activeLineEle.current.offsetTop + activeLineEle.current.clientHeight / 2);
 	}
 
-	const rawLyrics = lyrics
-		.map(line => {
-			if (!line.startTime) return line.text;
-			let startTimeString = "";
-
-			if (!isNaN(line.startTime)) {
-				let minutes = Math.trunc(line.startTime / 60000),
-					seconds = ((line.startTime - minutes * 60000) / 1000).toFixed(2);
-
-				if (minutes < 10) minutes = "0" + minutes;
-				if (seconds < 10) seconds = "0" + seconds;
-
-				startTimeString = `${minutes}:${seconds}`;
-			} else {
-				startTimeString = line.startTime.toString();
-			}
-
-			return `[${startTimeString}] ${line.text}`;
-		})
-		.join("\n");
+	const rawLyrics = Utils.convertParsedToLRC(lyrics);
 
 	return react.createElement(
 		"div",
@@ -180,6 +163,11 @@ const SyncedLyricsPage = react.memo(({ lyrics = [], provider, copyright, isKara 
 					animationIndex = i - CONFIG.visual["lines-before"] - 1;
 				}
 
+				const paddingLine = (animationIndex < 0 && -animationIndex > CONFIG.visual["lines-before"]) || animationIndex > CONFIG.visual["lines-after"];
+				if (paddingLine) {
+					className += " lyrics-lyricsContainer-LyricsLine-paddingLine";
+				}
+
 				return react.createElement(
 					"p",
 					{
@@ -198,8 +186,9 @@ const SyncedLyricsPage = react.memo(({ lyrics = [], provider, copyright, isKara 
 								Spicetify.Player.seek(startTime);
 							}
 						},
-						onAuxClick: async event => {
-							await Spicetify.Platform.ClipboardAPI.copy(rawLyrics)
+						onContextMenu: event => {
+							event.preventDefault();
+							Spicetify.Platform.ClipboardAPI.copy(rawLyrics)
 								.then(() => Spicetify.showNotification("Lyrics copied to clipboard"))
 								.catch(() => Spicetify.showNotification("Failed to copy lyrics to clipboard"));
 						}
@@ -230,6 +219,8 @@ class SearchBar extends react.Component {
 		this.viewPort = document.querySelector(".main-view-container .os-viewport");
 		this.mainViewOffsetTop = document.querySelector(".Root__main-view").offsetTop;
 		this.toggleCallback = () => {
+			if (!(Spicetify.Platform.History.location.pathname === "/lyrics-plus" && this.container)) return;
+
 			if (this.state.hidden) {
 				this.setState({ hidden: false });
 				this.container.focus();
@@ -367,7 +358,7 @@ const SyncedExpandedLyricsPage = react.memo(({ lyrics, provider, copyright, isKa
 
 	useTrackPosition(() => {
 		if (!Player.data.is_paused) {
-			setPosition(Spicetify.Player.getProgress() + CONFIG.visual.delay);
+			setPosition(Spicetify.Player.getProgress() + CONFIG.visual["global-delay"] + CONFIG.visual.delay);
 		}
 	});
 
@@ -386,26 +377,7 @@ const SyncedExpandedLyricsPage = react.memo(({ lyrics, provider, copyright, isKa
 		}
 	}
 
-	const rawLyrics = lyrics
-		.map(line => {
-			if (!line.startTime) return line.text;
-			let startTimeString = "";
-
-			if (!isNaN(line.startTime)) {
-				let minutes = Math.trunc(line.startTime / 60000),
-					seconds = ((line.startTime - minutes * 60000) / 1000).toFixed(2);
-
-				if (minutes < 10) minutes = "0" + minutes;
-				if (seconds < 10) seconds = "0" + seconds;
-
-				startTimeString = `${minutes}:${seconds}`;
-			} else {
-				startTimeString = line.startTime.toString();
-			}
-
-			return `[${startTimeString}] ${line.text}`;
-		})
-		.join("\n");
+	const rawLyrics = Utils.convertParsedToLRC(lyrics);
 
 	useEffect(() => {
 		if (activeLineRef.current && (!intialScroll[0] || isInViewport(activeLineRef.current))) {
@@ -452,8 +424,9 @@ const SyncedExpandedLyricsPage = react.memo(({ lyrics, provider, copyright, isKa
 							Spicetify.Player.seek(startTime);
 						}
 					},
-					onAuxClick: async event => {
-						await Spicetify.Platform.ClipboardAPI.copy(rawLyrics)
+					onContextMenu: event => {
+						event.preventDefault();
+						Spicetify.Platform.ClipboardAPI.copy(rawLyrics)
 							.then(() => Spicetify.showNotification("Lyrics copied to clipboard"))
 							.catch(() => Spicetify.showNotification("Failed to copy lyrics to clipboard"));
 					}
@@ -489,8 +462,9 @@ const UnsyncedLyricsPage = react.memo(({ lyrics, provider, copyright }) => {
 				{
 					className: "lyrics-lyricsContainer-LyricsLine lyrics-lyricsContainer-LyricsLine-active",
 					dir: "auto",
-					onAuxClick: async event => {
-						await Spicetify.Platform.ClipboardAPI.copy(rawLyrics)
+					onContextMenu: event => {
+						event.preventDefault();
+						Spicetify.Platform.ClipboardAPI.copy(rawLyrics)
 							.then(() => Spicetify.showNotification("Lyrics copied to clipboard"))
 							.catch(() => Spicetify.showNotification("Failed to copy lyrics to clipboard"));
 					}
@@ -587,13 +561,19 @@ const GeniusPage = react.memo(
 				ref: c => (container = c),
 				dangerouslySetInnerHTML: {
 					__html: lyrics
+				},
+				onContextMenu: event => {
+					event.preventDefault();
+					const copylyrics = lyrics.replace(/<br>/g, "\n").replace(/<[^>]*>/g, "");
+					Spicetify.Platform.ClipboardAPI.copy(copylyrics)
+						.then(() => Spicetify.showNotification("Lyrics copied to clipboard"))
+						.catch(() => Spicetify.showNotification("Failed to copy lyrics to clipboard"));
 				}
 			})
 		);
 
 		let mainContainer = [lyricsEl1];
-		//remove "&& false" below to restore the split display
-		const shouldSplit = versions.length > 1 && isSplitted && false;
+		const shouldSplit = versions.length > 1 && isSplitted;
 
 		if (shouldSplit) {
 			const lyricsEl2 = react.createElement(
