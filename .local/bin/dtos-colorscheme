@@ -68,7 +68,9 @@ optionsWithZathura=(
 	"Macchiato"
 	"Mocha"
 	"SolarizedLight"
-	"SolarizedDark")
+	"SolarizedDark"
+	"RosePineDawn"
+	"RosePineMoon")
 
 catppuccinOptions=(
 	"Latte"
