@@ -5,4 +5,12 @@ alias n='nvim'
 alias nvim-gui='neovide --neovim-bin $HOME/.local/share/neovim/bin/nvim --multigrid'
 alias ranger='source ranger'
 # alias neovide='nvidia-launcher neovide'
-alias noise='amixer -D pulse sset Master 50%; play -n synth brownnoise synth pinknoise mix synth sine amod 0.1 30'
+alias noise='amixer -D pulse sset Master 45%; play -n synth brownnoise synth pinknoise mix synth sine amod 0.1 30'
+alias next='gcalcli agenda now | head -2 | tail -1 | cut -d " " -f 15'
+alias pomschl='/home/manasmengle/tools/pomo/pomo -r 2 -f 600 -b 300 -l 600 -c 2 -F "aplay -q /home/manasmengle/tools/pomo/notification.wav" -B "aplay -q /home/manasmengle/tools/pomo/notification.wav" -L "aplay -q /home/manasmengle/tools/pomo/notification.wav" & disown'
+alias pomhome='/home/manasmengle/tools/pomo/pomo -r 2 -c 2 -F "aplay -q /home/manasmengle/tools/pomo/notification.wav" -B "aplay -q /home/manasmengle/tools/pomo/notification.wav" -L "aplay -q /home/manasmengle/tools/pomo/notification.wav" & disown'
+pomlong () {
+  num=${1:-5}
+  /home/manasmengle/tools/pomo/pomo -r 1 -f 3000 -b 600 -l 600 -c $num -F "aplay -q /home/manasmengle/tools/pomo/notification.wav" -B "aplay -q /home/manasmengle/tools/pomo/notification.wav" -L "aplay -q /home/manasmengle/tools/pomo/notification.wav" & disown
+}
+alias wp='nitrogen'
