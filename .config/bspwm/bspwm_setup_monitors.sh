@@ -8,9 +8,8 @@ monitor_add() {
 	desktops=(
 		dev
 		www
-		sys
 		doc
-		notes
+		gfx
 	)
 	# move first 5 desktops to external monitor
 	# for desktop in $(bspc query -D --names -m "$INTERNAL_MONITOR" | sed 5q); do
@@ -25,8 +24,8 @@ monitor_add() {
 	# bspc desktop gfx -to-monitor "$EXTERNAL_MONITOR"
 
 	# reorder desktops
-	# bspc monitor "$EXTERNAL_MONITOR" -o dev www sys doc notes
-	# bspc monitor "$INTERNAL_MONITOR" -o chat mus vid gfx
+	bspc monitor "$EXTERNAL_MONITOR" -o dev www doc gfx
+	bspc monitor "$INTERNAL_MONITOR" -o sys notes chat mus vid
 
 	# Remove default desktop created by bspwm
 	bspc desktop Desktop --remove
@@ -42,9 +41,8 @@ monitor_remove() {
 	desktops=(
 		dev
 		www
-		sys
 		doc
-		notes
+		gfx
 	)
 	# Move all desktops except the last default desktop to internal monitor
 	# for desktop in $(bspc query -D -m "$EXTERNAL_MONITOR"); do
@@ -62,7 +60,7 @@ monitor_remove() {
 if [[ $(xrandr -q | grep "${EXTERNAL_MONITOR} connected") ]]; then
 	# set xrandr rules for docked setup
 	xrandr --output "$INTERNAL_MONITOR" --mode 1920x1080 --pos 0x0 --rotate normal --output "$EXTERNAL_MONITOR" --primary --mode 1920x1080 --pos 1920x0 --rotate normal
-	if [[ $(bspc query -D -m "${EXTERNAL_MONITOR}" | wc -l) -ne 5 ]]; then
+	if [[ $(bspc query -D -m "${EXTERNAL_MONITOR}" | wc -l) -ne 4 ]]; then
 		monitor_add
 	fi
 	bspc wm -O "$EXTERNAL_MONITOR" "$INTERNAL_MONITOR"

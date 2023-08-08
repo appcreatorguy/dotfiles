@@ -1,12 +1,12 @@
 #!/bin/bash
 
-COLORSCHEME="latte"
+COLORSCHEME="macchiato"
 
 # Bodge: swap windows twice to fix display errors
 # if [[ $HOSTNAME == "manas-laptop" ]]; then
-  # xrandr --output eDP-1 --primary --auto --right-of HDMI-1-0 &
-  # echo "hello"
-  # sleep 0.5; xrandr --output HDMI-1-0 --primary --auto --right-of eDP-1 &
+# xrandr --output eDP-1 --primary --auto --right-of HDMI-1-0 &
+# echo "hello"
+# sleep 0.5; xrandr --output HDMI-1-0 --primary --auto --right-of eDP-1 &
 # fi
 
 # xrandr --output eDP-1 --primary --auto --right-of HDMI-1-0 &
@@ -26,64 +26,64 @@ COLORSCHEME="latte"
 INTERNAL_MONITOR="eDP-1"
 EXTERNAL_MONITOR="HDMI-1-0"
 
-
 # on first load setup default workspaces
 # if [[ $1 -eq 0 ]]; then
 if [[ $(bspc query -D -m "${INTERNAL_MONITOR}" | wc -l) -le 1 ]]; then
-  # notify-send "TEST $1"
-  # if [[ $(xrandr -q | grep "${EXTERNAL_MONITOR} connected") ]]; then
-  #   notify-send "setting up"
-  #   bspc monitor "$EXTERNAL_MONITOR" -d dev www sys doc notes
-  #   bspc monitor "$INTERNAL_MONITOR" -d chat mus vid gfx
-  #   bspc wm -O "$EXTERNAL_MONITOR" "$INTERNAL_MONITOR"
-  # else
-    bspc monitor "$INTERNAL_MONITOR" -d dev www sys doc notes chat mus vid gfx
-    bspc monitor "$EXTERNAL_MONITOR" -d Desktop
-    bspc wm -O "$EXTERNAL_MONITOR" "$INTERNAL_MONITOR"
-  # fi
-  # notify-send "not setting up"
+	# notify-send "TEST $1"
+	# if [[ $(xrandr -q | grep "${EXTERNAL_MONITOR} connected") ]]; then
+	#   notify-send "setting up"
+	#   bspc monitor "$EXTERNAL_MONITOR" -d dev www sys doc notes
+	#   bspc monitor "$INTERNAL_MONITOR" -d chat mus vid gfx
+	#   bspc wm -O "$EXTERNAL_MONITOR" "$INTERNAL_MONITOR"
+	# else
+	bspc monitor "$INTERNAL_MONITOR" -d dev web www sys doc notes chat mus vid gfx
+	bspc monitor "$EXTERNAL_MONITOR" -d Desktop
+	bspc wm -O "$EXTERNAL_MONITOR" "$INTERNAL_MONITOR"
+	# fi
+	# notify-send "not setting up"
 fi
 
 #### BSPWM configuration ####
-bspc config border_width                  2
-bspc config window_gap                    10
-bspc config top_padding                   20
-bspc config bottom_padding                0
-bspc config left_padding                  0
-bspc config right_padding                 0
-bspc config top_monocole_padding          -30 # counter top_padding
-bspc config single_monocle                false
-bspc config click_to_focus                true
-bspc config split_ratio                   0.50
-bspc config borderless_monocle            true
-bspc config gapless_monocle               true
-bspc config focus_by_distance             true
-bspc config focus_follows_pointer         true
-bspc config history_aware_focus           true
-bspc config remove_disabled_monitors      true
-bspc config merge_overlapping_monitors    true
+bspc config border_width 2
+bspc config window_gap 10
+bspc config top_padding 20
+bspc config bottom_padding 0
+bspc config left_padding 0
+bspc config right_padding 0
+bspc config top_monocole_padding -30 # counter top_padding
+bspc config single_monocle false
+bspc config click_to_focus true
+bspc config split_ratio 0.50
+bspc config borderless_monocle true
+bspc config gapless_monocle true
+bspc config focus_by_distance true
+bspc config focus_follows_pointer true
+bspc config history_aware_focus true
+bspc config remove_disabled_monitors true
+bspc config merge_overlapping_monitors true
 bspc config pointer_modifier mod4
 bspc config pointer_action1 move
 bspc config pointer_action2 resize_side
 bspc config pointer_action3 resize_corner
 
 #### BSPWM coloring ####
-bspc config normal_border_color		      "#4c566a"
-bspc config active_border_color	          "#1e1e1e"
-bspc config focused_border_color	      "#5e81ac"
-bspc config presel_feedback_color	      "#5e81ac"
-bspc config urgent_border_color 	      "#dd2727"
+bspc config normal_border_color "#4c566a"
+bspc config active_border_color "#1e1e1e"
+bspc config focused_border_color "#5e81ac"
+bspc config presel_feedback_color "#5e81ac"
+bspc config urgent_border_color "#dd2727"
 
 #polybar hidden when fullscreen for vlc, youtube, mpv ...
 #find out the name of your monitor with xrandr
 xdo below -t $(xdo id -n root) $(xdo id -a polybar-main_HDMI-1-0)
 xdo below -t $(xdo id -n root) $(xdo id -a polybar-main_eDP-1)
 
-bspc rule -a mpv desktop='^8'
-bspc rule -a qutebrowser desktop='^2'
+bspc rule -a mpv desktop='vid'
+bspc rule -a qutebrowser desktop='www'
+bspc rule -a firefox desktop='www'
 bspc rule -a Zathura state=tiled
 bspc rule -a Emacs state=tiled
-
+bspc rule -a Ulauncher border=off
 
 echo "autostart begin"
 
@@ -91,9 +91,9 @@ echo "autostart begin"
 
 # Helper function to check for active process, if not found starts program on the background
 _run() {
-  if ! pgrep -x "${1}" &>/dev/null; then
-    "$@" &
-  fi
+	if ! pgrep -x "${1}" &>/dev/null; then
+		"$@" &
+	fi
 }
 
 killall conky &
@@ -103,29 +103,62 @@ killall cava &
 # killall sxhkd; sleep 0.2;  sxhkd -c ~/.config/sxhkd/sxhkdrc &
 _run sxhkd -c ~/.config/sxhkd/sxhkdrc
 # killall picom; sleep 0.2; picom &
+killall xcompmgr
+sleep 0.1
+xcompmgr &
 _run nm-applet
 _run blueman-applet
-killall pasystray; pasystray &
 _run dunst
+_run ulauncher
 libinput-gestures &
 xinput set-prop "MSFT0001:01 06CB:7F28 Touchpad" "libinput Tapping Enabled" 1 & # Enable tap to click
 
 /usr/libexec/polkit-gnome-authentication-agent-1 & # enable auth agent
 
-_run mpd
+if [[ $(xrandr -q | grep "${EXTERNAL_MONITOR} connected") ]]; then
+	_run mpd
+	_run playerctld
+	_run mpDris2
+	# BODGE: mve cpu intensive daemons to a home/away check soon
+	_run syncthing
+	_run emacs --daemon
+fi
+if [[ $(xrandr -q | grep "DVI-I-2-1 connected") ]]; then
+	_run mpd
+	_run playerctld
+	_run mpDris2
+	# BODGE: mve cpu intensive daemons to a home/away check soon
+	_run syncthing
+	_run emacs --daemon
+fi
 _run playerctld
-killall mpDris2; sleep 0.1; mpDris2 &
+_run mpDris2
+# BODGE: mve cpu intensive daemons to a home/away check soon
+_run syncthing
+_run emacs --daemon
+_run pasystray
 /usr/libexec/kdeconnectd &
 kdeconnect-cli -n SM-M515F & # ADD DEVICE NAME
 _run kdeconnect-indicator
-pgrep -f 'auto-suspend' | xargs kill; sleep 0.1; /home/manasmengle/tools/auto-suspend -s /home/manasmengle/tools/i3-battery-popup.wav &
-sleep 1 && conky -c "$HOME/.config/conky/bspwm/$COLORSCHEME-01.conkyrc" &
-sleep 0.1 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0xe6e9ef --height 31 & 
+pgrep -f 'auto-suspend' | xargs kill
+sleep 0.1
+/home/manasmengle/tools/auto-suspend -s /home/manasmengle/tools/i3-battery-popup.wav &
+sleep 2 && conky -c "$HOME/.config/conky/bspwm/$COLORSCHEME-01.conkyrc" &
+sleep 0.1 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0xe6e9ef --height 31 &
 # feh --randomize -bg-fill ~/wallpapers/* &
 
 xsetroot -cursor_name left_ptr &
+xset b off &
 wmname LG3D &
 
-
 echo "autostart over"
-~/.config/bspwm/bspwm_setup_monitors.sh &
+
+if [[ $(xrandr -q | grep "HDMI-1-0 connected") ]]; then
+	~/.config/bspwm/bspwm_setup_monitors.sh &
+else
+	~/.config/bspwm/bspwm_setup_monitors_external.sh &
+fi
+
+# Launch Polybar
+sleep 0.5
+/home/manasmengle/.config/polybar/launch.sh &
