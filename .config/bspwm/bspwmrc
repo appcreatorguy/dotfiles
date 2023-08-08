@@ -84,6 +84,7 @@ bspc rule -a firefox desktop='www'
 bspc rule -a Zathura state=tiled
 bspc rule -a Emacs state=tiled
 bspc rule -a Ulauncher border=off
+bspc rule -a Protonvpn state=psuedo_tiled
 
 echo "autostart begin"
 
@@ -109,7 +110,9 @@ xcompmgr &
 _run nm-applet
 _run blueman-applet
 _run dunst
-_run ulauncher
+killall ulauncher
+sleep 0.01
+ulauncher &
 libinput-gestures &
 xinput set-prop "MSFT0001:01 06CB:7F28 Touchpad" "libinput Tapping Enabled" 1 & # Enable tap to click
 
