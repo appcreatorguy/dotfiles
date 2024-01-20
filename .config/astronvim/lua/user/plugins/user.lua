@@ -13,17 +13,15 @@ return {
   "brymer-meneses/grammar-guard.nvim",
   {
     "Pocco81/true-zen.nvim",
-    config = function()
-      require("true-zen").setup({})
-    end,
+    config = function() require("true-zen").setup {} end,
   },
   "lervag/vimtex",
   {
     "nvim-orgmode/orgmode",
     config = function()
-      require("orgmode").setup({
+      require("orgmode").setup {
         org_agenda_files = { "~/Documents/Notes/**/*" },
-      })
+      }
     end,
   },
   "Mofiqul/dracula.nvim",
