@@ -37,6 +37,7 @@ settings:
     '*://*.f1livegp.me/*': true
     '*://*.flathub.org/*': true
     '*://*.genius.com/*': true
+    '*://*.getkairo.com/*': true
     '*://*.github.com/*': true
     '*://*.githubnext.com/*': true
     '*://*.gitlab.com/*': true

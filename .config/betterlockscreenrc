@@ -2,11 +2,11 @@
 
 # default options
 display_on=0
-span_image=true
+span_image=false
 lock_timeout=300
 fx_list=(dim blur dimblur pixel dimpixel color)
 dim_level=40
-blur_level=1
+blur_level=1.1
 pixel_scale=10,1000
 solid_color=333333
 wallpaper_cmd="feh --bg-fill"
@@ -17,7 +17,7 @@ quiet=false
 loginbox=00000066
 loginshadow=00000000
 locktext="Type password to unlock..."
-font="Ubuntu"
+font="Alegreya"
 ringcolor=ffffffff
 insidecolor=00000000
 separatorcolor=00000000
