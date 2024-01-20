@@ -117,7 +117,8 @@ font:
     # family: Monofur Nerd Font
     # family: TerminessTTF Nerd Font
     # family: Mononoki Nerd Font
-    family: CaskaydiaCove Nerd Font Mono
+    # family: CaskaydiaCove Nerd Font Mono
+    family: BerkeleyMonoVariableNerdFontMono
 
     # The `style` can be specified to pick a specific face.
     style: Regular
@@ -133,12 +134,13 @@ font:
     # family: RobotoMono Nerd Font
     # family: Hack
     # family: JetBrains Mono
-    family: JetBrainsMono Nerd Font
+    # family: JetBrainsMono Nerd Font
     # family: UbuntuMono Nerd Font
     # family: Monofur Nerd Font
     # family: TerminessTTF Nerd Font
     # family: Mononoki Nerd Font
     # family: CaskaydiaCove Nerd Font Mono
+    family: BerkeleyMonoVariableNerdFontMono
 
     # The `style` can be specified to pick a specific face.
     style: Bold
@@ -154,12 +156,13 @@ font:
     # family: RobotoMono Nerd Font
     # family: Hack
     # family: JetBrains Mono
-    family: JetBrainsMono Nerd Font
+    # family: JetBrainsMono Nerd Font
     # family: UbuntuMono Nerd Font
     # family: Monofuritalic Nerd Font Mono
     # family: TerminessTTF Nerd Font
     # family: Mononoki Nerd Font
     # family: CaskaydiaCove Nerd Font Mono
+    family: BerkeleyMonoVariableNerdFontMono
 
     # The `style` can be specified to pick a specific face.
     style: Italic
@@ -175,12 +178,13 @@ font:
     # family: RobotoMono Nerd Font
     # family: Hack
     # family: JetBrains Mono
-    family: JetBrainsMono Nerd Font
+    # family: JetBrainsMono Nerd Font
     # family: UbuntuMono Nerd Font
     # family: Monofuritalic Nerd Font Mono
     # family: TerminessTTF Nerd Font
     # family: Mononoki Nerd Font
     # family: CaskaydiaCove Nerd Font Mono
+    family: BerkeleyMonoVariableNerdFontMono
 
     # The `style` can be specified to pick a specific face.
     style: Bold Italic
