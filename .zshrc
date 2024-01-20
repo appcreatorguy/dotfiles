@@ -129,3 +129,13 @@ fi
 
 # export KUBECONFIG="~/.kube/config"
 # export KUBECONFIG="$KUBECONFIG:~/.kube/config-rpi-k3s"
+
+# bun completions
+[ -s "/home/manasmengle/.bun/_bun" ] && source "/home/manasmengle/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+eval "$(direnv hook zsh)"
+
