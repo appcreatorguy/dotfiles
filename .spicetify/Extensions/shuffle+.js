@@ -459,29 +459,36 @@
 	async function Queue(list, context = null, type) {
 		const count = list.length;
 
+		// Delimits the end of our list, as Spotify may add new context tracks to the queue
 		list.push("spotify:delimiter");
 
-		await Spicetify.Platform.PlayerAPI.clearQueue();
+		const { _queue, _client } = Spicetify.Platform.PlayerAPI._queue;
+		const { prevTracks, queueRevision } = _queue;
 
-		await Spicetify.CosmosAsync.put("sp://player/v2/main/queue", {
-			queue_revision: Spicetify.Queue?.queueRevision,
-			next_tracks: list.map(uri => ({
+		// Format tracks with default values
+		const nextTracks = list.map(uri => ({
+			contextTrack: {
 				uri,
-				provider: "context",
+				uid: "",
 				metadata: {
 					is_queued: "false"
 				}
-			})),
-			prev_tracks: Spicetify.Queue?.prevTracks
+			},
+			removed: [],
+			blocked: [],
+			provider: "context"
+		}));
+
+		// Lowest level setQueue method from vendor~xpui.js
+		_client.setQueue({
+			nextTracks,
+			prevTracks,
+			queueRevision
 		});
 
 		if (context) {
-			await Spicetify.CosmosAsync.post("sp://player/v2/main/update", {
-				context: {
-					uri: context,
-					url: "context://" + context
-				}
-			});
+			const { sessionId } = Spicetify.Platform.PlayerAPI.getState();
+			Spicetify.Platform.PlayerAPI.updateContext(sessionId, { uri: context, url: "context://" + context });
 		}
 
 		Spicetify.Player.next();

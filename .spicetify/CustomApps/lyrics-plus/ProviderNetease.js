@@ -4,8 +4,8 @@ const ProviderNetease = (function () {
 	};
 
 	async function findLyrics(info) {
-		const searchURL = `https://music.xianqiao.wang/neteaseapiv2/search?limit=10&type=1&keywords=`;
-		const lyricURL = `https://music.xianqiao.wang/neteaseapiv2/lyric?id=`;
+		const searchURL = "https://music.xianqiao.wang/neteaseapiv2/search?limit=10&type=1&keywords=";
+		const lyricURL = "https://music.xianqiao.wang/neteaseapiv2/lyric?id=";
 
 		const cleanTitle = Utils.removeExtraInfo(Utils.removeSongFeat(Utils.normalize(info.title)));
 		const finalURL = searchURL + encodeURIComponent(`${cleanTitle} ${info.artist}`);
@@ -16,8 +16,10 @@ const ProviderNetease = (function () {
 			throw "Cannot find track";
 		}
 
-		const album = Utils.capitalize(info.album);
-		let itemId = items.findIndex(val => Utils.capitalize(val.album.name) === album || Math.abs(info.duration - val.duration) < 1000);
+		// normalized expected album name
+		const neAlbumName = Utils.normalize(info.album);
+		const expectedAlbumName = Utils.containsHanCharacter(neAlbumName) ? await Utils.toSimplifiedChinese(neAlbumName) : neAlbumName;
+		let itemId = items.findIndex(val => Utils.normalize(val.album.name) === expectedAlbumName || Math.abs(info.duration - val.duration) < 1000);
 		if (itemId === -1) throw "Cannot find track";
 
 		return await CosmosAsync.get(lyricURL + items[itemId].id, null, requestHeader);

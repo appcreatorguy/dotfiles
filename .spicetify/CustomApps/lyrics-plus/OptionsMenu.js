@@ -55,7 +55,7 @@ const OptionsMenu = react.memo(({ options, onSelect, selected, defaultValue, bol
 			),
 			trigger: "click",
 			action: "toggle",
-			renderInline: true
+			renderInline: false
 		},
 		react.createElement(
 			"button",
@@ -293,7 +293,7 @@ const AdjustmentsMenu = react.memo(({ mode }) => {
 							onChange: (name, value) => {
 								CONFIG.visual[name] = value;
 								localStorage.setItem(`${APP_NAME}:visual:${name}`, value);
-								name === "delay" && localStorage.setItem(`lyrics-delay:${Spicetify.Player.data.track.uri}`, value);
+								name === "delay" && localStorage.setItem(`lyrics-delay:${Spicetify.Player.data.item.uri}`, value);
 								lyricContainerUpdate && lyricContainerUpdate();
 							}
 						})

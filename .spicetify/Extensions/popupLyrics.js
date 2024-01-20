@@ -159,8 +159,8 @@ function PopupLyrics() {
 		}
 
 		static async fetchNetease(info) {
-			const searchURL = `https://music.xianqiao.wang/neteaseapiv2/search?limit=10&type=1&keywords=`;
-			const lyricURL = `https://music.xianqiao.wang/neteaseapiv2/lyric?id=`;
+			const searchURL = "https://music.xianqiao.wang/neteaseapiv2/search?limit=10&type=1&keywords=";
+			const lyricURL = "https://music.xianqiao.wang/neteaseapiv2/lyric?id=";
 			const requestHeader = {
 				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0"
 			};
@@ -365,9 +365,9 @@ function PopupLyrics() {
 			return;
 		}
 
-		const meta = Player.data.track.metadata;
+		const meta = Player.data.item.metadata;
 
-		if (!Spicetify.URI.isTrack(Player.data.track.uri) && !Spicetify.URI.isLocalTrack(Player.data.track.uri)) {
+		if (!Spicetify.URI.isTrack(Player.data.item.uri) && !Spicetify.URI.isLocalTrack(Player.data.item.uri)) {
 			return;
 		}
 
@@ -377,7 +377,7 @@ function PopupLyrics() {
 			album: meta.album_title,
 			artist: meta.artist_name,
 			title: meta.title,
-			uri: Player.data.track.uri
+			uri: Player.data.item.uri
 		};
 
 		for (let name of userConfigs.servicesOrder) {
