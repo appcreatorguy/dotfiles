@@ -95,8 +95,21 @@ if [ "$choice" ]; then
 		sed -i "s/import Colors.*/import Colors.$choice/g" "$HOME"/.xmonad/xmonad.hs || echo "Cannot modify xmonad.hs"
 	fi
 	if echo "${catppuccinOptions[@]}" | fgrep --word-regexp "$choice"; then
-		sed -i 's`current_theme           = .*`current_theme           = catppuccin-'$choicelower'`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
-		sed -i 's`color_scheme            = .*`color_scheme            = lavender`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
+		# 		sed -i 's`current_theme           = .*`current_theme           = catppuccin-'$choicelower'`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
+		# 		sed -i 's`color_scheme            = .*`color_scheme            = lavender`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
+		sed -i 's`current_theme           = .*`current_theme           = catppuccin`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
+		sed -i 's`color_scheme            = .*`color_scheme            = '$choicelower'`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
+		sed -i 's`"theme-name": .*`"theme-name": "Catpuccin-'$choice'-Mauve"`g;' /home/manasmengle/.config/ulauncher/settings.json
+		sed -i 's`gtk-theme-name=.*`gtk-theme-name="Catppuccin-'$choice'-Standard-Mauve"`g' /home/manasmengle/.gtkrc-2.0
+		sed -i 's`gtk-theme-name=.*`gtk-theme-name=Catppuccin-'$choice'-Standard-Mauve`g' /home/manasmengle/.config/gtk-3.0/settings.ini
+		flatpak override --env=GTK_THEME=Catppuccin-"$choice"-Standard-Mauve --user
+	fi
+	if echo "Latte" | fgrep --word-regexp "$choice"; then
+		sed -i 's`gtk-icon-theme-name=.*`gtk-icon-theme-name="BigSur"`g' /home/manasmengle/.gtkrc-2.0
+		sed -i 's`gtk-icon-theme-name=.*`gtk-icon-theme-name=BigSur`g' /home/manasmengle/.config/gtk-3.0/settings.ini
+	elif echo "${catppuccinOptions[@]}" | fgrep --word-regexp "$choice"; then
+		sed -i 's`gtk-icon-theme-name=.*`gtk-icon-theme-name="BigSur-dark"`g' /home/manasmengle/.gtkrc-2.0
+		sed -i 's`gtk-icon-theme-name=.*`gtk-icon-theme-name=BigSur-dark`g' /home/manasmengle/.config/gtk-3.0/settings.ini
 	fi
 	if echo "${rosePineOptions[@]}" | fgrep --word-regexp "$choice"; then
 		sed -i 's`current_theme           = .*`current_theme           = Ziro`g' /home/manasmengle/.config/spicetify/config-xpui.ini || echo "Cannot modify config-xpui.ini"
@@ -109,16 +122,18 @@ if [ "$choice" ]; then
 		sed -i "s/include .*/include $choice/g" "$HOME"/.config/zathura/zathurarc || echo "Cannot modify zathurarc"
 	fi
 	if echo "${catppuccinOptions[@]}" | fgrep --word-regexp "$choice"; then
-		echo "ello"
 		sed -i 's`return ".*`return "catppuccin-'$choicelower'"`g' /home/manasmengle/.config/astronvim/lua/user/colorscheme.lua || echo "cannot modify colorscheme.lua"
 	fi
 	if echo "${optionsWithNvim[@]}" | fgrep --word-regexp "$choice"; then
-		echo "no"
 		sed -i 's`return ".*`return "'$choicelower'"`g' /home/manasmengle/.config/astronvim/lua/user/colorscheme.lua || echo "cannot modify colorscheme.lua"
 	fi
 	sed -i 's`include-file = colors/.*`include-file = colors/'$choice'.ini`g' /home/manasmengle/.config/polybar/config.ini || echo "Cannot modify config.ini"
 	sed -i 's`COLORSCHEME=.*`COLORSCHEME="'$choicelower'"`g' /home/manasmengle/.config/bspwm/bspwmrc || echo "Cannot modify bspwmrc"
 	sed -i "s/^colors: .*/colors: \*$choice/g" "$HOME"/.config/alacritty/alacritty.yml
+
+	if echo "${catppuccinOptions[@]}" | fgrep --word-regexp "$choice"; then
+		cp "$HOME/.config/kitty/Catppuccin-$choice.conf" "$HOME/.config/kitty/current-theme.conf"
+	fi
 
 	if command -v xmonad &>/dev/null; then
 		xmonad --restart
