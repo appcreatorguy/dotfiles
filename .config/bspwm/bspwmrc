@@ -36,7 +36,7 @@ if [[ $(bspc query -D -m "${INTERNAL_MONITOR}" | wc -l) -le 1 ]]; then
 	#   bspc monitor "$INTERNAL_MONITOR" -d chat mus vid gfx
 	#   bspc wm -O "$EXTERNAL_MONITOR" "$INTERNAL_MONITOR"
 	# else
-	bspc monitor "$INTERNAL_MONITOR" -d dev web www sys doc notes chat mus vid gfx
+	bspc monitor "$INTERNAL_MONITOR" -d dev www sys doc notes chat mus vid gfx web
 	bspc monitor "$EXTERNAL_MONITOR" -d Desktop
 	bspc wm -O "$EXTERNAL_MONITOR" "$INTERNAL_MONITOR"
 	# fi
@@ -163,5 +163,5 @@ else
 fi
 
 # Launch Polybar
-sleep 0.5
-/home/manasmengle/.config/polybar/launch.sh &
+# sleep 0.5
+# /home/manasmengle/.config/polybar/launch.sh &

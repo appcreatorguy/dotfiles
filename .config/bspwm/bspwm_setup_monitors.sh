@@ -25,7 +25,7 @@ monitor_add() {
 
 	# reorder desktops
 	bspc monitor "$EXTERNAL_MONITOR" -o dev www doc gfx
-	bspc monitor "$INTERNAL_MONITOR" -o sys notes chat mus vid
+	bspc monitor "$INTERNAL_MONITOR" -o sys web notes chat mus vid
 
 	# Remove default desktop created by bspwm
 	bspc desktop Desktop --remove
@@ -54,7 +54,7 @@ monitor_remove() {
 	bspc desktop Desktop --remove
 
 	# reorder desktops
-	bspc monitor "$INTERNAL_MONITOR" -o dev www sys doc notes chat mus vid gfx
+	bspc monitor "$INTERNAL_MONITOR" -o dev www sys doc notes chat mus vid gfx web
 }
 
 if [[ $(xrandr -q | grep "${EXTERNAL_MONITOR} connected") ]]; then
