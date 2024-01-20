@@ -62,3 +62,5 @@
 (package! rose-pine-emacs :recipe (:host github :repo "thongpv87/rose-pine-emacs" :branch "master"))
 (package! org-wild-notifier)
 (package! org-ref)
+(package! org-pretty-table
+    :recipe (:host github :repo "Fuco1/org-pretty-table") :pin "7bd68b420d3402826fea16ee5099d04aa9879b78")

@@ -292,8 +292,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
     (unless (org-export-derived-backend-p 'org)
       (replace-regexp-in-string "\u200B" "" text)))
 
-  (package! org-pretty-table
-    :recipe (:host github :repo "Fuco1/org-pretty-table") :pin "7bd68b420d3402826fea16ee5099d04aa9879b78")
 
   (after! ox
     (add-to-list 'org-export-filter-final-output-functions #'+org-export-remove-zero-width-space t))
@@ -490,16 +488,32 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 \\usepackage{graphicx}
 \\usepackage{longtable}
 \\usepackage{hyperref}
-\\usepackage{natbib}
 \\usepackage{amssymb}
 \\usepackage{amsmath}
 \\usepackage{geometry}
+\\usepackage[style=bath]{biblatex}
+[EXTRA]
 \\geometry{a4paper,left=2.5cm,top=2cm,right=2.5cm,bottom=2cm,marginparsep=7pt, marginparwidth=.6in}"
                ("\\section{%s}" . "\\section*{%s}")
                ("\\subsection{%s}" . "\\subsection*{%s}")
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (setq org-latex-default-packages-alist
+                '(("AUTO" "inputenc" t
+ ("pdflatex"))
+ ("T1" "fontenc" t
+  ("pdflatex"))
+ ("" "graphicx" t)
+ ("" "longtable" nil)
+ ("" "wrapfig2" nil)
+ ("" "rotating" nil)
+ ("normalem" "ulem" t)
+ ("" "amsmath" t)
+ ("" "amssymb" t)
+ ("" "capt-of" nil)
+ ("" "hyperref" nil))))
+
 
 ;; (setq org-latex-pdf-process
 ;;       '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
@@ -507,7 +521,7 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
 ;;              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
 ;;              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 (setq org-latex-pdf-process
-      (list "latexmk -f -pdf %f"))
+      (list "latexmk -f -pdflua %f"))
 (use-package autothemer
   :ensure t)
 
