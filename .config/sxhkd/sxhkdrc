@@ -145,7 +145,7 @@ super + shift + d
 
 # terminal emulator
 super + Return
-	alacritty
+	kitty
 # launch ncpamixer
 # super + alt + a
 #     st -e ncpamixer
@@ -154,10 +154,10 @@ super + b
 	firefox
 # launch mocp
 super + alt + c
-    alacritty -e mocp
+    kitty -e mocp
 # launch ncmpcpp
 super + alt + m
-    alacritty -e ncmpcpp
+    kitty -e ncmpcpp
 # launch joplin
 # super + alt + j
 #     st -e joplin
@@ -205,11 +205,11 @@ super + ctrl + Return
 
 # SCRATCHPADS (super + s)
 super + s ; {t,m,c,v,b}
-  bspwmfloat {scratchpad "alacritty -t scratchpad",ncmpcpp "alacritty -t ncmpcpp -e ncmpcpp",Qalculate! qalculate-gtk,"Volume Control" pavucontrol, "Bluetooth Devices" blueman-manager}
+  bspwmfloat {scratchpad "kitty -T scratchpad",ncmpcpp "kitty -T ncmpcpp -e ncmpcpp",Qalculate! qalculate-gtk,"Volume Control" pavucontrol, "Bluetooth Devices" blueman-manager}
 
 # Show help on key bindings
 super + F1
-  bspwmfloat Keybinds "alacritty -t Keybinds -e $HOME/.config/sxhkd/show-keys.sh"
+  bspwmfloat Keybinds "kitty -T Keybinds -e $HOME/.config/sxhkd/show-keys.sh"
 #  ~/.config/sxhkd/show-keys.sh
 
 # MOCP Controls
