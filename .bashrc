@@ -119,3 +119,5 @@ source ~/.bash_completion/alacritty
 export PATH="$PATH:$HOME/.spicetify"
 
 . "$HOME/.cargo/env"
+
+export GPG_TTY=$(tty)

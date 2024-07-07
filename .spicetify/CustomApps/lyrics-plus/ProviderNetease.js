@@ -1,4 +1,4 @@
-const ProviderNetease = (function () {
+const ProviderNetease = (() => {
 	const requestHeader = {
 		"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0"
 	};
@@ -10,7 +10,7 @@ const ProviderNetease = (function () {
 		const cleanTitle = Utils.removeExtraInfo(Utils.removeSongFeat(Utils.normalize(info.title)));
 		const finalURL = searchURL + encodeURIComponent(`${cleanTitle} ${info.artist}`);
 
-		const searchResults = await CosmosAsync.get(finalURL, null, requestHeader);
+		const searchResults = await Spicetify.CosmosAsync.get(finalURL, null, requestHeader);
 		const items = searchResults.result.songs;
 		if (!items?.length) {
 			throw "Cannot find track";
@@ -19,10 +19,10 @@ const ProviderNetease = (function () {
 		// normalized expected album name
 		const neAlbumName = Utils.normalize(info.album);
 		const expectedAlbumName = Utils.containsHanCharacter(neAlbumName) ? await Utils.toSimplifiedChinese(neAlbumName) : neAlbumName;
-		let itemId = items.findIndex(val => Utils.normalize(val.album.name) === expectedAlbumName || Math.abs(info.duration - val.duration) < 1000);
+		const itemId = items.findIndex(val => Utils.normalize(val.album.name) === expectedAlbumName || Math.abs(info.duration - val.duration) < 1000);
 		if (itemId === -1) throw "Cannot find track";
 
-		return await CosmosAsync.get(lyricURL + items[itemId].id, null, requestHeader);
+		return await Spicetify.CosmosAsync.get(lyricURL + items[itemId].id, null, requestHeader);
 	}
 
 	const creditInfo = [
@@ -70,8 +70,8 @@ const ProviderNetease = (function () {
 		for (let i = 1; i < components.length; i += 2) {
 			if (components[i + 1] === " ") continue;
 			result.push({
-				word: components[i + 1] + " ",
-				time: parseInt(components[i])
+				word: `${components[i + 1]} `,
+				time: Number.parseInt(components[i])
 			});
 		}
 		return result;
@@ -91,9 +91,9 @@ const ProviderNetease = (function () {
 				if (!time || !text) return null;
 
 				const [key, value] = time.split(",") || [];
-				const [start, durr] = [parseFloat(key), parseFloat(value)];
+				const [start, durr] = [Number.parseFloat(key), Number.parseFloat(value)];
 
-				if (!isNaN(start) && !isNaN(durr) && !containCredits(text)) {
+				if (!Number.isNaN(start) && !Number.isNaN(durr) && !containCredits(text)) {
 					return {
 						startTime: start,
 						// endTime: start + durr,
@@ -102,7 +102,7 @@ const ProviderNetease = (function () {
 				}
 				return null;
 			})
-			.filter(a => a);
+			.filter(Boolean);
 
 		if (!karaoke.length) {
 			return null;
@@ -127,8 +127,8 @@ const ProviderNetease = (function () {
 				if (!time || !text) return null;
 
 				const [key, value] = time.split(":") || [];
-				const [min, sec] = [parseFloat(key), parseFloat(value)];
-				if (!isNaN(min) && !isNaN(sec) && !containCredits(text)) {
+				const [min, sec] = [Number.parseFloat(key), Number.parseFloat(value)];
+				if (!Number.isNaN(min) && !Number.isNaN(sec) && !containCredits(text)) {
 					return {
 						startTime: (min * 60 + sec) * 1000,
 						text: text || ""
@@ -136,7 +136,7 @@ const ProviderNetease = (function () {
 				}
 				return null;
 			})
-			.filter(a => a);
+			.filter(Boolean);
 
 		if (!lyrics.length || noLyrics) {
 			return null;
@@ -158,8 +158,8 @@ const ProviderNetease = (function () {
 				if (!time || !text) return null;
 
 				const [key, value] = time.split(":") || [];
-				const [min, sec] = [parseFloat(key), parseFloat(value)];
-				if (!isNaN(min) && !isNaN(sec) && !containCredits(text)) {
+				const [min, sec] = [Number.parseFloat(key), Number.parseFloat(value)];
+				if (!Number.isNaN(min) && !Number.isNaN(sec) && !containCredits(text)) {
 					return {
 						startTime: (min * 60 + sec) * 1000,
 						text: text || ""
@@ -167,7 +167,7 @@ const ProviderNetease = (function () {
 				}
 				return null;
 			})
-			.filter(a => a);
+			.filter(Boolean);
 
 		if (!translation.length) {
 			return null;
@@ -191,7 +191,7 @@ const ProviderNetease = (function () {
 				if (!parsed.text || containCredits(parsed.text)) return null;
 				return parsed;
 			})
-			.filter(a => a);
+			.filter(Boolean);
 
 		if (!lyrics.length || noLyrics) {
 			return null;

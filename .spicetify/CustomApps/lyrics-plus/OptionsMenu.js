@@ -34,7 +34,7 @@ const OptionsMenu = react.memo(({ options, onSelect, selected, defaultValue, bol
 	 *      </button>
 	 * </Spicetify.ReactComponent.ContextMenu>
 	 */
-	let menuRef = react.useRef(null);
+	const menuRef = react.useRef(null);
 	return react.createElement(
 		Spicetify.ReactComponent.ContextMenu,
 		{
@@ -146,14 +146,14 @@ const TranslationMenu = react.memo(({ friendlyLanguage, hasTranslation }) => {
 		return [
 			{
 				desc: "Translation Provider",
-				key: `translate:translated-lyrics-source`,
+				key: "translate:translated-lyrics-source",
 				type: ConfigSelection,
 				options: sourceOptions,
 				renderInline: true
 			},
 			{
 				desc: "Language Override",
-				key: `translate:detect-language-override`,
+				key: "translate:detect-language-override",
 				type: ConfigSelection,
 				options: languageOptions,
 				renderInline: true
@@ -272,8 +272,8 @@ const AdjustmentsMenu = react.memo(({ mode }) => {
 									desc: "Track delay",
 									key: "delay",
 									type: ConfigAdjust,
-									min: -Infinity,
-									max: Infinity,
+									min: Number.NEGATIVE_INFINITY,
+									max: Number.POSITIVE_INFINITY,
 									step: 250,
 									when: () => mode === SYNCED || mode === KARAOKE
 								},
@@ -294,7 +294,7 @@ const AdjustmentsMenu = react.memo(({ mode }) => {
 								CONFIG.visual[name] = value;
 								localStorage.setItem(`${APP_NAME}:visual:${name}`, value);
 								name === "delay" && localStorage.setItem(`lyrics-delay:${Spicetify.Player.data.item.uri}`, value);
-								lyricContainerUpdate && lyricContainerUpdate();
+								lyricContainerUpdate?.();
 							}
 						})
 					),

@@ -5,9 +5,9 @@ format = """
 $character"""
 
 # Inserts a blank line between shell prompts
-add_newline = true
+add_newline = false
 
 
 [character]
-success_symbol = "❯"
-error_symbol = "❯"
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold green)"

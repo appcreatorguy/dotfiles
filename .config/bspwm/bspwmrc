@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COLORSCHEME="macchiato"
+COLORSCHEME="latte"
 
 # Bodge: swap windows twice to fix display errors
 # if [[ $HOSTNAME == "manas-laptop" ]]; then

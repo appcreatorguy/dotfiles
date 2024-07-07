@@ -32,9 +32,9 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-; (setq doom-theme 'doom-one)
-; (setq doom-theme 'catppuccin)
-; (setq doom-theme 'doom-solarized-dark)
+                                        ; (setq doom-theme 'doom-one)
+                                        ; (setq doom-theme 'catppuccin)
+                                        ; (setq doom-theme 'doom-solarized-dark)
 (setq doom-theme 'catppuccin-mocha)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -127,7 +127,7 @@
 ;;   (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
 
 
-; cherrypicked from Tecosaur emacs config
+                                        ; cherrypicked from Tecosaur emacs config
 
 (setq doom-font (font-spec :family "JetBrains Mono" :size 15)
       doom-big-font (font-spec :family "JetBrains Mono" :size 23)
@@ -266,11 +266,11 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
     ;; needs to be run after other hooks have acted.
     (run-at-time nil nil #'org-appear--set-elements))
   (map! :map evil-org-mode-map
-      :after evil-org
-      :n "g <up>" #'org-backward-heading-same-level
-      :n "g <down>" #'org-forward-heading-same-level
-      :n "g <left>" #'org-up-element
-      :n "g <right>" #'org-down-element)
+        :after evil-org
+        :n "g <up>" #'org-backward-heading-same-level
+        :n "g <down>" #'org-forward-heading-same-level
+        :n "g <left>" #'org-up-element
+        :n "g <right>" #'org-down-element)
   (evil-define-command evil-buffer-org-new (count file)
     "Creates a new ORG buffer replacing the current window, optionally
      editing a certain FILE"
@@ -339,10 +339,10 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   (custom-set-faces!
     '(org-document-title :height 2.4))
   (setq org-agenda-deadline-faces
-      '((1.001 . error)
-        (1.0 . org-warning)
-        (0.5 . org-upcoming-deadline)
-        (0.0 . org-upcoming-distant-deadline)))
+        '((1.001 . error)
+          (1.0 . org-warning)
+          (0.5 . org-upcoming-deadline)
+          (0.0 . org-upcoming-distant-deadline)))
   (setq org-fontify-quote-and-verse-blocks t)
   (defun locally-defer-font-lock ()
     "Set jit-lock defer and stealth, when buffer is over a certain size."
@@ -460,11 +460,11 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
            "* TODO %?\nSCHEDULED: %^t\nCREATED:%U")))
   (use-package! org-ref
     :init)
-)
+  )
 
 (use-package catppuccin-theme
- :config
- (setq catppuccin-height-title1 1.5))
+  :config
+  (setq catppuccin-height-title1 1.5))
 
 (custom-set-faces!
   '(markdown-header-face-1 :height 1.25 :weight extra-bold :inherit markdown-header-face)
@@ -482,37 +482,35 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
   (require 'ox-latex)
   (add-to-list 'org-latex-classes
                '("bjmarticle"
-               "\\documentclass{article}
+                 "\\documentclass{article}
 \\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
 \\usepackage{graphicx}
 \\usepackage{longtable}
 \\usepackage{hyperref}
-\\usepackage{amssymb}
-\\usepackage{amsmath}
 \\usepackage{geometry}
 \\usepackage[style=bath]{biblatex}
 [EXTRA]
 \\geometry{a4paper,left=2.5cm,top=2cm,right=2.5cm,bottom=2cm,marginparsep=7pt, marginparwidth=.6in}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
   (setq org-latex-default-packages-alist
-                '(("AUTO" "inputenc" t
- ("pdflatex"))
- ("T1" "fontenc" t
-  ("pdflatex"))
- ("" "graphicx" t)
- ("" "longtable" nil)
- ("" "wrapfig2" nil)
- ("" "rotating" nil)
- ("normalem" "ulem" t)
- ("" "amsmath" t)
- ("" "amssymb" t)
- ("" "capt-of" nil)
- ("" "hyperref" nil))))
+        '(("AUTO" "inputenc" t
+           ("pdflatex"))
+          ("T1" "fontenc" t
+           ("pdflatex"))
+          ("" "graphicx" t)
+          ("" "longtable" nil)
+          ("" "wrapfig2" nil)
+          ("" "rotating" nil)
+          ("normalem" "ulem" t)
+          ("" "amsmath" t)
+          ("" "amssymb" t)
+          ("" "capt-of" nil)
+          ("" "hyperref" nil))))
 
 
 ;; (setq org-latex-pdf-process

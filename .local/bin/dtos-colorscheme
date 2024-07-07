@@ -85,6 +85,13 @@ rosePineOptions=(
 optionsWithNvim=(
 	"Dracula"
 )
+optionsWithKitty=(
+	"Dracula"
+	"Latte"
+	"Frappe"
+	"Macchiato"
+	"Mocha"
+)
 
 choice=$(printf '%s\n' "${options[@]}" | ${DMENU} 'Choose color scheme:' "${@}")
 choicelower=$(echo "$choice" | awk '{print tolower($0)}')
@@ -131,7 +138,7 @@ if [ "$choice" ]; then
 	sed -i 's`COLORSCHEME=.*`COLORSCHEME="'$choicelower'"`g' /home/manasmengle/.config/bspwm/bspwmrc || echo "Cannot modify bspwmrc"
 	sed -i "s/^colors: .*/colors: \*$choice/g" "$HOME"/.config/alacritty/alacritty.yml
 
-	if echo "${catppuccinOptions[@]}" | fgrep --word-regexp "$choice"; then
+	if echo "${optionsWithKitty[@]}" | fgrep --word-regexp "$choice"; then
 		cp "$HOME/.config/kitty/Catppuccin-$choice.conf" "$HOME/.config/kitty/current-theme.conf"
 	fi
 

@@ -83,7 +83,7 @@ import XMonad.Util.Cursor
       -- Frappe
       -- Macchiato
       -- Mocha
-import Colors.Macchiato
+import Colors.Latte
 
 myFont :: String
 myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialias=true:hinting=true"
