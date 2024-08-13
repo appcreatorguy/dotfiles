@@ -71,7 +71,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git adb pip command-not-found z bgnotify sudo pip python virtualenv poetry zsh-syntax-highlighting zsh-autosuggestions fzf kubectl)
+plugins=(git pip command-not-found z bgnotify sudo pip python virtualenv poetry zsh-syntax-highlighting zsh-autosuggestions fzf kubectl)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -123,7 +123,6 @@ fi
 export PATH=$PATH:/home/manasmengle/.spicetify
 
 if [[ $HOSTNAME == "manas-laptop" ]]; then
-  eval $(thefuck --alias)
   xset b off
   ### RANDOM COLOR SCRIPT ###
   colorscript random
@@ -183,3 +182,8 @@ zle-line-init() {
 }
 
 zle -N zle-line-init
+
+eval $(thefuck --alias)
+
+bindkey '\e[H' beginning-of-line
+bindkey '\e[F' end-of-line
