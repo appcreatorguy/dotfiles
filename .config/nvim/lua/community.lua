@@ -17,5 +17,8 @@ return {
   { import = "astrocommunity.diagnostics.trouble-nvim" },
   { import = "astrocommunity.pack.python-ruff" },
   { import = "astrocommunity.markdown-and-latex.glow-nvim" },
+  { import = "astrocommunity.markdown-and-latex.vimtex" },
   { import = "astrocommunity.pack.rust" },
+  { import = "astrocommunity.pack.haskell" },
+  { import = "astrocommunity.recipes.vscode" },
 }
